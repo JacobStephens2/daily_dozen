@@ -23,6 +23,7 @@ class DailyDozenTracker {
         this.dietTypeStorageKey = 'dailyDozenDietType';
         this.dietType = this.loadDietType();
         this.categories = this.getCategoriesForDietType(this.dietType);
+        this.deferredPrompt = null;
         this.init();
     }
 
@@ -242,6 +243,7 @@ class DailyDozenTracker {
         this.updateProgress();
         this.setupEventListeners();
         this.registerServiceWorker();
+        this.setupPWAInstallation();
     }
 
     updateDateDisplay() {
@@ -395,6 +397,14 @@ class DailyDozenTracker {
                 if (e.key === 'Escape') {
                     gratitudeModal.style.display = 'none';
                 }
+            });
+        }
+
+        // Header install button
+        const headerInstallBtn = document.getElementById('header-install-btn');
+        if (headerInstallBtn) {
+            headerInstallBtn.addEventListener('click', () => {
+                this.installApp();
             });
         }
     }
@@ -882,11 +892,228 @@ class DailyDozenTracker {
             }
         }, 10000);
     }
+
+    setupPWAInstallation() {
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            this.deferredPrompt = e;
+            // Show the install button
+            this.showInstallButton();
+        });
+
+        // Listen for successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            // Hide the install button
+            this.hideInstallButton();
+            // Log the installation
+            console.log('Daily Dozen Tracker was installed successfully');
+            // Show success message
+            this.showInstallationSuccess();
+        });
+
+        // Check if app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+            console.log('App is already installed');
+        } else {
+            // Show manual install instructions if PWA criteria are met
+            this.checkAndShowManualInstall();
+        }
+    }
+
+    showInstallButton() {
+        // Remove existing install button if present
+        this.hideInstallButton();
+        
+        const installButton = document.createElement('div');
+        installButton.className = 'install-prompt';
+        installButton.innerHTML = `
+            <div class="install-content">
+                <div class="install-icon">📱</div>
+                <div class="install-text">
+                    <h4>Install Daily Dozen Tracker</h4>
+                    <p>Add to your home screen for quick access and offline use</p>
+                </div>
+                <button class="install-btn" onclick="window.dailyDozenTracker.installApp()">
+                    Install App
+                </button>
+                <button class="dismiss-install-btn" onclick="window.dailyDozenTracker.hideInstallButton()">
+                    ✕
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(installButton);
+    }
+
+    hideInstallButton() {
+        const existingButton = document.querySelector('.install-prompt');
+        if (existingButton) {
+            existingButton.remove();
+        }
+    }
+
+    installApp() {
+        if (this.deferredPrompt) {
+            // Show the install prompt
+            this.deferredPrompt.prompt();
+            
+            // Wait for the user to respond to the prompt
+            this.deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                // Clear the deferredPrompt
+                this.deferredPrompt = null;
+            });
+        } else {
+            // Fallback: show manual installation instructions
+            this.showManualInstallInstructions();
+        }
+    }
+
+    showInstallationSuccess() {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'installation-success';
+        successDiv.innerHTML = `
+            <div class="success-content">
+                <div class="success-icon">✅</div>
+                <h4>Successfully Installed!</h4>
+                <p>Daily Dozen Tracker is now available on your home screen</p>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-success-btn">
+                    Great!
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(successDiv);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.parentNode.removeChild(successDiv);
+            }
+        }, 5000);
+    }
+
+    checkAndShowManualInstall() {
+        // Check if the app meets PWA criteria
+        if (this.isPWAReady()) {
+            // Show manual install button after a delay
+            setTimeout(() => {
+                this.showManualInstallButton();
+            }, 3000);
+        }
+    }
+
+    isPWAReady() {
+        // Check if we have a service worker
+        if (!('serviceWorker' in navigator)) return false;
+        
+        // Check if we have a manifest
+        const manifestLink = document.querySelector('link[rel="manifest"]');
+        if (!manifestLink) return false;
+        
+        // Check if we're on HTTPS (required for PWA)
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') return false;
+        
+        return true;
+    }
+
+    showManualInstallButton() {
+        // Only show if not already installed and no automatic prompt is available
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+            return;
+        }
+
+        const manualButton = document.createElement('div');
+        manualButton.className = 'manual-install-prompt';
+        manualButton.innerHTML = `
+            <div class="manual-install-content">
+                <div class="manual-install-icon">📱</div>
+                <div class="manual-install-text">
+                    <h4>Install Daily Dozen Tracker</h4>
+                    <p>Get quick access and offline functionality</p>
+                </div>
+                <button class="manual-install-btn" onclick="window.dailyDozenTracker.showManualInstallInstructions()">
+                    How to Install
+                </button>
+                <button class="dismiss-manual-btn" onclick="this.parentElement.parentElement.remove()">
+                    Maybe Later
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(manualButton);
+    }
+
+    showManualInstallInstructions() {
+        const instructionsDiv = document.createElement('div');
+        instructionsDiv.className = 'install-instructions-modal';
+        instructionsDiv.innerHTML = `
+            <div class="instructions-content">
+                <div class="instructions-header">
+                    <h3>📱 Install Daily Dozen Tracker</h3>
+                    <button class="close-instructions" onclick="this.parentElement.parentElement.parentElement.remove()">✕</button>
+                </div>
+                <div class="instructions-body">
+                    <div class="browser-instructions">
+                        <h4>Chrome / Edge / Brave:</h4>
+                        <ol>
+                            <li>Click the <strong>⋮</strong> menu in the top-right corner</li>
+                            <li>Select <strong>"Install Daily Dozen Tracker"</strong> or <strong>"Add to Home screen"</strong></li>
+                            <li>Click <strong>"Install"</strong> when prompted</li>
+                        </ol>
+                        
+                        <h4>Safari (iPhone/iPad):</h4>
+                        <ol>
+                            <li>Tap the <strong>Share</strong> button <strong>⎋</strong></li>
+                            <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                            <li>Tap <strong>"Add"</strong> to confirm</li>
+                        </ol>
+                        
+                        <h4>Firefox:</h4>
+                        <ol>
+                            <li>Click the <strong>⋮</strong> menu in the top-right corner</li>
+                            <li>Select <strong>"Install App"</strong> or <strong>"Add to Home Screen"</strong></li>
+                            <li>Click <strong>"Install"</strong> when prompted</li>
+                        </ol>
+                        
+                        <h4>Android Chrome:</h4>
+                        <ol>
+                            <li>Tap the <strong>⋮</strong> menu in the top-right corner</li>
+                            <li>Select <strong>"Add to Home screen"</strong></li>
+                            <li>Tap <strong>"Add"</strong> to confirm</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="install-benefits">
+                        <h4>Benefits of Installing:</h4>
+                        <ul>
+                            <li>✅ Quick access from your home screen</li>
+                            <li>✅ Works offline</li>
+                            <li>✅ Faster loading times</li>
+                            <li>✅ App-like experience</li>
+                            <li>✅ No need to remember the website URL</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(instructionsDiv);
+    }
 }
 
 
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new DailyDozenTracker();
+    window.dailyDozenTracker = new DailyDozenTracker();
 });

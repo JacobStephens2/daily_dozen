@@ -23,6 +23,7 @@ This app helps users track their daily consumption of the healthiest foods while
 ### Progressive Web App Features
 - **Offline Functionality**: Works without internet connection
 - **Installable**: Can be added to home screen on mobile devices
+- **Smart Installation Prompts**: Automatic and manual installation options
 - **Fast Loading**: Optimized for quick access
 - **Cross-Platform**: Works on all modern browsers
 
@@ -50,15 +51,24 @@ This app helps users track their daily consumption of the healthiest foods while
 
 ### Mobile Installation
 1. Open the app in your mobile browser
-2. Look for the "Add to Home Screen" option in your browser menu
-3. Follow the prompts to install the app
-4. The app will now work like a native app on your device
+2. The app will automatically show an install prompt if it meets PWA criteria
+3. Alternatively, tap the "📱 Install App" button in the header
+4. Follow the prompts to install the app
+5. The app will now work like a native app on your device
 
 ### Desktop Installation
-1. Open the app in Chrome or Edge
-2. Click the install icon in the address bar
-3. Follow the prompts to install the app
-4. The app will be available in your applications menu
+1. Open the app in Chrome, Edge, or other modern browsers
+2. The app will automatically show an install prompt if it meets PWA criteria
+3. Alternatively, click the "📱 Install App" button in the header
+4. Follow the prompts to install the app
+5. The app will be available in your applications menu
+
+### Manual Installation Instructions
+If automatic installation doesn't work, the app provides detailed step-by-step instructions for:
+- **Chrome / Edge / Brave**: Menu → Install Daily Dozen Tracker
+- **Safari (iPhone/iPad)**: Share button → Add to Home Screen
+- **Firefox**: Menu → Install App
+- **Android Chrome**: Menu → Add to Home screen
 
 ## 🛠️ Technical Details
 
@@ -123,6 +133,8 @@ This app is designed with the following Catholic principles in mind:
 - Can be installed on mobile and desktop devices
 - Appears in the app launcher/home screen
 - Works like a native app
+- Smart installation prompts with detailed instructions
+- Automatic detection of installation eligibility
 
 ### Fast and Reliable
 - Optimized for quick loading

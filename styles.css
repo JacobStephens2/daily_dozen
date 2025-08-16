@@ -129,6 +129,33 @@ body {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
+/* Header Install Button */
+.install-section {
+    margin-top: 1rem;
+}
+
+.header-install-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow);
+}
+
+.header-install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.header-install-btn:active {
+    transform: translateY(0);
+}
+
 /* Main Content */
 .main-content {
     padding: 2rem 1.5rem;
@@ -498,6 +525,11 @@ body {
         font-size: 1.75rem;
     }
     
+    .header-install-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
     .category-header {
         flex-direction: column;
         text-align: center;
@@ -776,6 +808,386 @@ body {
         right: 10px;
         left: 10px;
         max-width: none;
+    }
+}
+
+/* PWA Installation Styles */
+.install-prompt, .manual-install-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow-hover);
+    z-index: 1000;
+    animation: slideInUp 0.3s ease;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.install-content, .manual-install-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.install-icon, .manual-install-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.install-text, .manual-install-text {
+    flex: 1;
+}
+
+.install-text h4, .manual-install-text h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.install-text p, .manual-install-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.install-btn, .manual-install-btn {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.install-btn:hover, .manual-install-btn:hover {
+    background: #2E7D32;
+    transform: translateY(-1px);
+}
+
+.dismiss-install-btn, .dismiss-manual-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.dismiss-install-btn:hover, .dismiss-manual-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Installation Success */
+.installation-success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: var(--text-color);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow-hover);
+    z-index: 1001;
+    animation: fadeInScale 0.3s ease;
+    text-align: center;
+    max-width: 300px;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.success-icon {
+    font-size: 3rem;
+}
+
+.success-content h4 {
+    margin: 0;
+    color: var(--success);
+    font-size: 1.3rem;
+}
+
+.success-content p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.close-success-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.close-success-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Installation Instructions Modal */
+.install-instructions-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+    animation: fadeIn 0.3s ease;
+    padding: 1rem;
+}
+
+.instructions-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-hover);
+    animation: slideInUp 0.3s ease;
+}
+
+.instructions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.instructions-header h3 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.4rem;
+}
+
+.close-instructions {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-instructions:hover {
+    background: var(--background-light);
+    color: var(--text-color);
+}
+
+.instructions-body {
+    padding: 1.5rem;
+}
+
+.browser-instructions h4 {
+    color: var(--primary-color);
+    margin: 1.5rem 0 0.75rem 0;
+    font-size: 1.1rem;
+}
+
+.browser-instructions h4:first-child {
+    margin-top: 0;
+}
+
+.browser-instructions ol {
+    margin: 0 0 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.browser-instructions li {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.browser-instructions strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.install-benefits {
+    background: var(--background-light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+.install-benefits h4 {
+    color: var(--primary-color);
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.install-benefits ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.install-benefits li {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive PWA Installation */
+@media (max-width: 768px) {
+    .install-prompt, .manual-install-prompt {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 1rem;
+    }
+    
+    .install-content, .manual-install-content {
+        gap: 0.75rem;
+    }
+    
+    .install-icon, .manual-install-icon {
+        font-size: 1.5rem;
+    }
+    
+    .install-text h4, .manual-install-text h4 {
+        font-size: 1rem;
+    }
+    
+    .install-text p, .manual-install-text p {
+        font-size: 0.85rem;
+    }
+    
+    .install-btn, .manual-install-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .instructions-content {
+        margin: 1rem;
+        max-height: 85vh;
+    }
+    
+    .instructions-header {
+        padding: 1rem 1rem 0.75rem 1rem;
+    }
+    
+    .instructions-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .instructions-body {
+        padding: 1rem;
+    }
+    
+    .browser-instructions h4 {
+        font-size: 1rem;
+    }
+    
+    .browser-instructions ol {
+        padding-left: 1.25rem;
+    }
+    
+    .install-benefits {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-prompt, .manual-install-prompt {
+        padding: 0.75rem;
+    }
+    
+    .install-content, .manual-install-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .install-btn, .manual-install-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .dismiss-install-btn, .dismiss-manual-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .installation-success {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+    
+    .success-content {
+        gap: 0.75rem;
+    }
+    
+    .success-icon {
+        font-size: 2.5rem;
+    }
+    
+    .success-content h4 {
+        font-size: 1.1rem;
+    }
+    
+    .success-content p {
+        font-size: 0.9rem;
     }
 }
 
