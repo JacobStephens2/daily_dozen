@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Icon Test - Daily Dozen</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .icon-preview {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .icon-preview img {
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .instructions {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        button {
+            background: #2E7D32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <h1>iOS Icon Test - Daily Dozen</h1>
+    
+    <div class="instructions">
+        <h3>📱 How to Test iOS Home Screen Icon:</h3>
+        <ol>
+            <li>Open this page in Safari on your iPhone/iPad</li>
+            <li>Tap the Share button (square with arrow)</li>
+            <li>Scroll down and tap "Add to Home Screen"</li>
+            <li>Tap "Add" to confirm</li>
+            <li>Check your home screen - you should see the Daily Dozen icon instead of a "D"</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>iOS Icon Configuration</h2>
+        <p>Current iOS-specific icon settings:</p>
+        <div id="ios-config"></div>
+        <button onclick="testIOSIcons()">Test iOS Icons</button>
+    </div>
+
+    <div class="test-section">
+        <h2>iOS Icon Preview</h2>
+        <p>Icons that should appear on iOS home screen:</p>
+        <div id="ios-icon-preview"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        const iosIconSizes = [60, 76, 120, 152, 180];
+        let testResults = [];
+
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            resultsDiv.appendChild(statusDiv);
+            testResults.push({ message, type, timestamp: new Date() });
+        }
+
+        function testIOSIcon(size) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    resolve({ size, success: true, width: img.naturalWidth, height: img.naturalHeight });
+                };
+                img.onerror = () => {
+                    resolve({ size, success: false, error: 'Failed to load' });
+                };
+                
+                // Use the appropriate icon size for each iOS requirement
+                let iconPath;
+                        if (size === 60) iconPath = 'assets/icons/icon-72x72.png';
+        else if (size === 76) iconPath = 'assets/icons/icon-96x96.png';
+        else if (size === 120) iconPath = 'assets/icons/icon-128x128.png';
+        else if (size === 152) iconPath = 'assets/icons/icon-152x152.png';
+        else if (size === 180) iconPath = 'assets/icons/icon-192x192.png';
+                
+                img.src = `${iconPath}?v=2.0.5`;
+            });
+        }
+
+        async function testIOSIcons() {
+            addResult('Testing iOS icon configuration...', 'info');
+            document.getElementById('test-results').innerHTML = '';
+            
+            for (const size of iosIconSizes) {
+                const result = await testIOSIcon(size);
+                if (result.success) {
+                    addResult(`✅ iOS ${size}x${size} icon loaded successfully (${result.width}x${result.height})`, 'success');
+                } else {
+                    addResult(`❌ iOS ${size}x${size} icon failed to load: ${result.error}`, 'error');
+                }
+            }
+            
+            addResult('iOS icon testing complete!', 'info');
+        }
+
+        function showIOSConfig() {
+            const configDiv = document.getElementById('ios-config');
+            configDiv.innerHTML = `
+                <div class="status info">
+                    <strong>Apple Touch Icons:</strong><br>
+                    • Default: icon-152x152.png (152x152)<br>
+                    • iPhone 6 Plus: icon-192x192.png (180x180)<br>
+                    • iPhone 6/7/8: icon-152x152.png (152x152)<br>
+                    • iPhone 5/SE: icon-128x128.png (120x120)<br>
+                    • iPad: icon-96x96.png (76x76)<br>
+                    • iPad Pro: icon-72x72.png (60x60)<br>
+                    <br>
+                    <strong>Status Bar:</strong> black-translucent<br>
+                    <strong>Web App Capable:</strong> yes<br>
+                    <strong>App Title:</strong> Daily Dozen
+                </div>
+            `;
+        }
+
+        function createIOSIconPreview() {
+            const previewDiv = document.getElementById('ios-icon-preview');
+            previewDiv.innerHTML = '';
+            
+            const iconMappings = [
+                { size: 60, file: 'icon-72x72.png', device: 'iPad Pro' },
+                { size: 76, file: 'icon-96x96.png', device: 'iPad' },
+                { size: 120, file: 'icon-128x128.png', device: 'iPhone 5/SE' },
+                { size: 152, file: 'icon-152x152.png', device: 'iPhone 6/7/8 (Default)' },
+                { size: 180, file: 'icon-192x192.png', device: 'iPhone 6 Plus' }
+            ];
+            
+            iconMappings.forEach(mapping => {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'icon-preview';
+                
+                const img = document.createElement('img');
+                img.src = `icons/${mapping.file}?v=2.0.5`;
+                img.alt = `${mapping.size}x${mapping.size} icon`;
+                img.title = `${mapping.device} (${mapping.size}x${mapping.size})`;
+                
+                const label = document.createElement('div');
+                label.textContent = `${mapping.device}\n${mapping.size}x${mapping.size}`;
+                label.style.fontSize = '12px';
+                label.style.lineHeight = '1.2';
+                
+                iconDiv.appendChild(img);
+                iconDiv.appendChild(label);
+                previewDiv.appendChild(iconDiv);
+            });
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            showIOSConfig();
+            createIOSIconPreview();
+            addResult('iOS Icon Test initialized. Follow the instructions above to test on your iOS device.', 'info');
+        };
+    </script>
+</body>
+</html>

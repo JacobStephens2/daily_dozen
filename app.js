@@ -21,6 +21,7 @@ class DailyDozenTracker {
         this.currentDate = new Date();
         this.storageKey = 'dailyDozenData';
         this.dietTypeStorageKey = 'dailyDozenDietType';
+        this.installDismissedKey = 'dailyDozenInstallDismissed';
         this.dietType = this.loadDietType();
         this.categories = this.getCategoriesForDietType(this.dietType);
         this.deferredPrompt = null;
@@ -400,11 +401,13 @@ class DailyDozenTracker {
             });
         }
 
-        // Header install button
-        const headerInstallBtn = document.getElementById('header-install-btn');
-        if (headerInstallBtn) {
-            headerInstallBtn.addEventListener('click', () => {
-                this.installApp();
+
+
+        // Footer install button
+        const footerInstallBtn = document.getElementById('footer-install-btn');
+        if (footerInstallBtn) {
+            footerInstallBtn.addEventListener('click', () => {
+                this.showManualInstallInstructions();
             });
         }
     }
@@ -686,7 +689,7 @@ class DailyDozenTracker {
 
         // Update progress bar color based on completion
         if (percentage >= 100) {
-            progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #2E7D32)';
+            progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #548444)';
             // Show celebration when daily dozen is completed
             this.showCompletionCelebration();
         } else if (percentage >= 75) {
@@ -925,6 +928,11 @@ class DailyDozenTracker {
     }
 
     showInstallButton() {
+        // Check if user has dismissed install prompts
+        if (this.hasUserDismissedInstall()) {
+            return;
+        }
+        
         // Remove existing install button if present
         this.hideInstallButton();
         
@@ -940,7 +948,7 @@ class DailyDozenTracker {
                 <button class="install-btn" onclick="window.dailyDozenTracker.installApp()">
                     Install App
                 </button>
-                <button class="dismiss-install-btn" onclick="window.dailyDozenTracker.hideInstallButton()">
+                <button class="dismiss-install-btn" onclick="window.dailyDozenTracker.dismissInstallPrompt()">
                     ✕
                 </button>
             </div>
@@ -953,6 +961,47 @@ class DailyDozenTracker {
         const existingButton = document.querySelector('.install-prompt');
         if (existingButton) {
             existingButton.remove();
+        }
+    }
+
+    dismissInstallPrompt() {
+        this.hideInstallButton();
+        this.saveInstallDismissed();
+    }
+
+    dismissManualInstallPrompt() {
+        const existingButton = document.querySelector('.manual-install-prompt');
+        if (existingButton) {
+            existingButton.remove();
+        }
+        this.saveInstallDismissed();
+    }
+
+    hasUserDismissedInstall() {
+        try {
+            const dismissed = localStorage.getItem(this.installDismissedKey);
+            return dismissed === 'true';
+        } catch (error) {
+            console.log('Error checking install dismissed status:', error);
+            return false;
+        }
+    }
+
+    saveInstallDismissed() {
+        try {
+            localStorage.setItem(this.installDismissedKey, 'true');
+            console.log('Install prompts dismissed by user');
+        } catch (error) {
+            console.log('Error saving install dismissed status:', error);
+        }
+    }
+
+    resetInstallDismissed() {
+        try {
+            localStorage.removeItem(this.installDismissedKey);
+            console.log('Install dismissed status reset');
+        } catch (error) {
+            console.log('Error resetting install dismissed status:', error);
         }
     }
 
@@ -1002,6 +1051,11 @@ class DailyDozenTracker {
     }
 
     checkAndShowManualInstall() {
+        // Check if user has dismissed install prompts
+        if (this.hasUserDismissedInstall()) {
+            return;
+        }
+        
         // Check if the app meets PWA criteria
         if (this.isPWAReady()) {
             // Show manual install button after a delay
@@ -1026,6 +1080,11 @@ class DailyDozenTracker {
     }
 
     showManualInstallButton() {
+        // Check if user has dismissed install prompts
+        if (this.hasUserDismissedInstall()) {
+            return;
+        }
+        
         // Only show if not already installed and no automatic prompt is available
         if (window.matchMedia('(display-mode: standalone)').matches || 
             window.navigator.standalone === true) {
@@ -1044,7 +1103,7 @@ class DailyDozenTracker {
                 <button class="manual-install-btn" onclick="window.dailyDozenTracker.showManualInstallInstructions()">
                     How to Install
                 </button>
-                <button class="dismiss-manual-btn" onclick="this.parentElement.parentElement.remove()">
+                <button class="dismiss-manual-btn" onclick="window.dailyDozenTracker.dismissManualInstallPrompt()">
                     Maybe Later
                 </button>
             </div>
@@ -1102,6 +1161,13 @@ class DailyDozenTracker {
                             <li>✅ App-like experience</li>
                             <li>✅ No need to remember the website URL</li>
                         </ul>
+                    </div>
+                    
+                    <div class="install-actions">
+                        <button class="reset-install-dismissed-btn" onclick="window.dailyDozenTracker.resetInstallDismissed(); this.parentElement.parentElement.parentElement.remove();">
+                            Reset Install Prompts
+                        </button>
+                        <p class="reset-install-note">Click this if you want to see the automatic install prompts again</p>
                     </div>
                 </div>
             </div>

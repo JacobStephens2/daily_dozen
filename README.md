@@ -88,7 +88,7 @@ daily_dozen/
 ├── sw.js              # Service Worker
 ├── manifest.json      # PWA manifest
 ├── icons/             # App icons
-│   └── icon.svg       # SVG icon
+│   └── icon.jpg       # JPG icon
 └── README.md          # This file
 ```
 

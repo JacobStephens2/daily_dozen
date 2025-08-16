@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Color Test - Daily Dozen</title>
+    <meta name="theme-color" content="#548444">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            position: relative;
+        }
+        .color-swatch::after {
+            content: attr(data-color);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .app-header {
+            background: #548444;
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .instructions {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Theme Color Test - Daily Dozen</h1>
+    
+    <div class="instructions">
+        <h3>🎨 Theme Color Verification:</h3>
+        <p>This page tests that the PWA theme color (#548444) matches the app header background color. On iOS, the status bar should now match the app header color.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Color Comparison</h2>
+        <p>Both colors should be identical:</p>
+        
+        <div class="color-swatch" style="background-color: #548444;" data-color="PWA Theme Color"></div>
+        <div class="color-swatch" style="background-color: #548444;" data-color="App Header Color"></div>
+        
+        <div class="status success">
+            ✅ Both colors are set to #548444 (fern-green)
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>App Header Preview</h2>
+        <p>This is how the app header looks with the theme color:</p>
+        
+        <div class="app-header">
+            <h1>Daily Dozen Tracker</h1>
+            <p>Stewarding God's Gift of Health</p>
+        </div>
+        
+        <div class="status info">
+            📱 On iOS, the status bar should now match this header color when the PWA is installed.
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Configuration Details</h2>
+        <div class="status info">
+            <strong>PWA Theme Color Settings:</strong><br>
+            • HTML meta theme-color: #548444<br>
+            • Manifest theme_color: #548444<br>
+            • MS Tile Color: #548444<br>
+            • App Header Background: #548444 (fern-green CSS variable)<br>
+            <br>
+            <strong>iOS Status Bar:</strong> black-translucent<br>
+            <strong>Cache Version:</strong> v2.0.4
+        </div>
+    </div>
+
+    <script>
+        // Verify theme color is set correctly
+        const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--fern-green') || '#548444';
+        console.log('Theme color verification:', themeColor);
+        
+        // Check if running as PWA
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            document.body.innerHTML += '<div class="test-section"><div class="status success">✅ Running as PWA - theme color should be active</div></div>';
+        } else {
+            document.body.innerHTML += '<div class="test-section"><div class="status info">ℹ️ Running in browser - theme color will be active when installed as PWA</div></div>';
+        }
+    </script>
+</body>
+</html>

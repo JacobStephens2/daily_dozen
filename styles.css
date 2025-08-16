@@ -1,21 +1,34 @@
 /* Catholic Daily Dozen Tracker - Modern, Respectful Design */
 
 :root {
-    --primary-color: #2E7D32;
-    --primary-light: #4CAF50;
-    --primary-dark: #1B5E20;
-    --secondary-color: #FFC107;
-    --accent-color: #8BC34A;
-    --text-primary: #212121;
-    --text-secondary: #757575;
-    --background: #FAFAFA;
+    /* New color palette from icon */
+    --mine-shaft: #373434;
+    --mule-fawn: #95412c;
+    --tacha: #d6b96c;
+    --copper: #b9803c;
+    --aths-special: #eae3ca;
+    --indian-khaki: #c2b996;
+    --granny-smith: #7b959a;
+    --pale-leaf: #bbd1b0;
+    --zorba: #a99b8f;
+    --fern-green: #548444;
+    
+    /* Mapped colors for consistency */
+    --primary-color: var(--fern-green);
+    --primary-light: var(--pale-leaf);
+    --primary-dark: var(--mine-shaft);
+    --secondary-color: var(--tacha);
+    --accent-color: var(--granny-smith);
+    --text-primary: var(--mine-shaft);
+    --text-secondary: var(--zorba);
+    --background: var(--aths-special);
     --surface: #FFFFFF;
-    --border: #E0E0E0;
-    --success: #4CAF50;
-    --warning: #FF9800;
-    --error: #F44336;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --border: var(--indian-khaki);
+    --success: var(--fern-green);
+    --warning: var(--mule-fawn);
+    --error: #d32f2f;
+    --shadow: 0 2px 8px rgba(55, 52, 52, 0.1);
+    --shadow-hover: 0 4px 16px rgba(55, 52, 52, 0.15);
 }
 
 * {
@@ -43,7 +56,7 @@ body {
 
 /* Header Styles */
 .app-header {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    background: var(--fern-green);
     color: white;
     padding: 2rem 1.5rem;
     text-align: center;
@@ -135,7 +148,7 @@ body {
 }
 
 .header-install-btn {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--fern-green), var(--tacha));
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -178,7 +191,7 @@ body {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-color), var(--primary-light));
+    background: linear-gradient(90deg, var(--granny-smith), var(--pale-leaf));
     border-radius: 6px;
     transition: width 0.5s ease;
     width: 0%;
@@ -198,7 +211,7 @@ body {
 }
 
 .reset-btn {
-    background: linear-gradient(135deg, var(--warning), #FF5722);
+    background: linear-gradient(135deg, var(--mule-fawn), var(--copper));
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -213,7 +226,7 @@ body {
 .reset-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
-    background: linear-gradient(135deg, #FF5722, var(--warning));
+    background: linear-gradient(135deg, var(--copper), var(--mule-fawn));
 }
 
 .reset-btn:active {
@@ -278,7 +291,7 @@ body {
 .category-icon {
     width: 48px;
     height: 48px;
-    background: var(--primary-light);
+    background: var(--granny-smith);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -320,12 +333,13 @@ body {
     font-weight: 500;
     min-width: 60px;
     text-align: center;
+    color: var(--text-primary);
 }
 
 .serving-label:hover {
-    background: var(--primary-light);
+    background: var(--granny-smith);
     color: white;
-    border-color: var(--primary-light);
+    border-color: var(--granny-smith);
 }
 
 .serving-checkbox:checked + .serving-label {
@@ -335,6 +349,12 @@ body {
     transform: scale(1.05);
 }
 
+.serving-checkbox:not(:checked) + .serving-label {
+    background: var(--background);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
 /* Gratitude Section */
 .gratitude-section {
     text-align: center;
@@ -342,7 +362,7 @@ body {
 }
 
 .gratitude-btn {
-    background: linear-gradient(135deg, var(--secondary-color), #FF9800);
+    background: linear-gradient(135deg, var(--tacha), var(--copper));
     color: var(--text-primary);
     border: none;
     padding: 1rem 2rem;
@@ -401,7 +421,7 @@ body {
 }
 
 .modal-content h3 {
-    color: var(--primary-color);
+    color: var(--fern-green);
     margin-bottom: 1rem;
     font-size: 1.5rem;
 }
@@ -418,7 +438,7 @@ body {
 }
 
 .close-modal {
-    background: var(--primary-color);
+    background: var(--fern-green);
     color: white;
     border: none;
     padding: 0.75rem 2rem;
@@ -429,12 +449,12 @@ body {
 }
 
 .close-modal:hover {
-    background: var(--primary-dark);
+    background: var(--mine-shaft);
 }
 
 /* Footer */
 .app-footer {
-    background: var(--primary-dark);
+    background: var(--mine-shaft);
     color: white;
     padding: 1.5rem;
     text-align: center;
@@ -474,21 +494,46 @@ body {
 }
 
 .learn-more a {
-    color: var(--primary-light);
+    color: var(--pale-leaf);
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    border: 2px solid var(--primary-light);
+    border: 2px solid var(--pale-leaf);
     border-radius: 25px;
     transition: all 0.3s ease;
     display: inline-block;
 }
 
 .learn-more a:hover {
-    background: var(--primary-light);
+    background: var(--pale-leaf);
     color: white;
     transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
+}
+
+.footer-install-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-install-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+}
+
+.footer-install-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive Design */
@@ -528,6 +573,11 @@ body {
     .header-install-btn {
         padding: 0.5rem 1rem;
         font-size: 0.8rem;
+    }
+    
+    .footer-install-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
     }
     
     .category-header {
@@ -655,7 +705,7 @@ body {
 }
 
 .celebration-verses {
-    background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
+    background: linear-gradient(135deg, var(--pale-leaf), var(--tacha));
     color: white;
     padding: 1.5rem;
     border-radius: 15px;
@@ -676,7 +726,7 @@ body {
 }
 
 .celebration-close {
-    background: linear-gradient(135deg, var(--success), #2E7D32);
+    background: linear-gradient(135deg, var(--fern-green), var(--mine-shaft));
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -692,7 +742,7 @@ body {
 .celebration-close:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
-    background: linear-gradient(135deg, #2E7D32, var(--success));
+    background: linear-gradient(135deg, var(--mine-shaft), var(--fern-green));
 }
 
 /* Responsive celebration modal */
@@ -738,7 +788,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--fern-green), var(--tacha));
     color: white;
     padding: 1rem;
     border-radius: 10px;
@@ -776,7 +826,7 @@ body {
 }
 
 .update-btn:hover {
-    background: #2E7D32;
+    background: var(--fern-green);
     transform: translateY(-1px);
 }
 
@@ -817,7 +867,7 @@ body {
     bottom: 20px;
     left: 20px;
     right: 20px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--fern-green), var(--tacha));
     color: white;
     padding: 1rem;
     border-radius: 15px;
@@ -856,7 +906,7 @@ body {
 }
 
 .install-btn, .manual-install-btn {
-    background: var(--success);
+    background: var(--fern-green);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -869,7 +919,7 @@ body {
 }
 
 .install-btn:hover, .manual-install-btn:hover {
-    background: #2E7D32;
+    background: var(--mine-shaft);
     transform: translateY(-1px);
 }
 
@@ -919,7 +969,7 @@ body {
 
 .success-content h4 {
     margin: 0;
-    color: var(--success);
+    color: var(--fern-green);
     font-size: 1.3rem;
 }
 
@@ -930,7 +980,7 @@ body {
 }
 
 .close-success-btn {
-    background: var(--primary-color);
+    background: var(--fern-green);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -941,7 +991,7 @@ body {
 }
 
 .close-success-btn:hover {
-    background: var(--secondary-color);
+    background: var(--tacha);
     transform: translateY(-1px);
 }
 
@@ -981,7 +1031,7 @@ body {
 
 .instructions-header h3 {
     margin: 0;
-    color: var(--primary-color);
+    color: var(--fern-green);
     font-size: 1.4rem;
 }
 
@@ -1006,7 +1056,7 @@ body {
 }
 
 .browser-instructions h4 {
-    color: var(--primary-color);
+    color: var(--fern-green);
     margin: 1.5rem 0 0.75rem 0;
     font-size: 1.1rem;
 }
@@ -1026,7 +1076,7 @@ body {
 }
 
 .browser-instructions strong {
-    color: var(--primary-color);
+    color: var(--fern-green);
     font-weight: 600;
 }
 
@@ -1038,7 +1088,7 @@ body {
 }
 
 .install-benefits h4 {
-    color: var(--primary-color);
+    color: var(--fern-green);
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
 }
@@ -1051,6 +1101,37 @@ body {
 .install-benefits li {
     margin: 0.5rem 0;
     line-height: 1.5;
+}
+
+.install-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.reset-install-dismissed-btn {
+    background: var(--mule-fawn);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.reset-install-dismissed-btn:hover {
+    background: var(--copper);
+    transform: translateY(-1px);
+}
+
+.reset-install-note {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.8;
 }
 
 /* Animations */
@@ -1142,6 +1223,15 @@ body {
     
     .install-benefits {
         padding: 1rem;
+    }
+    
+    .install-actions {
+        padding: 1rem;
+    }
+    
+    .reset-install-dismissed-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
     }
 }
 

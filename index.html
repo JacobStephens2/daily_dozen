@@ -9,17 +9,30 @@
     <!-- Balanced caching approach - allow caching but with version control -->
     <meta http-equiv="Cache-Control" content="public, max-age=3600">
     
-    <link rel="manifest" href="manifest.json?v=2.0.1">
-    <link rel="icon" type="image/png" href="icon-192x192.png?v=2.0.1">
-    <link rel="apple-touch-icon" href="icon-192x192.png?v=2.0.1">
-    <meta name="theme-color" content="#2E7D32">
-    <link rel="stylesheet" href="styles.css?v=2.0.1">
+    <link rel="manifest" href="manifest.json?v=2.0.6">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2.0.6">
+    <link rel="apple-touch-icon" href="assets/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/icons/icon-72x72.png">
+    <meta name="theme-color" content="#548444">
+    <meta name="apple-mobile-web-app-capable" content="standalone">
+    <meta name="apple-mobile-web-app-title" content="Daily Dozen">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-itunes-app" content="app-argument=">
+    <meta name="msapplication-TileColor" content="#548444">
+    <meta name="msapplication-TileImage" content="assets/icons/icon-144x144.png">
+    <meta name="application-name" content="Daily Dozen">
+    <link rel="stylesheet" href="styles.css?v=2.0.6">
 </head>
 <body>
     <div class="app-container">
         <header class="app-header">
             <h1>Daily Dozen Tracker</h1>
-            <p class="subtitle">Stewarding God's Gift of Health</p>
             <div class="date-display">
                 <span id="current-date"></span>
             </div>
@@ -30,11 +43,7 @@
                     <option value="modified">Modified Daily Dozen</option>
                 </select>
             </div>
-            <div class="install-section">
-                <button class="header-install-btn" id="header-install-btn" title="Install Daily Dozen Tracker">
-                    📱 Install App
-                </button>
-            </div>
+
         </header>
 
         <main class="main-content">
@@ -78,12 +87,18 @@
             <div class="footer-links">
                 <p class="learn-more"><a href="https://nutritionfacts.org/video/dr-gregers-daily-dozen-checklist/" target="_blank" rel="noopener noreferrer">Watch the Daily Dozen Overview Video →</a></p>
                 <p class="learn-more"><a href="https://nutritionfacts.org/topics/daily-dozen/" target="_blank" rel="noopener noreferrer">Browse All Daily Dozen Videos →</a></p>
+                <p class="learn-more"><a href="https://usccb.cld.bz/Catechism-of-the-Catholic-Church/570/" target="_blank" rel="noopener noreferrer">Catholic Teaching on Respect for Health →</a></p>
+            </div>
+            <div class="footer-install-section">
+                <button class="footer-install-btn" id="footer-install-btn">
+                    📱 Show Installation Instructions
+                </button>
             </div>
         </footer>
     </div>
 
-    <script src="app.js?v=2.0.1"></script>
-    <script src="sw.js?v=2.0.1"></script>
+    <script src="app.js?v=2.0.6"></script>
+    <script src="sw.js?v=2.0.6"></script>
 </body>
 </html>
 

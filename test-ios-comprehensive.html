@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Icon Comprehensive Test - Daily Dozen</title>
+    <meta name="theme-color" content="#548444">
+    
+    <!-- iOS Icon Configuration -->
+    <link rel="apple-touch-icon" href="assets/icons/icon-152x152.png?v=2.0.5">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png?v=2.0.5">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png?v=2.0.5">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/icons/icon-128x128.png?v=2.0.5">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/icons/icon-96x96.png?v=2.0.5">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/icons/icon-72x72.png?v=2.0.5">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="standalone">
+    <meta name="apple-mobile-web-app-title" content="Daily Dozen">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .icon-test {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        .icon-test img {
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            max-width: 100px;
+            height: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        button {
+            background: #548444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2E7D32;
+        }
+        .debug-info {
+            font-family: monospace;
+            font-size: 12px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>iOS Icon Comprehensive Test - Daily Dozen</h1>
+    
+    <div class="instructions">
+        <h3>🔍 iOS Icon Diagnostic Test</h3>
+        <p>This page will help diagnose why iOS icon tests are failing on Safari. It tests icon accessibility, configuration, and provides debugging information.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>1. Icon Accessibility Test</h2>
+        <p>Testing if all icon files are accessible via HTTP:</p>
+        <div id="accessibility-results"></div>
+        <button onclick="testIconAccessibility()">Test Icon Accessibility</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Icon Loading Test</h2>
+        <p>Testing if icons can be loaded by the browser:</p>
+        <div id="loading-results"></div>
+        <button onclick="testIconLoading()">Test Icon Loading</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. iOS Icon Preview</h2>
+        <p>All configured iOS icons:</p>
+        <div id="icon-preview"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Configuration Analysis</h2>
+        <div id="config-analysis"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Debug Information</h2>
+        <div id="debug-info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Manual Testing Instructions</h2>
+        <div class="instructions">
+            <h4>📱 How to Test on iOS Safari:</h4>
+            <ol>
+                <li>Open this page in Safari on your iPhone/iPad</li>
+                <li>Tap the Share button (square with arrow)</li>
+                <li>Scroll down and tap "Add to Home Screen"</li>
+                <li>Tap "Add" to confirm</li>
+                <li>Check your home screen for the Daily Dozen icon</li>
+                <li>If you see a "D" with green background, the icons are not loading</li>
+            </ol>
+            
+            <h4>🔧 Troubleshooting Steps:</h4>
+            <ul>
+                <li>Clear Safari cache: Settings > Safari > Clear History and Website Data</li>
+                <li>Remove the app from home screen and re-add it</li>
+                <li>Check if the server is running on the correct port</li>
+                <li>Verify icons are accessible via direct URL</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const iconConfig = [
+            { size: 'default', file: 'icon-152x152.png', url: 'assets/icons/icon-152x152.png?v=2.0.5' },
+            { size: '180x180', file: 'icon-192x192.png', url: 'assets/icons/icon-192x192.png?v=2.0.5' },
+            { size: '152x152', file: 'icon-152x152.png', url: 'assets/icons/icon-152x152.png?v=2.0.5' },
+            { size: '120x120', file: 'icon-128x128.png', url: 'assets/icons/icon-128x128.png?v=2.0.5' },
+            { size: '76x76', file: 'icon-96x96.png', url: 'assets/icons/icon-96x96.png?v=2.0.5' },
+            { size: '60x60', file: 'icon-72x72.png', url: 'assets/icons/icon-72x72.png?v=2.0.5' }
+        ];
+
+        function addResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            container.appendChild(statusDiv);
+        }
+
+        async function testIconAccessibility() {
+            const container = document.getElementById('accessibility-results');
+            container.innerHTML = '';
+            addResult('accessibility-results', 'Testing icon accessibility...', 'info');
+
+            for (const icon of iconConfig) {
+                try {
+                    const response = await fetch(icon.url, { method: 'HEAD' });
+                    if (response.ok) {
+                        addResult('accessibility-results', `✅ ${icon.size}: ${icon.file} - Accessible (${response.status})`, 'success');
+                    } else {
+                        addResult('accessibility-results', `❌ ${icon.size}: ${icon.file} - Not accessible (${response.status})`, 'error');
+                    }
+                } catch (error) {
+                    addResult('accessibility-results', `❌ ${icon.size}: ${icon.file} - Error: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function testIconLoading() {
+            const container = document.getElementById('loading-results');
+            container.innerHTML = '';
+            addResult('loading-results', 'Testing icon loading...', 'info');
+
+            for (const icon of iconConfig) {
+                const img = new Image();
+                img.onload = () => {
+                    addResult('loading-results', `✅ ${icon.size}: ${icon.file} - Loaded (${img.naturalWidth}x${img.naturalHeight})`, 'success');
+                };
+                img.onerror = () => {
+                    addResult('loading-results', `❌ ${icon.size}: ${icon.file} - Failed to load`, 'error');
+                };
+                img.src = icon.url;
+            }
+        }
+
+        function createIconPreview() {
+            const container = document.getElementById('icon-preview');
+            container.innerHTML = '';
+
+            iconConfig.forEach(icon => {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'icon-test';
+
+                const img = document.createElement('img');
+                img.src = icon.url;
+                img.alt = `${icon.size} icon`;
+                img.title = `${icon.size} - ${icon.file}`;
+
+                const label = document.createElement('div');
+                label.textContent = `${icon.size}\n${icon.file}`;
+                label.style.fontSize = '12px';
+                label.style.lineHeight = '1.2';
+
+                iconDiv.appendChild(img);
+                iconDiv.appendChild(label);
+                container.appendChild(iconDiv);
+            });
+        }
+
+        function analyzeConfiguration() {
+            const container = document.getElementById('config-analysis');
+            container.innerHTML = '';
+
+            // Check if running as PWA
+            const isPWA = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+            addResult('config-analysis', `PWA Mode: ${isPWA ? 'Yes' : 'No'}`, isPWA ? 'success' : 'info');
+
+            // Check user agent
+            const userAgent = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+            addResult('config-analysis', `iOS Device: ${isIOS ? 'Yes' : 'No'}`, isIOS ? 'success' : 'info');
+
+            // Check if Safari
+            const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+            addResult('config-analysis', `Safari Browser: ${isSafari ? 'Yes' : 'No'}`, isSafari ? 'success' : 'info');
+
+            // Check viewport
+            const viewport = window.innerWidth + 'x' + window.innerHeight;
+            addResult('config-analysis', `Viewport: ${viewport}`, 'info');
+
+            // Check if service worker is registered
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistration().then(registration => {
+                    if (registration) {
+                        addResult('config-analysis', `Service Worker: Registered (${registration.active ? 'Active' : 'Installing'})`, 'success');
+                    } else {
+                        addResult('config-analysis', 'Service Worker: Not registered', 'warning');
+                    }
+                });
+            } else {
+                addResult('config-analysis', 'Service Worker: Not supported', 'error');
+            }
+        }
+
+        function showDebugInfo() {
+            const container = document.getElementById('debug-info');
+            container.innerHTML = '';
+
+            const debugInfo = {
+                'User Agent': navigator.userAgent,
+                'Platform': navigator.platform,
+                'Language': navigator.language,
+                'Cookie Enabled': navigator.cookieEnabled,
+                'Online': navigator.onLine,
+                'URL': window.location.href,
+                'Protocol': window.location.protocol,
+                'Host': window.location.host,
+                'Pathname': window.location.pathname,
+                'Search': window.location.search,
+                'Hash': window.location.hash
+            };
+
+            Object.entries(debugInfo).forEach(([key, value]) => {
+                const debugDiv = document.createElement('div');
+                debugDiv.className = 'debug-info';
+                debugDiv.innerHTML = `<strong>${key}:</strong> ${value}`;
+                container.appendChild(debugDiv);
+            });
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            createIconPreview();
+            analyzeConfiguration();
+            showDebugInfo();
+            addResult('accessibility-results', 'Click "Test Icon Accessibility" to check if icons are accessible via HTTP.', 'info');
+            addResult('loading-results', 'Click "Test Icon Loading" to check if icons can be loaded by the browser.', 'info');
+        };
+    </script>
+</body>
+</html>
