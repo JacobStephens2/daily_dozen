@@ -438,6 +438,8 @@ body {
     font-size: 0.9rem;
 }
 
+
+
 .servings-container {
     display: flex;
     flex-wrap: wrap;
@@ -488,7 +490,7 @@ body {
 }
 
 .gratitude-btn {
-    background: linear-gradient(135deg, var(--tacha), var(--copper));
+    background: var(--tacha);
     color: var(--text-primary);
     border: none;
     padding: 1rem 2rem;
@@ -690,12 +692,17 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
     }
     
     .header-icon {
-        display: none;
+        display: inline;
+        width: 32px;
+        height: 32px;
+        margin-right: 0.5rem;
     }
     
     .app-header h1 {
@@ -762,41 +769,71 @@ body {
     }
     
     .category-card {
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
+        padding: 0.6rem;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
     
     .category-header {
-        margin-bottom: 0.75rem;
+        margin-bottom: 0;
+        align-items: flex-start;
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
     }
     
     .category-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        margin-right: 0.75rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+    
+    .category-info {
+        flex: 1;
+        min-width: 0;
+        margin-right: 0.5rem;
+        text-align: left;
     }
     
     .category-info h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.2rem;
+        font-size: 1rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
     }
     
     .category-info p {
+        display: inline;
+        margin-left: 0.5rem;
         font-size: 0.8rem;
+        color: var(--text-secondary);
+        opacity: 0.8;
+    }
+    
+    .category-info h3 {
+        display: inline;
     }
     
     .servings-container {
-        justify-content: center;
-        gap: 0.4rem;
+        justify-content: flex-end;
+        gap: 0.3rem;
+        flex-shrink: 0;
+        align-items: center;
+        display: flex;
     }
     
     .serving-label {
-        min-width: 45px;
-        padding: 0.4rem 0.6rem;
-        font-size: 0.85rem;
+        min-width: 40px;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
         font-weight: 500;
-        border-radius: 6px;
+        border-radius: 4px;
     }
 
     .profile-selector {
@@ -897,7 +934,10 @@ body {
     }
     
     .header-icon {
-        display: none;
+        display: inline;
+        width: 28px;
+        height: 28px;
+        margin-right: 0.4rem;
     }
     
     .header-install-btn {
@@ -911,7 +951,6 @@ body {
     }
     
     .category-header {
-        flex-direction: column;
         text-align: center;
     }
     
@@ -920,25 +959,38 @@ body {
         margin-bottom: 0.5rem;
     }
     
-    .servings-container {
-        gap: 0.3rem;
-    }
-    
-    .serving-label {
-        min-width: 40px;
-        padding: 0.35rem 0.5rem;
-        font-size: 0.8rem;
-    }
-    
     .category-card {
-        padding: 0.6rem;
+        padding: 0.5rem;
+        gap: 0.4rem;
+    }
+    
+    .category-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+        margin-right: 0.4rem;
+    }
+    
+    .category-info {
+        margin-right: 0.4rem;
     }
     
     .category-info h3 {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
     
     .category-info p {
+        font-size: 0.75rem;
+        margin-left: 0.4rem;
+    }
+    
+    .servings-container {
+        gap: 0.25rem;
+    }
+    
+    .serving-label {
+        min-width: 35px;
+        padding: 0.25rem 0.4rem;
         font-size: 0.75rem;
     }
 }

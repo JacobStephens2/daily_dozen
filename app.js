@@ -24,11 +24,11 @@ class DailyDozenTracker {
         this.installDismissedKey = 'dailyDozenInstallDismissed';
         this.profileStorageKey = 'dailyDozenProfiles';
         this.currentProfileKey = 'dailyDozenCurrentProfile';
-        this.dietType = this.loadDietType();
-        this.categories = this.getCategoriesForDietType(this.dietType);
         this.deferredPrompt = null;
         this.profiles = this.loadProfiles();
         this.currentProfile = this.loadCurrentProfile();
+        this.dietType = this.loadDietType();
+        this.categories = this.getCategoriesForDietType(this.dietType);
         this.init();
     }
 
@@ -39,7 +39,7 @@ class DailyDozenTracker {
                 name: 'Beans',
                 icon: '🫘',
                 servings: 3,
-                description: 'e.g., ½ c. cooked beans, ¼ c. hummus',
+                description: '½ c. cooked beans, ¼&nbsp;c.&nbsp;hummus',
                 examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
             },
             {
@@ -47,7 +47,7 @@ class DailyDozenTracker {
                 name: 'Berries',
                 icon: '🫐',
                 servings: 1,
-                description: 'e.g., ½ c. fresh or frozen, ¼ c. dried',
+                description: '½ c. fresh or frozen, ¼ c. dried',
                 examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
             },
             {
@@ -55,7 +55,7 @@ class DailyDozenTracker {
                 name: 'Other Fruits',
                 icon: '🍎',
                 servings: 3,
-                description: 'e.g., 1 medium fruit, ¼ c. dried fruit',
+                description: '1 medium fruit, ¼&nbsp;c.&nbsp;dried&nbsp;fruit',
                 examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
             },
             {
@@ -63,7 +63,7 @@ class DailyDozenTracker {
                 name: 'Greens',
                 icon: '🥬',
                 servings: 2,
-                description: 'e.g., 1 c. raw, ½ c. cooked',
+                description: '1 c. raw, ½ c. cooked',
                 examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
             },
             {
@@ -71,7 +71,7 @@ class DailyDozenTracker {
                 name: 'Cruciferous Vegetables',
                 icon: '🥦',
                 servings: 1,
-                description: 'e.g., ½ c. chopped, 1 tbsp horseradish',
+                description: '½ c. chopped, 1&nbsp;tbsp&nbsp;horseradish',
                 examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
             },
             {
@@ -79,7 +79,7 @@ class DailyDozenTracker {
                 name: 'Other Vegetables',
                 icon: '🥕',
                 servings: 2,
-                description: 'e.g., ½ c. nonleafy vegetables',
+                description: '½ c. nonleafy vegetables',
                 examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
             },
             {
@@ -87,7 +87,7 @@ class DailyDozenTracker {
                 name: 'Flaxseed',
                 icon: '🌾',
                 servings: 1,
-                description: 'e.g., 1 tbsp ground',
+                description: '1 tbsp ground',
                 examples: ['Ground flaxseed', 'Flaxseed oil']
             },
             {
@@ -95,7 +95,7 @@ class DailyDozenTracker {
                 name: 'Nuts and Seeds',
                 icon: '🥜',
                 servings: 1,
-                description: 'e.g., ¼ c. nuts, 2 tbsp nut butter',
+                description: '¼ c. nuts, 2 tbsp nut butter',
                 examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
             },
             {
@@ -103,7 +103,7 @@ class DailyDozenTracker {
                 name: 'Herbs and Spices',
                 icon: '🌿',
                 servings: 1,
-                description: 'e.g., ¼ tsp turmeric',
+                description: '¼ tsp turmeric',
                 examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
             },
             {
@@ -111,7 +111,7 @@ class DailyDozenTracker {
                 name: 'Whole Grains',
                 icon: '🌾',
                 servings: 3,
-                description: 'e.g., ½ c. hot cereal, 1 slice of bread',
+                description: '½ c. hot cereal, 1 slice of bread',
                 examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
             },
             {
@@ -119,7 +119,7 @@ class DailyDozenTracker {
                 name: 'Beverages',
                 icon: '💧',
                 servings: 5,
-                description: '60 oz per day',
+                description: "60&nbsp;oz&nbsp;per&nbsp;day",
                 examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
             },
             {
@@ -140,7 +140,7 @@ class DailyDozenTracker {
                 name: 'Protein',
                 icon: '🥩',
                 servings: 2,
-                description: 'e.g., 3 oz lean meat, 1 egg, ½ c. beans',
+                description: '3 oz lean meat, 1 egg, ½ c. beans',
                 examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
             },
             {
@@ -148,7 +148,7 @@ class DailyDozenTracker {
                 name: 'Berries',
                 icon: '🫐',
                 servings: 1,
-                description: 'e.g., ½ c. fresh or frozen, ¼ c. dried',
+                description: '½ c. fresh or frozen, ¼ c. dried',
                 examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
             },
             {
@@ -156,7 +156,7 @@ class DailyDozenTracker {
                 name: 'Other Fruits',
                 icon: '🍎',
                 servings: 3,
-                description: 'e.g., 1 medium fruit, ¼ c. dried fruit',
+                description: '1 medium fruit, ¼ c. dried fruit',
                 examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
             },
             {
@@ -164,7 +164,7 @@ class DailyDozenTracker {
                 name: 'Greens',
                 icon: '🥬',
                 servings: 2,
-                description: 'e.g., 1 c. raw, ½ c. cooked',
+                description: '1 c. raw, ½ c. cooked',
                 examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
             },
             {
@@ -172,7 +172,7 @@ class DailyDozenTracker {
                 name: 'Cruciferous Vegetables',
                 icon: '🥦',
                 servings: 1,
-                description: 'e.g., ½ c. chopped, 1 tbsp horseradish',
+                description: '½ c. chopped, 1 tbsp horseradish',
                 examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
             },
             {
@@ -180,7 +180,7 @@ class DailyDozenTracker {
                 name: 'Other Vegetables',
                 icon: '🥕',
                 servings: 2,
-                description: 'e.g., ½ c. nonleafy vegetables',
+                description: '½ c. nonleafy vegetables',
                 examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
             },
             {
@@ -188,7 +188,7 @@ class DailyDozenTracker {
                 name: 'Nuts and Seeds',
                 icon: '🥜',
                 servings: 1,
-                description: 'e.g., ¼ c. nuts, 2 tbsp nut butter',
+                description: '¼ c. nuts, 2 tbsp nut butter',
                 examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
             },
             {
@@ -196,7 +196,7 @@ class DailyDozenTracker {
                 name: 'Herbs and Spices',
                 icon: '🌿',
                 servings: 1,
-                description: 'e.g., ¼ tsp turmeric',
+                description: '¼ tsp turmeric',
                 examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
             },
             {
@@ -204,7 +204,7 @@ class DailyDozenTracker {
                 name: 'Whole Grains',
                 icon: '🌾',
                 servings: 3,
-                description: 'e.g., ½ c. hot cereal, 1 slice of bread',
+                description: '½ c. hot cereal, 1 slice of bread',
                 examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
             },
             {
@@ -249,7 +249,7 @@ class DailyDozenTracker {
         // Default profiles
         return {
             'user': { name: 'You', color: '#548444' },
-            'partner': { name: 'Partner', color: '#b9803c' }
+            'other': { name: 'Other', color: '#b9803c' }
         };
     }
 
