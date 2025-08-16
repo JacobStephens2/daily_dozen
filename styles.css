@@ -861,7 +861,7 @@ body {
     
     .app-header {
         padding: 3rem 2rem;
-        background: linear-gradient(135deg, var(--fern-green), var(--granny-smith));
+        background: var(--fern-green);
     }
     
     .header-content {
@@ -933,7 +933,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     
     .category-card::before {
@@ -963,6 +963,7 @@ body {
         align-items: center;
         flex: 1;
         min-width: 0;
+        margin-right: 1rem;
     }
     
     .category-icon {
@@ -997,23 +998,26 @@ body {
     }
     
     .servings-container {
-        gap: 0.4rem;
+        gap: 0.3rem;
         flex-wrap: nowrap;
         justify-content: flex-end;
         flex-shrink: 0;
         align-items: center;
+        min-width: 0;
     }
     
     .serving-label {
-        padding: 0.6rem 0.85rem;
-        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
         font-weight: 600;
-        min-width: 65px;
+        min-width: 55px;
+        max-width: 60px;
         border-radius: 8px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
         text-align: center;
+        white-space: nowrap;
     }
     
     .serving-label::before {
@@ -1180,6 +1184,27 @@ body {
         transform: translateY(-1px);
     }
     
+    .patron-saint-info {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .patron-saint-info a {
+        color: var(--tacha);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .patron-saint-info a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+    
     .footer-install-section {
         margin-top: 2rem;
         padding-top: 2rem;
@@ -1191,7 +1216,7 @@ body {
         font-size: 1.1rem;
         font-weight: 600;
         border-radius: 12px;
-        background: linear-gradient(135deg, var(--fern-green), var(--granny-smith));
+        background: var(--fern-green);
         box-shadow: 0 4px 16px rgba(84, 132, 68, 0.3);
     }
     
