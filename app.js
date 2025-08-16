@@ -272,10 +272,50 @@ class DailyDozenTracker {
 
         const servingsHtml = this.createServingsHtml(category);
         
-        // Add link for cruciferous vegetables
-        const categoryName = category.id === 'cruciferous' 
-            ? `<a href="https://nutritionfacts.org/topics/cruciferous-vegetables/" target="_blank" rel="noopener noreferrer">${category.name}</a>`
-            : category.name;
+        // Add links for various categories
+        let categoryName = category.name;
+        
+        switch(category.id) {
+            case 'beans':
+                categoryName = `<a href="https://nutritionfacts.org/topics/beans/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'berries':
+                categoryName = `<a href="https://nutritionfacts.org/topics/berries/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'other-fruits':
+                categoryName = `<a href="https://nutritionfacts.org/topics/fruit/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'greens':
+                categoryName = `<a href="https://nutritionfacts.org/topics/greens/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'cruciferous':
+                categoryName = `<a href="https://nutritionfacts.org/topics/cruciferous-vegetables/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'other-vegetables':
+                categoryName = `<a href="https://nutritionfacts.org/topics/vegetables/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'flaxseed':
+                categoryName = `<a href="https://nutritionfacts.org/topics/flax-seeds/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'nuts-seeds':
+                categoryName = `<a href="https://nutritionfacts.org/topics/nuts/" target="_blank" rel="noopener noreferrer">Nuts</a> and <a href="https://nutritionfacts.org/topics/seeds/" target="_blank" rel="noopener noreferrer">Seeds</a>`;
+                break;
+            case 'herbs-spices':
+                categoryName = `<a href="https://nutritionfacts.org/topics/herbs/" target="_blank" rel="noopener noreferrer">Herbs</a> and <a href="https://nutritionfacts.org/topics/spices/" target="_blank" rel="noopener noreferrer">Spices</a>`;
+                break;
+            case 'whole-grains':
+                categoryName = `<a href="https://nutritionfacts.org/topics/grains/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'beverages':
+                categoryName = `<a href="https://nutritionfacts.org/topics/beverages/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'exercise':
+                categoryName = `<a href="https://nutritionfacts.org/topics/exercise/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+            case 'protein':
+                categoryName = `<a href="https://nutritionfacts.org/topics/protein/" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+                break;
+        }
         
         card.innerHTML = `
             <div class="category-header">
