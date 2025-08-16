@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dozen App Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        button {
+            background: #2E7D32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Dozen App Test</h1>
+    
+    <div class="test-section info">
+        <h3>App Status</h3>
+        <p>This page tests the functionality of the Daily Dozen Tracker app.</p>
+    </div>
+
+    <div class="test-section" id="localStorage-test">
+        <h3>Local Storage Test</h3>
+        <p>Testing local storage functionality...</p>
+        <button onclick="testLocalStorage()">Test Local Storage</button>
+        <div id="localStorage-result"></div>
+    </div>
+
+    <div class="test-section" id="serviceWorker-test">
+        <h3>Service Worker Test</h3>
+        <p>Testing service worker registration...</p>
+        <button onclick="testServiceWorker()">Test Service Worker</button>
+        <div id="serviceWorker-result"></div>
+    </div>
+
+    <div class="test-section" id="pwa-test">
+        <h3>PWA Features Test</h3>
+        <p>Testing progressive web app features...</p>
+        <button onclick="testPWA()">Test PWA Features</button>
+        <div id="pwa-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Quick Links</h3>
+        <a href="index.html" target="_blank">
+            <button>Open Main App</button>
+        </a>
+        <a href="generate-icons.html" target="_blank">
+            <button>Icon Generator</button>
+        </a>
+    </div>
+
+    <script>
+        function testLocalStorage() {
+            const result = document.getElementById('localStorage-result');
+            try {
+                localStorage.setItem('test', 'test-value');
+                const retrieved = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                
+                if (retrieved === 'test-value') {
+                    result.innerHTML = '<div class="success">✅ Local storage is working correctly!</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ Local storage test failed</div>';
+                }
+            } catch (e) {
+                result.innerHTML = '<div class="error">❌ Local storage not available: ' + e.message + '</div>';
+            }
+        }
+
+        function testServiceWorker() {
+            const result = document.getElementById('serviceWorker-result');
+            if ('serviceWorker' in navigator) {
+                result.innerHTML = '<div class="success">✅ Service Worker is supported</div>';
+            } else {
+                result.innerHTML = '<div class="error">❌ Service Worker not supported</div>';
+            }
+        }
+
+        function testPWA() {
+            const result = document.getElementById('pwa-result');
+            let features = [];
+            
+            if ('serviceWorker' in navigator) features.push('Service Worker');
+            if ('localStorage' in window) features.push('Local Storage');
+            if ('manifest' in document) features.push('Web App Manifest');
+            if ('standalone' in window.navigator) features.push('Standalone Mode');
+            
+            if (features.length > 0) {
+                result.innerHTML = '<div class="success">✅ PWA features available: ' + features.join(', ') + '</div>';
+            } else {
+                result.innerHTML = '<div class="error">❌ No PWA features detected</div>';
+            }
+        }
+
+        // Run tests on page load
+        window.onload = function() {
+            testLocalStorage();
+            testServiceWorker();
+            testPWA();
+        };
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dozen Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Dozen JavaScript Fix Test</h1>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        function runTests() {
+            const results = document.getElementById('test-results');
+            let testOutput = '';
+            
+            // Test 1: Date object creation
+            try {
+                const testDate = new Date();
+                const dateString = testDate.toDateString();
+                const formattedDate = testDate.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                testOutput += `
+                    <div class="test-result success">
+                        <h3>✅ Date Object Test Passed</h3>
+                        <p>Date object created successfully</p>
+                        <p><strong>Date String:</strong> ${dateString}</p>
+                        <p><strong>Formatted Date:</strong> ${formattedDate}</p>
+                    </div>
+                `;
+            } catch (error) {
+                testOutput += `
+                    <div class="test-result error">
+                        <h3>❌ Date Object Test Failed</h3>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+            
+            // Test 2: Local Storage
+            try {
+                const testKey = 'testDateKey';
+                const testDate = new Date();
+                const dateKey = testDate.toDateString();
+                
+                localStorage.setItem(testKey, JSON.stringify({
+                    [dateKey]: { test: 'data' }
+                }));
+                
+                const retrieved = JSON.parse(localStorage.getItem(testKey));
+                localStorage.removeItem(testKey);
+                
+                if (retrieved && retrieved[dateKey]) {
+                    testOutput += `
+                        <div class="test-result success">
+                            <h3>✅ Local Storage Test Passed</h3>
+                            <p>Data stored and retrieved successfully using date key</p>
+                            <p><strong>Date Key:</strong> ${dateKey}</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Data not retrieved correctly');
+                }
+            } catch (error) {
+                testOutput += `
+                    <div class="test-result error">
+                        <h3>❌ Local Storage Test Failed</h3>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+            
+            // Test 3: Icon loading
+            const iconTest = new Image();
+            iconTest.onload = function() {
+                testOutput += `
+                    <div class="test-result success">
+                        <h3>✅ Icon Loading Test Passed</h3>
+                        <p>192x192 icon loaded successfully</p>
+                    </div>
+                `;
+                results.innerHTML = testOutput;
+            };
+            iconTest.onerror = function() {
+                testOutput += `
+                    <div class="test-result error">
+                        <h3>❌ Icon Loading Test Failed</h3>
+                        <p>Could not load icon-192x192.png</p>
+                    </div>
+                `;
+                results.innerHTML = testOutput;
+            };
+            iconTest.src = 'icons/icon-192x192.png';
+            
+            // If icon test doesn't run, show other results
+            if (!iconTest.complete) {
+                setTimeout(() => {
+                    if (!results.innerHTML) {
+                        results.innerHTML = testOutput;
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Run tests when page loads
+        window.onload = runTests;
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dozen Tracker - Stewarding God's Gift of Health</title>
+    <meta name="description" content="Track your daily servings of the healthiest foods while honoring your body as a temple of the Holy Spirit">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Daily Dozen Tracker</h1>
+            <p class="subtitle">Stewarding God's Gift of Health</p>
+            <div class="date-display">
+                <span id="current-date"></span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-count">0</span> / <span id="total-servings">24</span> servings completed
+                </div>
+            </div>
+
+            <div class="categories-container" id="categories-container">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
+
+            <div class="gratitude-section">
+                <button class="gratitude-btn" id="gratitude-btn">
+                    🙏 Give Thanks for Today's Nourishment
+                </button>
+                <div class="gratitude-modal" id="gratitude-modal">
+                    <div class="modal-content">
+                        <h3>Blessing Before Meals</h3>
+                        <p>"Bless us, O Lord, and these Thy gifts, which we are about to receive from Thy bounty, through Christ our Lord. Amen."</p>
+                        <p class="gratitude-note">Thank you, Lord, for the gift of healthy food and the strength to care for this temple of the Holy Spirit.</p>
+                        <button class="close-modal" id="close-gratitude">Amen</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>Created with respect for the dignity of the human person and the body as a temple of the Holy Spirit</p>
+            <p class="disclaimer">This app is inspired by Dr. Greger's Daily Dozen from NutritionFacts.org</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="sw.js"></script>
+</body>
+</html>
+
