@@ -1,0 +1,27 @@
+# Cache Control Headers for Daily Dozen Tracker
+# Balanced caching approach - allow caching for performance but with reasonable expiration
+
+# Cache HTML files for 1 hour
+<FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
+
+# Cache CSS and JS files for 1 day
+<FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=86400"
+</FilesMatch>
+
+# Cache manifest file for 1 hour
+<FilesMatch "manifest\.json$">
+    Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
+
+# Cache images and icons for 1 year (they don't change often)
+<FilesMatch "\.(png|jpg|jpeg|gif|ico|svg)$">
+    Header set Cache-Control "public, max-age=31536000"
+</FilesMatch>
+
+# Force HTTPS (if available)
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

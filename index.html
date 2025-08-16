@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Dozen Tracker - Stewarding God's Gift of Health</title>
     <meta name="description" content="Track your daily servings of the healthiest foods while honoring your body as a temple of the Holy Spirit">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="icon-192x192.png">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <!-- Balanced caching approach - allow caching but with version control -->
+    <meta http-equiv="Cache-Control" content="public, max-age=3600">
+    
+    <link rel="manifest" href="manifest.json?v=2.0.1">
+    <link rel="icon" type="image/png" href="icon-192x192.png?v=2.0.1">
+    <link rel="apple-touch-icon" href="icon-192x192.png?v=2.0.1">
     <meta name="theme-color" content="#2E7D32">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2.0.1">
 </head>
 <body>
     <div class="app-container">
@@ -49,11 +53,17 @@
                 <div class="gratitude-modal" id="gratitude-modal">
                     <div class="modal-content">
                         <h3>Blessing Before Meals</h3>
-                        <p>"Bless us, O Lord, and these Thy gifts, which we are about to receive from Thy bounty, through Christ our Lord. Amen."</p>
-                        <p class="gratitude-note">Thank you, Lord, for the gift of healthy food and the strength to care for this temple of the Holy Spirit.</p>
+                        <p>Bless us, O Lord, and these Thy gifts, which we are about to receive from Thy bounty, through Christ our Lord. Amen.</p>
+                        <p>And may the souls of the faithful departed, through the mercy of God, rest in peace. Amen.</p>
                         <button class="close-modal" id="close-gratitude">Amen</button>
                     </div>
                 </div>
+            </div>
+
+            <div class="reset-section">
+                <button class="reset-btn" id="reset-day-btn">
+                    🔄 Reset Day
+                </button>
             </div>
         </main>
 
@@ -67,8 +77,8 @@
         </footer>
     </div>
 
-    <script src="app.js?v=2.0.0"></script>
-    <script src="sw.js?v=2.0.0"></script>
+    <script src="app.js?v=2.0.1"></script>
+    <script src="sw.js?v=2.0.1"></script>
 </body>
 </html>
 

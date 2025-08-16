@@ -1,4 +1,20 @@
 // Catholic Daily Dozen Tracker - Main Application Logic
+// Version: 2.0.2 - Fixed checkbox unchecking logic
+
+console.log('Daily Dozen Tracker loaded - Version 2.0.2');
+console.log('Timestamp:', new Date().toISOString());
+
+// Check for updates on page load (but don't clear cache aggressively)
+if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+    // Check for service worker updates
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+                registration.update();
+            });
+        });
+    }
+}
 
 class DailyDozenTracker {
     constructor() {
@@ -256,11 +272,16 @@ class DailyDozenTracker {
 
         const servingsHtml = this.createServingsHtml(category);
         
+        // Add link for cruciferous vegetables
+        const categoryName = category.id === 'cruciferous' 
+            ? `<a href="https://nutritionfacts.org/topics/cruciferous-vegetables/" target="_blank" rel="noopener noreferrer">${category.name}</a>`
+            : category.name;
+        
         card.innerHTML = `
             <div class="category-header">
                 <div class="category-icon">${category.icon}</div>
                 <div class="category-info">
-                    <h3>${category.name}</h3>
+                    <h3>${categoryName}</h3>
                     <p>${category.description}</p>
                 </div>
             </div>
@@ -301,6 +322,14 @@ class DailyDozenTracker {
             }
         });
 
+        // Reset day button
+        const resetDayBtn = document.getElementById('reset-day-btn');
+        if (resetDayBtn) {
+            resetDayBtn.addEventListener('click', () => {
+                this.resetDay();
+            });
+        }
+
         // Gratitude button
         const gratitudeBtn = document.getElementById('gratitude-btn');
         const gratitudeModal = document.getElementById('gratitude-modal');
@@ -335,40 +364,196 @@ class DailyDozenTracker {
         const servingIndex = parseInt(checkbox.dataset.serving);
         const isChecked = checkbox.checked;
 
+        console.log(`handleServingChange: ${categoryId}-${servingIndex}, initial checked: ${isChecked}`);
+
         // If checking a box, also check all boxes to the left that are unchecked
         if (isChecked) {
             this.fillCheckboxesToLeft(categoryId, servingIndex);
         }
-        // If unchecking a box, also uncheck all boxes to the left
+        // If unchecking a box, handle the new behavior
         else {
-            this.uncheckBoxesToLeft(categoryId, servingIndex);
+            this.handleUncheckBehavior(categoryId, servingIndex, checkbox);
         }
 
-        this.saveServing(categoryId, servingIndex, isChecked);
+        console.log(`handleServingChange: ${categoryId}-${servingIndex}, final checked: ${checkbox.checked}`);
+
+        // Save the current state of the checkbox after all logic has been applied
+        this.saveServing(categoryId, servingIndex, checkbox.checked);
         this.updateProgress();
         this.updateCategoryStatus(categoryId);
     }
 
     fillCheckboxesToLeft(categoryId, servingIndex) {
-        // Check all checkboxes to the left of the current one
-        for (let i = 0; i < servingIndex; i++) {
-            const leftCheckbox = document.getElementById(`${categoryId}-${i}`);
-            if (leftCheckbox && !leftCheckbox.checked) {
-                leftCheckbox.checked = true;
-                this.saveServing(categoryId, i, true);
+        // Check if there are any checked boxes to the right of the current one
+        const category = this.categories.find(c => c.id === categoryId);
+        if (!category) return;
+        
+        let hasCheckedBoxesToRight = false;
+        for (let i = servingIndex + 1; i < category.servings; i++) {
+            const rightCheckbox = document.getElementById(`${categoryId}-${i}`);
+            if (rightCheckbox && rightCheckbox.checked) {
+                hasCheckedBoxesToRight = true;
+                break;
+            }
+        }
+        
+        if (hasCheckedBoxesToRight) {
+            // If there are checked boxes to the right, uncheck the clicked box and all to its right
+            this.uncheckBoxesToRight(categoryId, servingIndex);
+            // Also uncheck the clicked box itself
+            const clickedCheckbox = document.getElementById(`${categoryId}-${servingIndex}`);
+            if (clickedCheckbox) {
+                clickedCheckbox.checked = false;
+                this.saveServing(categoryId, servingIndex, false);
+            }
+            // Force CSS re-evaluation by temporarily adding a class to the body
+            document.body.classList.add('force-update');
+            setTimeout(() => {
+                document.body.classList.remove('force-update');
+            }, 0);
+            // Update progress and category status after all changes
+            this.updateProgress();
+            this.updateCategoryStatus(categoryId);
+        } else {
+            // Check all checkboxes to the left of the current one
+            for (let i = 0; i < servingIndex; i++) {
+                const leftCheckbox = document.getElementById(`${categoryId}-${i}`);
+                if (leftCheckbox && !leftCheckbox.checked) {
+                    leftCheckbox.checked = true;
+                    this.saveServing(categoryId, i, true);
+                }
+            }
+        }
+    }
+
+    handleUncheckBehavior(categoryId, servingIndex, checkbox) {
+        console.log(`handleUncheckBehavior: ${categoryId}-${servingIndex}`);
+        
+        // Find the leftmost and rightmost checked checkboxes in this category
+        // BUT temporarily re-check the clicked checkbox to get the correct state
+        const wasChecked = checkbox.checked;
+        checkbox.checked = true;
+        
+        const category = this.categories.find(c => c.id === categoryId);
+        if (!category) return;
+        
+        let leftmostCheckedIndex = -1;
+        let rightmostCheckedIndex = -1;
+        
+        // Find leftmost checked box
+        for (let i = 0; i < category.servings; i++) {
+            const currentCheckbox = document.getElementById(`${categoryId}-${i}`);
+            if (currentCheckbox && currentCheckbox.checked) {
+                leftmostCheckedIndex = i;
+                break;
+            }
+        }
+        
+        // Find rightmost checked box
+        for (let i = category.servings - 1; i >= 0; i--) {
+            const currentCheckbox = document.getElementById(`${categoryId}-${i}`);
+            if (currentCheckbox && currentCheckbox.checked) {
+                rightmostCheckedIndex = i;
+                break;
+            }
+        }
+        
+        console.log(`handleUncheckBehavior: leftmost=${leftmostCheckedIndex}, rightmost=${rightmostCheckedIndex}`);
+        
+        // If the clicked checkbox is the leftmost checked one, uncheck all boxes
+        if (servingIndex === leftmostCheckedIndex) {
+            console.log(`handleUncheckBehavior: unchecking all boxes for ${categoryId}`);
+            this.uncheckAllBoxes(categoryId);
+        }
+        // If the clicked checkbox is the rightmost checked one, uncheck it and all to the left
+        else if (servingIndex === rightmostCheckedIndex) {
+            console.log(`handleUncheckBehavior: unchecking boxes to left for ${categoryId}-${servingIndex}`);
+            this.uncheckBoxesToLeft(categoryId, servingIndex);
+        } else {
+            // Check if there are any checked boxes to the right of the clicked box
+            let hasCheckedBoxesToRight = false;
+            for (let i = servingIndex + 1; i < category.servings; i++) {
+                const rightCheckbox = document.getElementById(`${categoryId}-${i}`);
+                if (rightCheckbox && rightCheckbox.checked) {
+                    hasCheckedBoxesToRight = true;
+                    break;
+                }
+            }
+            
+            if (hasCheckedBoxesToRight) {
+                // If the clicked checkbox has checked boxes to its right, 
+                // re-check the clicked box and uncheck only the boxes to its right
+                console.log(`handleUncheckBehavior: re-checking ${categoryId}-${servingIndex} and unchecking to right`);
+                checkbox.checked = true;
+                this.uncheckBoxesToRight(categoryId, servingIndex);
+            } else {
+                // If no checked boxes to the right, leave the clicked box unchecked
+                checkbox.checked = false;
             }
         }
     }
 
     uncheckBoxesToLeft(categoryId, servingIndex) {
-        // Uncheck all checkboxes to the left of the current one
-        for (let i = 0; i < servingIndex; i++) {
+        // Uncheck all checkboxes to the left of the current one AND the current one
+        for (let i = 0; i <= servingIndex; i++) {
             const leftCheckbox = document.getElementById(`${categoryId}-${i}`);
             if (leftCheckbox && leftCheckbox.checked) {
                 leftCheckbox.checked = false;
                 this.saveServing(categoryId, i, false);
             }
         }
+    }
+
+    uncheckBoxesToRight(categoryId, servingIndex) {
+        // Uncheck all checkboxes to the right of the current one
+        const category = this.categories.find(c => c.id === categoryId);
+        if (!category) return;
+        
+        for (let i = servingIndex + 1; i < category.servings; i++) {
+            const rightCheckbox = document.getElementById(`${categoryId}-${i}`);
+            if (rightCheckbox && rightCheckbox.checked) {
+                rightCheckbox.checked = false;
+                this.saveServing(categoryId, i, false);
+            }
+        }
+    }
+
+    uncheckAllBoxes(categoryId) {
+        console.log(`uncheckAllBoxes: unchecking all boxes for ${categoryId}`);
+        
+        // Uncheck all checkboxes in the category
+        const category = this.categories.find(c => c.id === categoryId);
+        if (!category) return;
+        
+        for (let i = 0; i < category.servings; i++) {
+            const checkbox = document.getElementById(`${categoryId}-${i}`);
+            if (checkbox && checkbox.checked) {
+                console.log(`uncheckAllBoxes: unchecking ${categoryId}-${i}`);
+                checkbox.checked = false;
+                this.saveServing(categoryId, i, false);
+            }
+        }
+        
+        // Force UI update
+        console.log(`uncheckAllBoxes: forcing UI update for ${categoryId}`);
+        this.forceUIUpdate(categoryId);
+        
+        // Debug: Check final states
+        console.log(`uncheckAllBoxes: final checkbox states for ${categoryId}:`);
+        for (let i = 0; i < category.servings; i++) {
+            const checkbox = document.getElementById(`${categoryId}-${i}`);
+            if (checkbox) {
+                console.log(`  ${categoryId}-${i}: checked=${checkbox.checked}`);
+            }
+        }
+    }
+
+    forceUIUpdate(categoryId) {
+        // Force CSS re-evaluation by temporarily adding a class to the body
+        document.body.classList.add('force-update');
+        setTimeout(() => {
+            document.body.classList.remove('force-update');
+        }, 0);
     }
 
     saveServing(categoryId, servingIndex, isChecked) {
@@ -452,6 +637,8 @@ class DailyDozenTracker {
         // Update progress bar color based on completion
         if (percentage >= 100) {
             progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #2E7D32)';
+            // Show celebration when daily dozen is completed
+            this.showCompletionCelebration();
         } else if (percentage >= 75) {
             progressFill.style.background = 'linear-gradient(90deg, #8BC34A, #4CAF50)';
         } else if (percentage >= 50) {
@@ -486,7 +673,96 @@ class DailyDozenTracker {
         }
     }
 
+    showCompletionCelebration() {
+        // Check if we've already shown celebration for today
+        const celebrationKey = `dailyDozenCelebration_${this.currentDate.toDateString()}`;
+        if (localStorage.getItem(celebrationKey)) {
+            return; // Already shown today
+        }
 
+        // Create celebration modal
+        const celebrationModal = document.createElement('div');
+        celebrationModal.className = 'celebration-modal';
+        celebrationModal.innerHTML = `
+            <div class="celebration-content">
+                <div class="celebration-icon">🎉</div>
+                <h2>Congratulations!</h2>
+                <p>You've completed your Daily Dozen for today!</p>
+                <p class="celebration-message">Thank you for honoring this temple of the Holy Spirit. Your care for your body glorifies God and respects the sacred gift of life He has entrusted to you.</p>
+                <div class="celebration-verses">
+                    <p>"Do you not know that your body is a temple of the Holy Spirit within you, whom you have from&nbsp;God?"</p>
+                    <p class="verse-reference">— 1 Corinthians 6:19</p>
+                </div>
+                <button class="celebration-close" onclick="this.parentElement.parentElement.remove()">Amen! 🙏</button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(celebrationModal);
+
+        // Mark celebration as shown for today
+        localStorage.setItem(celebrationKey, 'true');
+
+        // Add some animation
+        setTimeout(() => {
+            celebrationModal.classList.add('show');
+        }, 100);
+    }
+
+    resetDay() {
+        // Show confirmation dialog
+        if (!confirm('Are you sure you want to reset all your progress for today? This action cannot be undone.')) {
+            return;
+        }
+
+        // Clear all checkboxes on the page
+        const checkboxes = document.querySelectorAll('.serving-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Remove today's data from localStorage
+        const data = this.loadData();
+        const dateKey = this.currentDate.toDateString();
+        if (data[dateKey]) {
+            delete data[dateKey];
+            localStorage.setItem(this.storageKey, JSON.stringify(data));
+        }
+
+        // Remove the celebration flag for today so it can show again
+        const celebrationKey = `dailyDozenCelebration_${this.currentDate.toDateString()}`;
+        localStorage.removeItem(celebrationKey);
+
+        // Update progress and category status
+        this.updateProgress();
+        this.categories.forEach(category => {
+            this.updateCategoryStatus(category.id);
+        });
+
+        // Show confirmation message
+        this.showResetConfirmation();
+    }
+
+    showResetConfirmation() {
+        // Create a temporary confirmation message
+        const confirmationDiv = document.createElement('div');
+        confirmationDiv.className = 'reset-confirmation';
+        confirmationDiv.innerHTML = `
+            <div class="confirmation-content">
+                <p>✅ Day reset successfully! You can now start fresh.</p>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(confirmationDiv);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            if (confirmationDiv.parentNode) {
+                confirmationDiv.parentNode.removeChild(confirmationDiv);
+            }
+        }, 3000);
+    }
 
     setDietTypeSelector() {
         const dietTypeSelect = document.getElementById('diet-type');
@@ -515,7 +791,10 @@ class DailyDozenTracker {
 
     registerServiceWorker() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js?v=2.0.0')
+            // Use version-based registration for controlled updates
+            const swUrl = 'sw.js?v=2.0.1';
+            
+            navigator.serviceWorker.register(swUrl)
                 .then(registration => {
                     console.log('Service Worker registered successfully');
                     
@@ -524,16 +803,44 @@ class DailyDozenTracker {
                         const newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // New service worker available, reload the page
-                                window.location.reload();
+                                // New service worker available, show update notification
+                                this.showUpdateNotification();
                             }
                         });
                     });
+                    
+                    // Check for updates periodically
+                    setInterval(() => {
+                        registration.update();
+                    }, 60000); // Check every minute
                 })
                 .catch(error => {
                     console.log('Service Worker registration failed:', error);
                 });
         }
+    }
+
+    showUpdateNotification() {
+        // Create update notification
+        const updateNotification = document.createElement('div');
+        updateNotification.className = 'update-notification';
+        updateNotification.innerHTML = `
+            <div class="update-content">
+                <p>🔄 A new version is available!</p>
+                <button onclick="window.location.reload()" class="update-btn">Update Now</button>
+                <button onclick="this.parentElement.parentElement.remove()" class="dismiss-btn">Later</button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(updateNotification);
+
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (updateNotification.parentNode) {
+                updateNotification.parentNode.removeChild(updateNotification);
+            }
+        }, 10000);
     }
 }
 

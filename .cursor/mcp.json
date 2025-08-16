@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "Magisterium": {
+            "command": "node",
+            "args": [
+                "/var/www/magisterium_mcp_server/mcp-magisterium.cjs"
+            ],
+            "cwd": "/var/www/magisterium_mcp_server",
+            "env": {
+                "MAGISTERIUM_API_KEY": "sk_educat_01aafdd0df5a4875b0a9170f8882836b"
+            }
+        }
+    }
+}

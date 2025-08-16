@@ -1,0 +1,25 @@
+{
+  "name": "daily-dozen-tracker",
+  "version": "2.0.1",
+  "description": "A Catholic Daily Dozen Tracker - Stewarding God's Gift of Health",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "daily-dozen",
+    "nutrition",
+    "health",
+    "catholic",
+    "tracker"
+  ],
+  "author": "Jacob Stephens",
+  "license": "MIT"
+}
