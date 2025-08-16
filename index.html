@@ -27,21 +27,17 @@
     <meta name="msapplication-TileColor" content="#548444">
     <meta name="msapplication-TileImage" content="assets/icons/icon-144x144.png">
     <meta name="application-name" content="Daily Dozen">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=2.0.6">
 </head>
 <body>
     <div class="app-container">
         <header class="app-header">
             <h1>Daily Dozen Tracker</h1>
-            <div class="date-display">
-                <span id="current-date"></span>
-            </div>
-            <div class="diet-selector">
-                <label for="diet-type">Diet Type:</label>
-                <select id="diet-type">
-                    <option value="standard">Standard Daily Dozen</option>
-                    <option value="modified">Modified Daily Dozen</option>
-                </select>
+            <div class="profile-selector" id="profile-selector">
+                <!-- Profile buttons will be populated by JavaScript -->
             </div>
 
         </header>
@@ -78,6 +74,19 @@
                 <button class="reset-btn" id="reset-day-btn">
                     🔄 Reset Day
                 </button>
+            </div>
+
+            <div class="diet-selector-section">
+                <div class="date-display">
+                    <span id="current-date"></span>
+                </div>
+                <div class="diet-selector">
+                    <label for="diet-type" id="diet-type-label">Diet Type for Profile:</label>
+                    <select id="diet-type">
+                        <option value="standard">Standard Daily Dozen</option>
+                        <option value="modified">Modified Daily Dozen</option>
+                    </select>
+                </div>
             </div>
         </main>
 

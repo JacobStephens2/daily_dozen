@@ -22,9 +22,13 @@ class DailyDozenTracker {
         this.storageKey = 'dailyDozenData';
         this.dietTypeStorageKey = 'dailyDozenDietType';
         this.installDismissedKey = 'dailyDozenInstallDismissed';
+        this.profileStorageKey = 'dailyDozenProfiles';
+        this.currentProfileKey = 'dailyDozenCurrentProfile';
         this.dietType = this.loadDietType();
         this.categories = this.getCategoriesForDietType(this.dietType);
         this.deferredPrompt = null;
+        this.profiles = this.loadProfiles();
+        this.currentProfile = this.loadCurrentProfile();
         this.init();
     }
 
@@ -227,21 +231,59 @@ class DailyDozenTracker {
     }
 
     loadDietType() {
-        const savedDietType = localStorage.getItem(this.dietTypeStorageKey);
+        const profileDietKey = this.getDietTypeStorageKey(this.currentProfile);
+        const savedDietType = localStorage.getItem(profileDietKey);
         return savedDietType || 'standard';
     }
 
     saveDietType(dietType) {
-        localStorage.setItem(this.dietTypeStorageKey, dietType);
+        const profileDietKey = this.getDietTypeStorageKey(this.currentProfile);
+        localStorage.setItem(profileDietKey, dietType);
+    }
+
+    loadProfiles() {
+        const savedProfiles = localStorage.getItem(this.profileStorageKey);
+        if (savedProfiles) {
+            return JSON.parse(savedProfiles);
+        }
+        // Default profiles
+        return {
+            'user': { name: 'You', color: '#548444' },
+            'partner': { name: 'Partner', color: '#b9803c' }
+        };
+    }
+
+    saveProfiles() {
+        localStorage.setItem(this.profileStorageKey, JSON.stringify(this.profiles));
+    }
+
+    loadCurrentProfile() {
+        const savedProfile = localStorage.getItem(this.currentProfileKey);
+        return savedProfile || 'user';
+    }
+
+    saveCurrentProfile(profileId) {
+        localStorage.setItem(this.currentProfileKey, profileId);
+    }
+
+    getProfileStorageKey(profileId) {
+        return `${this.storageKey}_${profileId}`;
+    }
+
+    getDietTypeStorageKey(profileId) {
+        return `${this.dietTypeStorageKey}_${profileId}`;
     }
 
     init() {
         this.updateDateDisplay();
+        this.setProfileSelector();
         this.setDietTypeSelector();
         this.renderCategories();
         const data = this.loadData();
         this.restoreCheckboxes(data);
         this.updateProgress();
+        this.updateHeaderColor();
+        this.updateDietTypeLabel();
         this.setupEventListeners();
         this.registerServiceWorker();
         this.setupPWAInstallation();
@@ -256,6 +298,137 @@ class DailyDozenTracker {
             day: 'numeric' 
         };
         dateElement.textContent = this.currentDate.toLocaleDateString('en-US', options);
+    }
+
+    setProfileSelector() {
+        const profileContainer = document.getElementById('profile-selector');
+        if (!profileContainer) return;
+
+        profileContainer.innerHTML = '';
+        
+        Object.keys(this.profiles).forEach(profileId => {
+            const profile = this.profiles[profileId];
+            const profileBtn = document.createElement('button');
+            profileBtn.className = 'profile-btn';
+            profileBtn.dataset.profileId = profileId;
+            
+            if (profileId === this.currentProfile) {
+                profileBtn.classList.add('active');
+            }
+            
+            profileBtn.style.setProperty('--profile-color', profile.color);
+            profileBtn.innerHTML = `
+                <span class="profile-icon">👤</span>
+                <span class="profile-name">${profile.name}</span>
+                <button class="edit-profile-btn" data-profile-id="${profileId}">✏️</button>
+            `;
+            
+            // Add click handler for the main profile button
+            profileBtn.addEventListener('click', (e) => {
+                // Don't trigger profile switch if clicking the edit button
+                if (!e.target.classList.contains('edit-profile-btn')) {
+                    this.switchProfile(profileId);
+                }
+            });
+            
+            // Add click handler for the edit button
+            const editBtn = profileBtn.querySelector('.edit-profile-btn');
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.editProfileName(profileId);
+            });
+            
+            profileContainer.appendChild(profileBtn);
+        });
+    }
+
+    switchProfile(profileId) {
+        if (profileId === this.currentProfile) return;
+        
+        // Save current profile's diet type
+        this.saveDietType(this.dietType);
+        
+        // Switch to new profile
+        this.currentProfile = profileId;
+        this.saveCurrentProfile(profileId);
+        
+        // Load new profile's diet type
+        this.dietType = this.loadDietType();
+        this.categories = this.getCategoriesForDietType(this.dietType);
+        
+        // Update UI
+        this.setProfileSelector();
+        this.setDietTypeSelector();
+        this.renderCategories();
+        
+        // Load and restore new profile's data
+        const data = this.loadData();
+        this.restoreCheckboxes(data);
+        this.updateProgress();
+        
+        // Update header color
+        this.updateHeaderColor();
+        
+        // Update diet type label
+        this.updateDietTypeLabel();
+    }
+
+    updateHeaderColor() {
+        const header = document.querySelector('.app-header');
+        const profile = this.profiles[this.currentProfile];
+        if (header && profile) {
+            header.style.backgroundColor = profile.color;
+        }
+    }
+
+    updateDietTypeLabel() {
+        const dietTypeLabel = document.getElementById('diet-type-label');
+        const profile = this.profiles[this.currentProfile];
+        if (dietTypeLabel && profile) {
+            dietTypeLabel.textContent = `Diet Type for ${profile.name}:`;
+        }
+    }
+
+    editProfileName(profileId) {
+        const profile = this.profiles[profileId];
+        const currentName = profile.name;
+        
+        // Create a simple prompt for editing
+        const newName = prompt(`Enter a new name for ${currentName}:`, currentName);
+        
+        if (newName && newName.trim() && newName.trim() !== currentName) {
+            // Update the profile name
+            this.profiles[profileId].name = newName.trim();
+            this.saveProfiles();
+            
+            // Update the UI
+            this.setProfileSelector();
+            this.updateDietTypeLabel();
+            
+            // Show confirmation
+            this.showProfileNameUpdated(newName.trim());
+        }
+    }
+
+    showProfileNameUpdated(newName) {
+        // Create a temporary confirmation message
+        const confirmationDiv = document.createElement('div');
+        confirmationDiv.className = 'profile-update-confirmation';
+        confirmationDiv.innerHTML = `
+            <div class="confirmation-content">
+                <span>✅ Profile name updated to "${newName}"</span>
+            </div>
+        `;
+        
+        // Add to page
+        document.body.appendChild(confirmationDiv);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            if (confirmationDiv.parentNode) {
+                confirmationDiv.parentNode.removeChild(confirmationDiv);
+            }
+        }, 3000);
     }
 
     renderCategories() {
@@ -632,11 +805,13 @@ class DailyDozenTracker {
             }
         }
 
-        localStorage.setItem(this.storageKey, JSON.stringify(data));
+        const profileStorageKey = this.getProfileStorageKey(this.currentProfile);
+        localStorage.setItem(profileStorageKey, JSON.stringify(data));
     }
 
     loadData() {
-        const data = localStorage.getItem(this.storageKey);
+        const profileStorageKey = this.getProfileStorageKey(this.currentProfile);
+        const data = localStorage.getItem(profileStorageKey);
         if (data) {
             const parsedData = JSON.parse(data);
             return parsedData;
@@ -728,7 +903,7 @@ class DailyDozenTracker {
 
     showCompletionCelebration() {
         // Check if we've already shown celebration for today
-        const celebrationKey = `dailyDozenCelebration_${this.currentDate.toDateString()}`;
+        const celebrationKey = `dailyDozenCelebration_${this.currentProfile}_${this.currentDate.toDateString()}`;
         if (localStorage.getItem(celebrationKey)) {
             return; // Already shown today
         }
@@ -740,7 +915,7 @@ class DailyDozenTracker {
             <div class="celebration-content">
                 <div class="celebration-icon">🎉</div>
                 <h2>Congratulations!</h2>
-                <p>You've completed your Daily Dozen for today!</p>
+                <p>${this.profiles[this.currentProfile].name} has completed the Daily Dozen for today!</p>
                 <p class="celebration-message">Thank you for honoring this temple of the Holy Spirit. Your care for your body glorifies God and respects the sacred gift of life He has entrusted to you.</p>
                 <div class="celebration-verses">
                     <p>"Do you not know that your body is a temple of the Holy Spirit within you, whom you have from&nbsp;God?"</p>
@@ -779,11 +954,12 @@ class DailyDozenTracker {
         const dateKey = this.currentDate.toDateString();
         if (data[dateKey]) {
             delete data[dateKey];
-            localStorage.setItem(this.storageKey, JSON.stringify(data));
+            const profileStorageKey = this.getProfileStorageKey(this.currentProfile);
+            localStorage.setItem(profileStorageKey, JSON.stringify(data));
         }
 
         // Remove the celebration flag for today so it can show again
-        const celebrationKey = `dailyDozenCelebration_${this.currentDate.toDateString()}`;
+        const celebrationKey = `dailyDozenCelebration_${this.currentProfile}_${this.currentDate.toDateString()}`;
         localStorage.removeItem(celebrationKey);
 
         // Update progress and category status
