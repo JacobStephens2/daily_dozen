@@ -1,6 +1,6 @@
 # Daily Dozen Tracker - Catholic Progressive Web App
 
-A progressive web application for tracking Dr. Greger's Daily Dozen food recommendations, designed with Catholic principles of stewardship, temperance, and respect for the body as a temple of the Holy Spirit.
+A progressive web application for tracking Dr. Greger's Daily Dozen food recommendations (or a modified version of the recommendations), designed with Catholic principles of stewardship, temperance, and respect for the body as a temple of the Holy Spirit.
 
 ## 🎯 Purpose
 
