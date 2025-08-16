@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Test</title>
+    <style>
+        .gratitude-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .gratitude-btn {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #212121;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-modal {
+            background: #2E7D32;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding: 2rem; text-align: center;">
+        <h1>Modal Test</h1>
+        <button class="gratitude-btn" id="gratitude-btn">
+            🙏 Give Thanks for Today's Nourishment
+        </button>
+        
+        <div class="gratitude-modal" id="gratitude-modal">
+            <div class="modal-content">
+                <h3>Blessing Before Meals</h3>
+                <p>"Bless us, O Lord, and these Thy gifts, which we are about to receive from Thy bounty, through Christ our Lord. Amen."</p>
+                <p class="gratitude-note">Thank you, Lord, for the gift of healthy food and the strength to care for this temple of the Holy Spirit.</p>
+                <button class="close-modal" id="close-gratitude">Amen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gratitudeBtn = document.getElementById('gratitude-btn');
+            const gratitudeModal = document.getElementById('gratitude-modal');
+            const closeGratitude = document.getElementById('close-gratitude');
+
+            console.log('Test - Gratitude button found:', gratitudeBtn);
+            console.log('Test - Gratitude modal found:', gratitudeModal);
+            console.log('Test - Close gratitude button found:', closeGratitude);
+
+            if (gratitudeBtn && gratitudeModal && closeGratitude) {
+                gratitudeBtn.addEventListener('click', () => {
+                    console.log('Test - Gratitude button clicked');
+                    gratitudeModal.style.display = 'flex';
+                    console.log('Test - Modal display set to flex');
+                });
+
+                closeGratitude.addEventListener('click', () => {
+                    console.log('Test - Close button clicked');
+                    gratitudeModal.style.display = 'none';
+                });
+
+                gratitudeModal.addEventListener('click', (e) => {
+                    if (e.target === gratitudeModal) {
+                        console.log('Test - Modal background clicked');
+                        gratitudeModal.style.display = 'none';
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        gratitudeModal.style.display = 'none';
+                    }
+                });
+            } else {
+                console.error('Test - One or more gratitude modal elements not found');
+            }
+        });
+    </script>
+</body>
+</html>

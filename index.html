@@ -19,6 +19,13 @@
             <div class="date-display">
                 <span id="current-date"></span>
             </div>
+            <div class="diet-selector">
+                <label for="diet-type">Diet Type:</label>
+                <select id="diet-type">
+                    <option value="standard">Standard Daily Dozen</option>
+                    <option value="modified">Modified Daily Dozen</option>
+                </select>
+            </div>
         </header>
 
         <main class="main-content">
@@ -52,12 +59,16 @@
 
         <footer class="app-footer">
             <p>Created with respect for the dignity of the human person and the body as a temple of the Holy Spirit</p>
-            <p class="disclaimer">This app is inspired by Dr. Greger's Daily Dozen from NutritionFacts.org</p>
+            <p class="disclaimer">This app is inspired by Dr. Greger's Daily Dozen from <a href="https://nutritionfacts.org/video/dr-gregers-daily-dozen-checklist/" target="_blank" rel="noopener noreferrer">NutritionFacts.org</a></p>
+            <div class="footer-links">
+                <p class="learn-more"><a href="https://nutritionfacts.org/video/dr-gregers-daily-dozen-checklist/" target="_blank" rel="noopener noreferrer">Watch the Daily Dozen Overview Video →</a></p>
+                <p class="learn-more"><a href="https://nutritionfacts.org/topics/daily-dozen/" target="_blank" rel="noopener noreferrer">Browse All Daily Dozen Videos →</a></p>
+            </div>
         </footer>
     </div>
 
-    <script src="app.js"></script>
-    <script src="sw.js"></script>
+    <script src="app.js?v=2.0.0"></script>
+    <script src="sw.js?v=2.0.0"></script>
 </body>
 </html>
 

@@ -2,7 +2,16 @@
 
 class DailyDozenTracker {
     constructor() {
-        this.categories = [
+        this.currentDate = new Date();
+        this.storageKey = 'dailyDozenData';
+        this.dietTypeStorageKey = 'dailyDozenDietType';
+        this.dietType = this.loadDietType();
+        this.categories = this.getCategoriesForDietType(this.dietType);
+        this.init();
+    }
+
+    getStandardCategories() {
+        return [
             {
                 id: 'beans',
                 name: 'Beans',
@@ -100,14 +109,117 @@ class DailyDozenTracker {
                 examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
             }
         ];
+    }
 
-        this.currentDate = new Date();
-        this.storageKey = 'dailyDozenData';
-        this.init();
+    getModifiedCategories() {
+        return [
+            {
+                id: 'protein',
+                name: 'Protein',
+                icon: '🥩',
+                servings: 2,
+                description: 'e.g., 3 oz lean meat, 1 egg, ½ c. beans',
+                examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
+            },
+            {
+                id: 'berries',
+                name: 'Berries',
+                icon: '🫐',
+                servings: 1,
+                description: 'e.g., ½ c. fresh or frozen, ¼ c. dried',
+                examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
+            },
+            {
+                id: 'other-fruits',
+                name: 'Other Fruits',
+                icon: '🍎',
+                servings: 3,
+                description: 'e.g., 1 medium fruit, ¼ c. dried fruit',
+                examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
+            },
+            {
+                id: 'greens',
+                name: 'Greens',
+                icon: '🥬',
+                servings: 2,
+                description: 'e.g., 1 c. raw, ½ c. cooked',
+                examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
+            },
+            {
+                id: 'cruciferous',
+                name: 'Cruciferous Vegetables',
+                icon: '🥦',
+                servings: 1,
+                description: 'e.g., ½ c. chopped, 1 tbsp horseradish',
+                examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
+            },
+            {
+                id: 'other-vegetables',
+                name: 'Other Vegetables',
+                icon: '🥕',
+                servings: 2,
+                description: 'e.g., ½ c. nonleafy vegetables',
+                examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
+            },
+            {
+                id: 'nuts-seeds',
+                name: 'Nuts and Seeds',
+                icon: '🥜',
+                servings: 1,
+                description: 'e.g., ¼ c. nuts, 2 tbsp nut butter',
+                examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
+            },
+            {
+                id: 'herbs-spices',
+                name: 'Herbs and Spices',
+                icon: '🌿',
+                servings: 1,
+                description: 'e.g., ¼ tsp turmeric',
+                examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
+            },
+            {
+                id: 'whole-grains',
+                name: 'Whole Grains',
+                icon: '🌾',
+                servings: 3,
+                description: 'e.g., ½ c. hot cereal, 1 slice of bread',
+                examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
+            },
+            {
+                id: 'beverages',
+                name: 'Beverages',
+                icon: '💧',
+                servings: 5,
+                description: '60 oz per day',
+                examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
+            },
+            {
+                id: 'exercise',
+                name: 'Exercise',
+                icon: '🏃',
+                servings: 1,
+                description: '90 min. moderate or 40 min. vigorous',
+                examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
+            }
+        ];
+    }
+
+    getCategoriesForDietType(dietType) {
+        return dietType === 'modified' ? this.getModifiedCategories() : this.getStandardCategories();
+    }
+
+    loadDietType() {
+        const savedDietType = localStorage.getItem(this.dietTypeStorageKey);
+        return savedDietType || 'standard';
+    }
+
+    saveDietType(dietType) {
+        localStorage.setItem(this.dietTypeStorageKey, dietType);
     }
 
     init() {
         this.updateDateDisplay();
+        this.setDietTypeSelector();
         this.renderCategories();
         const data = this.loadData();
         this.restoreCheckboxes(data);
@@ -176,6 +288,12 @@ class DailyDozenTracker {
     }
 
     setupEventListeners() {
+        // Diet type change event
+        const dietTypeSelect = document.getElementById('diet-type');
+        dietTypeSelect.addEventListener('change', (e) => {
+            this.handleDietTypeChange(e.target.value);
+        });
+
         // Checkbox change events
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('serving-checkbox')) {
@@ -188,26 +306,28 @@ class DailyDozenTracker {
         const gratitudeModal = document.getElementById('gratitude-modal');
         const closeGratitude = document.getElementById('close-gratitude');
 
-        gratitudeBtn.addEventListener('click', () => {
-            gratitudeModal.style.display = 'flex';
-        });
+        if (gratitudeBtn && gratitudeModal && closeGratitude) {
+            gratitudeBtn.addEventListener('click', () => {
+                gratitudeModal.style.display = 'flex';
+            });
 
-        closeGratitude.addEventListener('click', () => {
-            gratitudeModal.style.display = 'none';
-        });
-
-        gratitudeModal.addEventListener('click', (e) => {
-            if (e.target === gratitudeModal) {
+            closeGratitude.addEventListener('click', () => {
                 gratitudeModal.style.display = 'none';
-            }
-        });
+            });
 
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                gratitudeModal.style.display = 'none';
-            }
-        });
+            gratitudeModal.addEventListener('click', (e) => {
+                if (e.target === gratitudeModal) {
+                    gratitudeModal.style.display = 'none';
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    gratitudeModal.style.display = 'none';
+                }
+            });
+        }
     }
 
     handleServingChange(checkbox) {
@@ -290,6 +410,12 @@ class DailyDozenTracker {
         const dateKey = this.currentDate.toDateString();
         if (data[dateKey]) {
             Object.keys(data[dateKey]).forEach(categoryId => {
+                // Only process categories that exist in the current diet type
+                const categoryExists = this.categories.some(c => c.id === categoryId);
+                if (!categoryExists) {
+                    return; // Skip categories that don't exist in current diet type
+                }
+                
                 data[dateKey][categoryId].forEach(servingIndex => {
                     const checkbox = document.getElementById(`${categoryId}-${servingIndex}`);
                     if (checkbox) {
@@ -343,6 +469,11 @@ class DailyDozenTracker {
         const dateKey = this.currentDate.toDateString();
         const category = this.categories.find(c => c.id === categoryId);
 
+        // Safety check: ensure category exists and card is found
+        if (!category || !card) {
+            return;
+        }
+
         if (data[dateKey] && data[dateKey][categoryId]) {
             const completedCount = data[dateKey][categoryId].length;
             if (completedCount >= category.servings) {
@@ -355,11 +486,49 @@ class DailyDozenTracker {
         }
     }
 
+
+
+    setDietTypeSelector() {
+        const dietTypeSelect = document.getElementById('diet-type');
+        if (dietTypeSelect) {
+            dietTypeSelect.value = this.dietType;
+        }
+    }
+
+    handleDietTypeChange(newDietType) {
+        this.dietType = newDietType;
+        this.saveDietType(newDietType);
+        
+        // Update categories based on diet type
+        this.categories = this.getCategoriesForDietType(newDietType);
+        
+        // Re-render the categories
+        this.renderCategories();
+        
+        // Restore any existing data for the current date
+        const data = this.loadData();
+        this.restoreCheckboxes(data);
+        
+        // Update progress with new total
+        this.updateProgress();
+    }
+
     registerServiceWorker() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('sw.js?v=2.0.0')
                 .then(registration => {
                     console.log('Service Worker registered successfully');
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New service worker available, reload the page
+                                window.location.reload();
+                            }
+                        });
+                    });
                 })
                 .catch(error => {
                     console.log('Service Worker registration failed:', error);
@@ -368,20 +537,7 @@ class DailyDozenTracker {
     }
 }
 
-// Add CSS animations for notifications
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
+
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,6 +1,7 @@
 // Service Worker for Catholic Daily Dozen Tracker
 
-const CACHE_NAME = 'daily-dozen-v1';
+const CACHE_VERSION = 'v2.0.0';
+const CACHE_NAME = `daily-dozen-${CACHE_VERSION}`;
 const urlsToCache = [
     '/',
     '/index.html',
@@ -25,7 +26,25 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                // Return cached version or fetch from network
+                // For HTML, CSS, and JS files, always try to fetch from network first
+                if (event.request.url.includes('.html') || 
+                    event.request.url.includes('.css') || 
+                    event.request.url.includes('.js')) {
+                    return fetch(event.request)
+                        .then(networkResponse => {
+                            // Update cache with new response
+                            const responseClone = networkResponse.clone();
+                            caches.open(CACHE_NAME).then(cache => {
+                                cache.put(event.request, responseClone);
+                            });
+                            return networkResponse;
+                        })
+                        .catch(() => {
+                            // If network fails, return cached version
+                            return response;
+                        });
+                }
+                // For other resources, return cached version or fetch from network
                 return response || fetch(event.request);
             })
     );
@@ -43,6 +62,9 @@ self.addEventListener('activate', event => {
                     }
                 })
             );
+        }).then(() => {
+            // Force update of all clients
+            return self.clients.claim();
         })
     );
 });

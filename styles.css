@@ -86,6 +86,47 @@ body {
     font-weight: 500;
     position: relative;
     z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.diet-selector {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+}
+
+.diet-selector label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.diet-selector select {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.diet-selector select:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+}
+
+.diet-selector select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
 /* Main Content */
@@ -226,6 +267,8 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
 }
 
 .gratitude-btn:hover {
@@ -242,9 +285,22 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 1002;
     align-items: center;
     justify-content: center;
+    pointer-events: auto;
+}
+
+.gratitude-modal[style*="display: flex"] {
+    display: flex !important;
+}
+
+/* Ensure modal is visible when displayed */
+.gratitude-modal[style*="display: flex"],
+.gratitude-modal.show {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .modal-content {
@@ -255,6 +311,8 @@ body {
     width: 90%;
     text-align: center;
     box-shadow: var(--shadow-hover);
+    position: relative;
+    z-index: 1003;
 }
 
 .modal-content h3 {
@@ -306,6 +364,46 @@ body {
 .disclaimer {
     opacity: 0.8;
     font-size: 0.8rem;
+}
+
+.disclaimer a {
+    color: inherit;
+    text-decoration: underline;
+    transition: opacity 0.3s ease;
+}
+
+.disclaimer a:hover {
+    opacity: 1;
+}
+
+.footer-links {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.learn-more {
+    margin: 0;
+}
+
+.learn-more a {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--primary-light);
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.learn-more a:hover {
+    background: var(--primary-light);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
 
 /* Responsive Design */
