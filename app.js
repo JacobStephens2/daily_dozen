@@ -226,8 +226,115 @@ class DailyDozenTracker {
         ];
     }
 
+    getOneBeanCategories() {
+        return [
+            {
+                id: 'beans',
+                name: 'Beans',
+                icon: '🫘',
+                servings: 1,
+                description: '½ c. cooked beans, ¼ c. hummus',
+                examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
+            },
+            {
+                id: 'protein',
+                name: 'Protein',
+                icon: '🥩',
+                servings: 1,
+                description: '3 oz lean meat, 1 egg, ½ c. beans',
+                examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
+            },
+            {
+                id: 'berries',
+                name: 'Berries',
+                icon: '🫐',
+                servings: 1,
+                description: '½ c. fresh or frozen, ¼ c. dried',
+                examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
+            },
+            {
+                id: 'other-fruits',
+                name: 'Other Fruits',
+                icon: '🍎',
+                servings: 3,
+                description: '1 medium fruit, ¼ c. dried fruit',
+                examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
+            },
+            {
+                id: 'greens',
+                name: 'Greens',
+                icon: '🥬',
+                servings: 2,
+                description: '1 c. raw, ½ c. cooked',
+                examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
+            },
+            {
+                id: 'cruciferous',
+                name: 'Cruciferous Vegetables',
+                icon: '🥦',
+                servings: 1,
+                description: '½ c. chopped, 1 tbsp horseradish',
+                examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
+            },
+            {
+                id: 'other-vegetables',
+                name: 'Other Vegetables',
+                icon: '🥕',
+                servings: 2,
+                description: '½ c. nonleafy vegetables',
+                examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
+            },
+            {
+                id: 'nuts-seeds',
+                name: 'Nuts and Seeds',
+                icon: '🥜',
+                servings: 1,
+                description: '¼ c. nuts, 2 tbsp nut butter',
+                examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
+            },
+            {
+                id: 'herbs-spices',
+                name: 'Herbs and Spices',
+                icon: '🌿',
+                servings: 1,
+                description: '¼ tsp turmeric',
+                examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
+            },
+            {
+                id: 'whole-grains',
+                name: 'Whole Grains',
+                icon: '🌾',
+                servings: 3,
+                description: '½ c. hot cereal, 1 slice of bread',
+                examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
+            },
+            {
+                id: 'beverages',
+                name: 'Beverages',
+                icon: '💧',
+                servings: 5,
+                description: '60 oz per day',
+                examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
+            },
+            {
+                id: 'exercise',
+                name: 'Exercise',
+                icon: '🏃',
+                servings: 1,
+                description: '90 min. moderate or 40 min. vigorous',
+                examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
+            }
+        ];
+    }
+
     getCategoriesForDietType(dietType) {
-        return dietType === 'modified' ? this.getModifiedCategories() : this.getStandardCategories();
+        if (dietType === 'modified') {
+            return this.getModifiedCategories();
+        } else if (dietType === 'one-bean') {
+            return this.getOneBeanCategories();
+        } else {
+            return this.getStandardCategories();
+        }
     }
 
     loadDietType() {
