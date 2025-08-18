@@ -1,6 +1,6 @@
 // Service Worker for Catholic Daily Dozen Tracker
 
-const CACHE_VERSION = 'v2.0.6';
+const CACHE_VERSION = 'v2.0.8';
 const CACHE_NAME = `daily-dozen-${CACHE_VERSION}`;
 const urlsToCache = [
     '/',
@@ -22,11 +22,16 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', event => {
+    console.log(`Service Worker installing version ${CACHE_VERSION}`);
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('Opened cache');
                 return cache.addAll(urlsToCache);
+            })
+            .then(() => {
+                // Skip waiting to activate immediately
+                return self.skipWaiting();
             })
     );
 });
@@ -72,8 +77,9 @@ self.addEventListener('fetch', event => {
     );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and notify clients of update
 self.addEventListener('activate', event => {
+    console.log(`Service Worker activating version ${CACHE_VERSION}`);
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
@@ -87,6 +93,17 @@ self.addEventListener('activate', event => {
         }).then(() => {
             // Force update of all clients
             return self.clients.claim();
+        }).then(() => {
+            // Notify all clients about the new version
+            return self.clients.matchAll().then(clients => {
+                clients.forEach(client => {
+                    client.postMessage({
+                        type: 'SW_UPDATED',
+                        version: CACHE_VERSION,
+                        timestamp: new Date().toISOString()
+                    });
+                });
+            });
         })
     );
 });
@@ -95,6 +112,16 @@ self.addEventListener('activate', event => {
 self.addEventListener('sync', event => {
     if (event.tag === 'background-sync') {
         event.waitUntil(doBackgroundSync());
+    }
+});
+
+// Handle messages from the main app
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'GET_VERSION') {
+        event.ports[0].postMessage({
+            version: CACHE_VERSION,
+            timestamp: new Date().toISOString()
+        });
     }
 });
 

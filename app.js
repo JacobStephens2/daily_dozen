@@ -1,7 +1,7 @@
 // Catholic Daily Dozen Tracker - Main Application Logic
-// Version: 2.0.2 - Fixed checkbox unchecking logic
+// Version: 2.0.8 - Enhanced PWA update mechanism
 
-console.log('Daily Dozen Tracker loaded - Version 2.0.2');
+console.log('Daily Dozen Tracker loaded - Version 2.0.8');
 console.log('Timestamp:', new Date().toISOString());
 
 // Check for updates on page load (but don't clear cache aggressively)
@@ -394,6 +394,7 @@ class DailyDozenTracker {
         this.setupEventListeners();
         this.registerServiceWorker();
         this.setupPWAInstallation();
+        this.checkForPendingUpdates();
     }
 
     updateDateDisplay() {
@@ -688,6 +689,14 @@ class DailyDozenTracker {
         if (footerInstallBtn) {
             footerInstallBtn.addEventListener('click', () => {
                 this.showManualInstallInstructions();
+            });
+        }
+
+        // Version info button
+        const versionInfoBtn = document.getElementById('version-info-btn');
+        if (versionInfoBtn) {
+            versionInfoBtn.addEventListener('click', () => {
+                this.showVersionInfo();
             });
         }
     }
@@ -1128,11 +1137,23 @@ class DailyDozenTracker {
     registerServiceWorker() {
         if ('serviceWorker' in navigator) {
             // Use version-based registration for controlled updates
-            const swUrl = 'sw.js?v=2.0.1';
+            const swUrl = 'sw.js?v=2.0.8';
             
             navigator.serviceWorker.register(swUrl)
                 .then(registration => {
                     console.log('Service Worker registered successfully');
+                    
+                    // Store registration for later use
+                    this.swRegistration = registration;
+                    
+                    // Wait for the service worker to be ready
+                    if (registration.installing) {
+                        registration.installing.addEventListener('statechange', () => {
+                            if (registration.installing.state === 'installed') {
+                                console.log('Service Worker installed and ready');
+                            }
+                        });
+                    }
                     
                     // Check for updates
                     registration.addEventListener('updatefound', () => {
@@ -1145,10 +1166,20 @@ class DailyDozenTracker {
                         });
                     });
                     
+                    // Listen for service worker messages
+                    navigator.serviceWorker.addEventListener('message', (event) => {
+                        if (event.data && event.data.type === 'SW_UPDATED') {
+                            this.handleServiceWorkerUpdate(event.data);
+                        }
+                    });
+                    
                     // Check for updates periodically
                     setInterval(() => {
                         registration.update();
-                    }, 60000); // Check every minute
+                    }, 300000); // Check every 5 minutes
+                    
+                    // Initial update check
+                    registration.update();
                 })
                 .catch(error => {
                     console.log('Service Worker registration failed:', error);
@@ -1156,27 +1187,498 @@ class DailyDozenTracker {
         }
     }
 
-    showUpdateNotification() {
+    showUpdateNotification(version = null) {
+        // Remove any existing update notifications
+        const existingNotification = document.querySelector('.update-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
         // Create update notification
         const updateNotification = document.createElement('div');
         updateNotification.className = 'update-notification';
         updateNotification.innerHTML = `
             <div class="update-content">
                 <p>🔄 A new version is available!</p>
-                <button onclick="window.location.reload()" class="update-btn">Update Now</button>
-                <button onclick="this.parentElement.parentElement.remove()" class="dismiss-btn">Later</button>
+                ${version ? `<small>Version ${version}</small>` : ''}
+                <div class="update-buttons">
+                    <button class="update-btn">Update Now</button>
+                    <button class="dismiss-btn">Later</button>
+                </div>
             </div>
         `;
+
+        // Add event listeners to buttons
+        const updateBtn = updateNotification.querySelector('.update-btn');
+        const dismissBtn = updateNotification.querySelector('.dismiss-btn');
+        
+        updateBtn.addEventListener('click', () => {
+            this.updateApp();
+        });
+        
+        dismissBtn.addEventListener('click', () => {
+            this.dismissUpdate();
+        });
 
         // Add to page
         document.body.appendChild(updateNotification);
 
-        // Auto-remove after 10 seconds
+        // Store notification reference
+        this.currentUpdateNotification = updateNotification;
+
+        // Auto-remove after 30 seconds if not dismissed
         setTimeout(() => {
-            if (updateNotification.parentNode) {
-                updateNotification.parentNode.removeChild(updateNotification);
+            if (updateNotification.parentNode && !updateNotification.classList.contains('dismissed')) {
+                updateNotification.remove();
             }
-        }, 10000);
+        }, 30000);
+    }
+
+    handleServiceWorkerUpdate(updateData) {
+        console.log('Service Worker updated:', updateData);
+        
+        // Store update info
+        this.lastUpdateInfo = updateData;
+        
+        // Show update notification with version info
+        this.showUpdateNotification(updateData.version);
+        
+        // Update local storage with new version info
+        localStorage.setItem('dailyDozenLastUpdate', JSON.stringify({
+            version: updateData.version,
+            timestamp: updateData.timestamp,
+            applied: false
+        }));
+    }
+
+    updateApp() {
+        // Remove update notification
+        if (this.currentUpdateNotification) {
+            this.currentUpdateNotification.remove();
+        }
+
+        // Mark the update as applied
+        if (this.lastUpdateInfo) {
+            localStorage.setItem('dailyDozenLastUpdate', JSON.stringify({
+                version: this.lastUpdateInfo.version,
+                timestamp: this.lastUpdateInfo.timestamp,
+                applied: true,
+                appliedAt: new Date().toISOString()
+            }));
+        }
+
+        // Show loading state
+        this.showUpdateLoading();
+
+        // Reload the page to apply the update
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
+
+    dismissUpdate() {
+        if (this.currentUpdateNotification) {
+            this.currentUpdateNotification.classList.add('dismissed');
+            this.currentUpdateNotification.remove();
+        }
+
+        // Mark update as dismissed
+        if (this.lastUpdateInfo) {
+            localStorage.setItem('dailyDozenLastUpdate', JSON.stringify({
+                version: this.lastUpdateInfo.version,
+                timestamp: this.lastUpdateInfo.timestamp,
+                dismissed: true,
+                dismissedAt: new Date().toISOString()
+            }));
+        }
+    }
+
+    showUpdateLoading() {
+        const loadingNotification = document.createElement('div');
+        loadingNotification.className = 'update-notification update-loading';
+        loadingNotification.innerHTML = `
+            <div class="update-content">
+                <p>⏳ Updating app...</p>
+                <div class="loading-spinner"></div>
+            </div>
+        `;
+
+        document.body.appendChild(loadingNotification);
+    }
+
+    checkForUpdates() {
+        if (this.swRegistration) {
+            console.log('Checking for updates...');
+            this.swRegistration.update();
+            
+            // Listen for updatefound event
+            this.swRegistration.addEventListener('updatefound', () => {
+                console.log('Update found!');
+                this.showUpdateFoundFeedback();
+                
+                const newWorker = this.swRegistration.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log('New service worker installed, showing update notification');
+                        this.showUpdateNotification();
+                    }
+                });
+            });
+        } else {
+            console.log('No service worker registration available');
+        }
+    }
+
+    getCurrentVersion() {
+        return new Promise((resolve) => {
+            // First try to get version from service worker
+            if (navigator.serviceWorker.controller) {
+                const messageChannel = new MessageChannel();
+                messageChannel.port1.onmessage = (event) => {
+                    resolve(event.data);
+                };
+                
+                // Set a timeout in case the service worker doesn't respond
+                const timeout = setTimeout(() => {
+                    console.log('Service worker version request timed out, using fallback');
+                    resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
+                }, 2000);
+                
+                messageChannel.port1.onmessage = (event) => {
+                    clearTimeout(timeout);
+                    resolve(event.data);
+                };
+                
+                navigator.serviceWorker.controller.postMessage(
+                    { type: 'GET_VERSION' },
+                    [messageChannel.port2]
+                );
+            } else {
+                // Fallback: use the version from the service worker registration
+                navigator.serviceWorker.getRegistration().then(registration => {
+                    if (registration && registration.active) {
+                        // Extract version from the service worker URL or use default
+                        const swUrl = registration.active.scriptURL;
+                        const versionMatch = swUrl.match(/[?&]v=([^&]+)/);
+                        const version = versionMatch ? versionMatch[1] : 'v2.0.8';
+                        resolve({ version: version, timestamp: new Date().toISOString() });
+                    } else {
+                        resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
+                    }
+                }).catch(() => {
+                    resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
+                });
+            }
+        });
+    }
+
+    checkForPendingUpdates() {
+        // Check if there's a pending update that was dismissed
+        const lastUpdate = localStorage.getItem('dailyDozenLastUpdate');
+        if (lastUpdate) {
+            try {
+                const updateInfo = JSON.parse(lastUpdate);
+                
+                // Check current version to see if update is still relevant
+                this.getCurrentVersion().then(currentVersion => {
+                    // If the stored update version matches current version, clear the update info
+                    if (updateInfo.version === currentVersion.version) {
+                        localStorage.removeItem('dailyDozenLastUpdate');
+                        return;
+                    }
+                    
+                    // Check if the dismissed update is still relevant (within 24 hours)
+                    if (updateInfo.dismissed && !updateInfo.applied) {
+                        const dismissedTime = new Date(updateInfo.dismissedAt);
+                        const now = new Date();
+                        const hoursSinceDismissed = (now - dismissedTime) / (1000 * 60 * 60);
+                        
+                        // If dismissed less than 24 hours ago, show a reminder
+                        if (hoursSinceDismissed < 24) {
+                            setTimeout(() => {
+                                this.showUpdateReminder(updateInfo.version);
+                            }, 5000); // Show after 5 seconds
+                        } else {
+                            // Clear old dismissed updates
+                            localStorage.removeItem('dailyDozenLastUpdate');
+                        }
+                    }
+                });
+            } catch (e) {
+                console.log('Error parsing last update info:', e);
+            }
+        }
+
+        // Check current version and compare with stored version
+        this.getCurrentVersion().then(versionInfo => {
+            const storedVersion = localStorage.getItem('dailyDozenCurrentVersion');
+            if (storedVersion && storedVersion !== versionInfo.version) {
+                // Version has changed, update stored version
+                localStorage.setItem('dailyDozenCurrentVersion', versionInfo.version);
+                localStorage.setItem('dailyDozenVersionUpdated', new Date().toISOString());
+            } else if (!storedVersion) {
+                // First time, store current version
+                localStorage.setItem('dailyDozenCurrentVersion', versionInfo.version);
+            }
+        });
+    }
+
+    showUpdateReminder(version) {
+        const reminderNotification = document.createElement('div');
+        reminderNotification.className = 'update-notification update-reminder';
+        reminderNotification.innerHTML = `
+            <div class="update-content">
+                <p>📱 Don't forget to update!</p>
+                <small>Version ${version} is still available</small>
+                <div class="update-buttons">
+                    <button class="update-btn">Update Now</button>
+                    <button class="dismiss-btn">Not Now</button>
+                </div>
+            </div>
+        `;
+
+        // Add event listeners to buttons
+        const updateBtn = reminderNotification.querySelector('.update-btn');
+        const dismissBtn = reminderNotification.querySelector('.dismiss-btn');
+        
+        updateBtn.addEventListener('click', () => {
+            this.updateApp();
+        });
+        
+        dismissBtn.addEventListener('click', () => {
+            this.dismissUpdateReminder();
+        });
+
+        document.body.appendChild(reminderNotification);
+        this.currentUpdateReminder = reminderNotification;
+
+        // Auto-remove after 15 seconds
+        setTimeout(() => {
+            if (reminderNotification.parentNode) {
+                reminderNotification.remove();
+            }
+        }, 15000);
+    }
+
+    dismissUpdateReminder() {
+        if (this.currentUpdateReminder) {
+            this.currentUpdateReminder.remove();
+        }
+        
+        // Mark reminder as dismissed
+        const lastUpdate = localStorage.getItem('dailyDozenLastUpdate');
+        if (lastUpdate) {
+            try {
+                const updateInfo = JSON.parse(lastUpdate);
+                updateInfo.reminderDismissed = true;
+                updateInfo.reminderDismissedAt = new Date().toISOString();
+                localStorage.setItem('dailyDozenLastUpdate', JSON.stringify(updateInfo));
+            } catch (e) {
+                console.log('Error updating reminder dismissal:', e);
+            }
+        }
+    }
+
+
+
+    showUpdateCheckFeedback() {
+        const feedbackNotification = document.createElement('div');
+        feedbackNotification.className = 'update-notification update-feedback';
+        feedbackNotification.innerHTML = `
+            <div class="update-content">
+                <p>🔍 Checking for updates...</p>
+                <small>This may take a moment</small>
+            </div>
+        `;
+
+        document.body.appendChild(feedbackNotification);
+
+        // Store reference for potential update
+        this.currentFeedbackNotification = feedbackNotification;
+
+        // Update the message after 2 seconds to show completion
+        setTimeout(() => {
+            if (feedbackNotification.parentNode) {
+                feedbackNotification.innerHTML = `
+                    <div class="update-content">
+                        <p>✅ Update check completed</p>
+                        <small>No new updates available</small>
+                    </div>
+                `;
+            }
+        }, 2000);
+
+        // Remove after 4 seconds
+        setTimeout(() => {
+            if (feedbackNotification.parentNode) {
+                feedbackNotification.remove();
+            }
+        }, 4000);
+    }
+
+    showUpdateFoundFeedback() {
+        // Remove the current feedback notification if it exists
+        if (this.currentFeedbackNotification && this.currentFeedbackNotification.parentNode) {
+            this.currentFeedbackNotification.remove();
+        }
+
+        const updateFoundNotification = document.createElement('div');
+        updateFoundNotification.className = 'update-notification update-found';
+        updateFoundNotification.innerHTML = `
+            <div class="update-content">
+                <p>🎉 New update found!</p>
+                <small>An update is available for your app</small>
+            </div>
+        `;
+
+        document.body.appendChild(updateFoundNotification);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            if (updateFoundNotification.parentNode) {
+                updateFoundNotification.remove();
+            }
+        }, 3000);
+    }
+
+    async showVersionInfo() {
+        const currentVersion = await this.getCurrentVersion();
+        const lastUpdate = localStorage.getItem('dailyDozenLastUpdate');
+        const currentVersionStored = localStorage.getItem('dailyDozenCurrentVersion');
+        
+        console.log('Current version detected:', currentVersion);
+        console.log('Stored version:', currentVersionStored);
+        console.log('Last update info:', lastUpdate);
+        
+        // Check if there's a pending update
+        let updateStatus = '✅ Up to date';
+        let lastUpdateInfo = '';
+        
+        if (lastUpdate) {
+            try {
+                const updateInfo = JSON.parse(lastUpdate);
+                console.log('Stored update info:', updateInfo);
+                console.log('Current version:', currentVersion);
+                
+                // Compare the stored update version with current version
+                if (updateInfo.version === currentVersion.version) {
+                    // Same version - no update needed
+                    updateStatus = '✅ Up to date';
+                    console.log('Versions match - up to date');
+                } else if (!updateInfo.applied && !updateInfo.dismissed) {
+                    // Different version and not applied/dismissed
+                    updateStatus = '🔄 Update available';
+                    console.log('Update available - different version');
+                } else if (updateInfo.dismissed) {
+                    // Update was dismissed
+                    updateStatus = '⏸️ Update dismissed';
+                    console.log('Update dismissed');
+                } else if (updateInfo.applied) {
+                    // Update was applied
+                    updateStatus = '✅ Up to date';
+                    console.log('Update applied');
+                }
+                
+                const updateDate = new Date(updateInfo.timestamp).toLocaleDateString();
+                lastUpdateInfo = `
+                    <div class="version-detail">
+                        <strong>Last Update Available:</strong> ${updateInfo.version} (${updateDate})
+                        ${updateInfo.dismissed ? '<br><small>Update was dismissed</small>' : ''}
+                        ${updateInfo.applied ? '<br><small>Update was applied</small>' : ''}
+                    </div>
+                `;
+            } catch (e) {
+                console.log('Error parsing last update info:', e);
+            }
+        }
+        if (lastUpdate) {
+            try {
+                const updateInfo = JSON.parse(lastUpdate);
+                const updateDate = new Date(updateInfo.timestamp).toLocaleDateString();
+                lastUpdateInfo = `
+                    <div class="version-detail">
+                        <strong>Last Update Available:</strong> ${updateInfo.version} (${updateDate})
+                        ${updateInfo.dismissed ? '<br><small>Update was dismissed</small>' : ''}
+                    </div>
+                `;
+            } catch (e) {
+                console.log('Error parsing last update info:', e);
+            }
+        }
+
+        const versionModal = document.createElement('div');
+        versionModal.className = 'version-modal';
+        versionModal.innerHTML = `
+            <div class="modal-content version-modal-content">
+                <h3>📱 App Version Information</h3>
+                <div class="version-details">
+                    <div class="version-detail">
+                        <strong>Current Version:</strong> ${currentVersion.version}
+                    </div>
+                    <div class="version-detail">
+                        <strong>Last Updated:</strong> ${new Date(currentVersion.timestamp).toLocaleDateString()}
+                    </div>
+                    ${lastUpdateInfo}
+                    <div class="version-detail">
+                        <strong>Update Status:</strong> ${updateStatus}
+                    </div>
+                    <div class="version-detail">
+                        <strong>Installation Status:</strong> 
+                        ${window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true 
+                            ? '✅ Installed as PWA' 
+                            : '🌐 Running in browser'}
+                    </div>
+                </div>
+                <div class="version-actions">
+                    <button class="update-btn">Check for Updates</button>
+                    <button class="dismiss-btn">Close</button>
+                </div>
+            </div>
+        `;
+
+        // Add event listeners to buttons
+        const checkUpdateBtn = versionModal.querySelector('.update-btn');
+        const closeBtn = versionModal.querySelector('.dismiss-btn');
+        
+        checkUpdateBtn.addEventListener('click', () => {
+            // Add loading state to the button
+            checkUpdateBtn.textContent = '⏳ Checking...';
+            checkUpdateBtn.disabled = true;
+            
+            // Check for updates
+            this.checkForUpdates();
+            
+            // Show feedback notification
+            this.showUpdateCheckFeedback();
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                checkUpdateBtn.textContent = 'Check for Updates';
+                checkUpdateBtn.disabled = false;
+            }, 3000);
+        });
+        
+
+        
+        closeBtn.addEventListener('click', () => {
+            versionModal.remove();
+        });
+
+        document.body.appendChild(versionModal);
+
+        // Close on background click
+        versionModal.addEventListener('click', (e) => {
+            if (e.target === versionModal) {
+                versionModal.remove();
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                versionModal.remove();
+            }
+        });
     }
 
     setupPWAInstallation() {

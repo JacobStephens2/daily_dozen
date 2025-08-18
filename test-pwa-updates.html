@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Update Test - Daily Dozen Tracker</title>
+    <style>
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #548444;
+        }
+        .test-button {
+            background: #548444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .test-button:hover {
+            background: #4a7a3a;
+        }
+        .status {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 PWA Update Mechanism Test</h1>
+    
+    <div class="test-section">
+        <h2>Service Worker Status</h2>
+        <div id="sw-status" class="status info">Checking service worker status...</div>
+        <button class="test-button" onclick="checkServiceWorker()">Check Service Worker</button>
+        <button class="test-button" onclick="checkForUpdates()">Check for Updates</button>
+        <button class="test-button" onclick="getVersion()">Get Current Version</button>
+    </div>
+
+    <div class="test-section">
+        <h2>PWA Installation Status</h2>
+        <div id="pwa-status" class="status info">Checking PWA status...</div>
+        <button class="test-button" onclick="checkPWAStatus()">Check PWA Status</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Update History</h2>
+        <div id="update-history" class="status info">Loading update history...</div>
+        <button class="test-button" onclick="clearUpdateHistory()">Clear Update History</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Update Test</h2>
+        <p>This will simulate a new version being available:</p>
+        <button class="test-button" onclick="simulateUpdate()">Simulate New Update</button>
+        <button class="test-button" onclick="showUpdateNotification()">Show Update Notification</button>
+    </div>
+
+    <script>
+        // Check service worker status
+        async function checkServiceWorker() {
+            const statusDiv = document.getElementById('sw-status');
+            
+            if (!('serviceWorker' in navigator)) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Service Worker not supported';
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `
+                        ✅ Service Worker Registered<br>
+                        <strong>State:</strong> ${registration.active ? 'Active' : 'Installing'}<br>
+                        <strong>Scope:</strong> ${registration.scope}<br>
+                        <strong>Update Found:</strong> ${registration.waiting ? 'Yes' : 'No'}
+                    `;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ No Service Worker registered';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        // Check for updates
+        async function checkForUpdates() {
+            const statusDiv = document.getElementById('sw-status');
+            
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    await registration.update();
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Update check completed';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Update check failed: ${error.message}`;
+            }
+        }
+
+        // Get current version
+        async function getVersion() {
+            const statusDiv = document.getElementById('sw-status');
+            
+            try {
+                if (navigator.serviceWorker.controller) {
+                    const messageChannel = new MessageChannel();
+                    messageChannel.port1.onmessage = (event) => {
+                        statusDiv.className = 'status success';
+                        statusDiv.innerHTML = `
+                            ✅ Current Version: ${event.data.version}<br>
+                            <strong>Timestamp:</strong> ${new Date(event.data.timestamp).toLocaleString()}
+                        `;
+                    };
+                    navigator.serviceWorker.controller.postMessage(
+                        { type: 'GET_VERSION' },
+                        [messageChannel.port2]
+                    );
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ No service worker controller available';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Error getting version: ${error.message}`;
+            }
+        }
+
+        // Check PWA status
+        function checkPWAStatus() {
+            const statusDiv = document.getElementById('pwa-status');
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            const isIOSStandalone = window.navigator.standalone === true;
+            
+            if (isStandalone || isIOSStandalone) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `
+                    ✅ PWA Installed<br>
+                    <strong>Display Mode:</strong> ${isStandalone ? 'Standalone' : 'iOS Standalone'}<br>
+                    <strong>User Agent:</strong> ${navigator.userAgent.substring(0, 50)}...
+                `;
+            } else {
+                statusDiv.className = 'status info';
+                statusDiv.innerHTML = `
+                    🌐 Running in Browser<br>
+                    <strong>Display Mode:</strong> Browser<br>
+                    <strong>User Agent:</strong> ${navigator.userAgent.substring(0, 50)}...
+                `;
+            }
+        }
+
+        // Show update history
+        function showUpdateHistory() {
+            const historyDiv = document.getElementById('update-history');
+            const lastUpdate = localStorage.getItem('dailyDozenLastUpdate');
+            const currentVersion = localStorage.getItem('dailyDozenCurrentVersion');
+            
+            let history = '';
+            if (lastUpdate) {
+                try {
+                    const updateInfo = JSON.parse(lastUpdate);
+                    history += `<strong>Last Update:</strong> ${updateInfo.version}<br>`;
+                    history += `<strong>Timestamp:</strong> ${new Date(updateInfo.timestamp).toLocaleString()}<br>`;
+                    if (updateInfo.dismissed) {
+                        history += `<strong>Status:</strong> Dismissed<br>`;
+                        history += `<strong>Dismissed At:</strong> ${new Date(updateInfo.dismissedAt).toLocaleString()}<br>`;
+                    }
+                } catch (e) {
+                    history += 'Error parsing update info<br>';
+                }
+            } else {
+                history += 'No update history found<br>';
+            }
+            
+            if (currentVersion) {
+                history += `<strong>Current Version:</strong> ${currentVersion}<br>`;
+            }
+            
+            historyDiv.className = 'status info';
+            historyDiv.innerHTML = history;
+        }
+
+        // Clear update history
+        function clearUpdateHistory() {
+            localStorage.removeItem('dailyDozenLastUpdate');
+            localStorage.removeItem('dailyDozenCurrentVersion');
+            localStorage.removeItem('dailyDozenVersionUpdated');
+            showUpdateHistory();
+        }
+
+        // Simulate update
+        function simulateUpdate() {
+            const testUpdateInfo = {
+                version: 'v2.0.8-test',
+                timestamp: new Date().toISOString(),
+                applied: false
+            };
+            localStorage.setItem('dailyDozenLastUpdate', JSON.stringify(testUpdateInfo));
+            showUpdateHistory();
+        }
+
+        // Show update notification
+        function showUpdateNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'update-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #548444, #8fbc8f);
+                color: white;
+                padding: 1rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                max-width: 300px;
+                border-left: 4px solid #4caf50;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <p style="margin: 0; font-weight: 600;">🔄 Test Update Available!</p>
+                    <small>Version v2.0.8-test</small>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                style="flex: 1; padding: 0.5rem; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Update Now
+                        </button>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                style="flex: 1; padding: 0.5rem; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; cursor: pointer;">
+                            Later
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 10000);
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            checkServiceWorker();
+            checkPWAStatus();
+            showUpdateHistory();
+        });
+    </script>
+</body>
+</html>

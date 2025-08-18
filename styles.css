@@ -85,6 +85,8 @@ body {
     z-index: 1;
 }
 
+
+
 .header-icon {
     width: 48px;
     height: 48px;
@@ -689,6 +691,27 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.version-info-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.version-info-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -758,6 +781,13 @@ body {
         padding: 0.6rem 1rem;
         font-size: 0.8rem;
     }
+    
+    .version-info-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+
     
     .main-content {
         padding: 1rem 0.75rem;
@@ -1573,6 +1603,7 @@ body {
     z-index: 1000;
     animation: slideInRight 0.3s ease;
     max-width: 300px;
+    border-left: 4px solid var(--success);
 }
 
 .update-content {
@@ -1587,6 +1618,17 @@ body {
     font-size: 1rem;
 }
 
+.update-content small {
+    opacity: 0.9;
+    font-size: 0.85rem;
+}
+
+.update-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
 .update-btn, .dismiss-btn {
     padding: 0.5rem 1rem;
     border: none;
@@ -1595,6 +1637,7 @@ body {
     font-weight: 600;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    flex: 1;
 }
 
 .update-btn {
@@ -1615,6 +1658,148 @@ body {
 
 .dismiss-btn:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+/* Update loading state */
+.update-loading {
+    background: linear-gradient(135deg, var(--tacha), var(--fern-green));
+    border-left-color: var(--tacha);
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0.5rem auto 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Update reminder */
+.update-reminder {
+    background: linear-gradient(135deg, var(--tacha), var(--fern-green));
+    border-left-color: var(--tacha);
+    animation: slideInRight 0.3s ease, pulse 2s ease-in-out infinite;
+}
+
+/* Update feedback */
+.update-feedback {
+    background: linear-gradient(135deg, var(--fern-green), var(--tacha));
+    border-left-color: var(--fern-green);
+}
+
+/* Update found */
+.update-found {
+    background: linear-gradient(135deg, var(--success), var(--fern-green));
+    border-left-color: var(--success);
+    animation: slideInRight 0.3s ease, bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+    40% { transform: translateX(-5px); }
+    60% { transform: translateX(-3px); }
+}
+
+/* Version modal */
+.version-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.version-modal-content {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-hover);
+}
+
+.version-details {
+    margin: 1.5rem 0;
+}
+
+.version-detail {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border-left: 3px solid var(--fern-green);
+}
+
+.version-detail strong {
+    color: var(--text-primary);
+}
+
+.version-detail small {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.version-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.version-actions .update-btn,
+.version-actions .dismiss-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.version-actions .update-btn {
+    background: var(--fern-green);
+    color: white;
+}
+
+.version-actions .update-btn:hover {
+    background: var(--tacha);
+}
+
+
+
+.version-actions .dismiss-btn {
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.version-actions .dismiss-btn:hover {
+    background: var(--border);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-2px); }
 }
 
 @keyframes slideInRight {
