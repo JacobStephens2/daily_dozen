@@ -1,7 +1,7 @@
 // Catholic Daily Dozen Tracker - Main Application Logic
-// Version: 2.0.8 - Enhanced PWA update mechanism
+// Version: 2.0.11 - Enhanced PWA update mechanism
 
-console.log('Daily Dozen Tracker loaded - Version 2.0.8');
+console.log('Daily Dozen Tracker loaded - Version 2.0.11');
 console.log('Timestamp:', new Date().toISOString());
 
 // Check for updates on page load (but don't clear cache aggressively)
@@ -24,6 +24,11 @@ class DailyDozenTracker {
         this.installDismissedKey = 'dailyDozenInstallDismissed';
         this.profileStorageKey = 'dailyDozenProfiles';
         this.currentProfileKey = 'dailyDozenCurrentProfile';
+        
+        // Detect iOS
+        this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        this.isIOSStandalone = window.navigator.standalone === true;
+        this.isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
         this.deferredPrompt = null;
         this.profiles = this.loadProfiles();
         this.currentProfile = this.loadCurrentProfile();
@@ -327,11 +332,114 @@ class DailyDozenTracker {
         ];
     }
 
+    getOneBeanTwoProteinCategories() {
+        return [
+            {
+                id: 'beans',
+                name: 'Beans',
+                icon: '🫘',
+                servings: 1,
+                description: '½ c. cooked beans, ¼ c. hummus',
+                examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
+            },
+            {
+                id: 'protein',
+                name: 'Protein',
+                icon: '🥩',
+                servings: 2,
+                description: '3 oz lean meat, 1 egg, ½ c. beans',
+                examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
+            },
+            {
+                id: 'berries',
+                name: 'Berries',
+                icon: '🫐',
+                servings: 1,
+                description: '½ c. fresh or frozen, ¼ c. dried',
+                examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
+            },
+            {
+                id: 'other-fruits',
+                name: 'Other Fruits',
+                icon: '🍎',
+                servings: 3,
+                description: '1 medium fruit, ¼ c. dried fruit',
+                examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
+            },
+            {
+                id: 'greens',
+                name: 'Greens',
+                icon: '🥬',
+                servings: 2,
+                description: '1 c. raw, ½ c. cooked',
+                examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
+            },
+            {
+                id: 'cruciferous',
+                name: 'Cruciferous Vegetables',
+                icon: '🥦',
+                servings: 1,
+                description: '½ c. chopped, 1 tbsp horseradish',
+                examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
+            },
+            {
+                id: 'other-vegetables',
+                name: 'Other Vegetables',
+                icon: '🥕',
+                servings: 2,
+                description: '½ c. nonleafy vegetables',
+                examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
+            },
+            {
+                id: 'nuts-seeds',
+                name: 'Nuts and Seeds',
+                icon: '🥜',
+                servings: 1,
+                description: '¼ c. nuts, 2 tbsp nut butter',
+                examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
+            },
+            {
+                id: 'herbs-spices',
+                name: 'Herbs and Spices',
+                icon: '🌿',
+                servings: 1,
+                description: '¼ tsp turmeric',
+                examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
+            },
+            {
+                id: 'whole-grains',
+                name: 'Whole Grains',
+                icon: '🌾',
+                servings: 3,
+                description: '½ c. hot cereal, 1 slice of bread',
+                examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
+            },
+            {
+                id: 'beverages',
+                name: 'Beverages',
+                icon: '💧',
+                servings: 5,
+                description: '60 oz per day',
+                examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
+            },
+            {
+                id: 'exercise',
+                name: 'Exercise',
+                icon: '🏃',
+                servings: 1,
+                description: '90 min. moderate or 40 min. vigorous',
+                examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
+            }
+        ];
+    }
+
     getCategoriesForDietType(dietType) {
         if (dietType === 'modified') {
             return this.getModifiedCategories();
         } else if (dietType === 'one-bean') {
             return this.getOneBeanCategories();
+        } else if (dietType === 'one-bean-two-protein') {
+            return this.getOneBeanTwoProteinCategories();
         } else {
             return this.getStandardCategories();
         }
@@ -1137,7 +1245,7 @@ class DailyDozenTracker {
     registerServiceWorker() {
         if ('serviceWorker' in navigator) {
             // Use version-based registration for controlled updates
-            const swUrl = 'sw.js?v=2.0.8';
+            const swUrl = 'sw.js?v=2.0.11';
             
             navigator.serviceWorker.register(swUrl)
                 .then(registration => {
@@ -1174,12 +1282,27 @@ class DailyDozenTracker {
                     });
                     
                     // Check for updates periodically
+                    // iOS needs more frequent checks due to aggressive caching
+                    const updateInterval = this.isIOS ? 60000 : 300000; // 1 min for iOS, 5 min for others
                     setInterval(() => {
                         registration.update();
-                    }, 300000); // Check every 5 minutes
+                    }, updateInterval);
                     
                     // Initial update check
                     registration.update();
+                    
+                    // iOS-specific: Check more aggressively on focus/visibility change
+                    if (this.isIOS) {
+                        document.addEventListener('visibilitychange', () => {
+                            if (!document.hidden) {
+                                registration.update();
+                            }
+                        });
+                        
+                        window.addEventListener('focus', () => {
+                            registration.update();
+                        });
+                    }
                 })
                 .catch(error => {
                     console.log('Service Worker registration failed:', error);
@@ -1194,6 +1317,16 @@ class DailyDozenTracker {
             existingNotification.remove();
         }
 
+        // iOS-specific instructions
+        const iosInstructions = this.isIOSStandalone ? `
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.85em;">
+                <strong>iOS Update Instructions:</strong><br>
+                1. Close this app completely<br>
+                2. Open Safari and visit this site<br>
+                3. Tap Share → Add to Home Screen (replace existing)
+            </div>
+        ` : '';
+
         // Create update notification
         const updateNotification = document.createElement('div');
         updateNotification.className = 'update-notification';
@@ -1201,8 +1334,9 @@ class DailyDozenTracker {
             <div class="update-content">
                 <p>🔄 A new version is available!</p>
                 ${version ? `<small>Version ${version}</small>` : ''}
+                ${iosInstructions}
                 <div class="update-buttons">
-                    <button class="update-btn">Update Now</button>
+                    <button class="update-btn">${this.isIOSStandalone ? 'Open in Safari' : 'Update Now'}</button>
                     <button class="dismiss-btn">Later</button>
                 </div>
             </div>
@@ -1267,12 +1401,34 @@ class DailyDozenTracker {
             }));
         }
 
+        // iOS standalone mode: Open in Safari for reinstall
+        if (this.isIOSStandalone) {
+            // Try to open in Safari
+            const currentUrl = window.location.href;
+            // iOS will handle opening in Safari if possible
+            window.location.href = currentUrl.split('?')[0] + '?update=1&t=' + Date.now();
+            
+            // Show instructions
+            alert('To update on iOS:\n\n1. Copy this page URL\n2. Open Safari\n3. Paste and visit the URL\n4. Tap Share → Add to Home Screen\n5. Replace the existing app');
+            return;
+        }
+
         // Show loading state
         this.showUpdateLoading();
 
+        // For non-iOS or browser mode: Force reload with cache bypass
+        // Add cache-busting parameter
+        const url = new URL(window.location.href);
+        url.searchParams.set('_update', Date.now());
+        
+        // Clear service worker cache if possible
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+        }
+        
         // Reload the page to apply the update
         setTimeout(() => {
-            window.location.reload();
+            window.location.href = url.toString();
         }, 1000);
     }
 
@@ -1331,44 +1487,87 @@ class DailyDozenTracker {
 
     getCurrentVersion() {
         return new Promise((resolve) => {
-            // First try to get version from service worker
-            if (navigator.serviceWorker.controller) {
-                const messageChannel = new MessageChannel();
-                messageChannel.port1.onmessage = (event) => {
-                    resolve(event.data);
-                };
+            // First, try to get version from service worker registration URL (most reliable)
+            // This reflects what version we're trying to use, not what's cached
+            navigator.serviceWorker.getRegistration().then(registration => {
+                let registrationVersion = null;
+                let latestVersion = 'v2.0.11'; // Current expected version
                 
-                // Set a timeout in case the service worker doesn't respond
-                const timeout = setTimeout(() => {
-                    console.log('Service worker version request timed out, using fallback');
-                    resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
-                }, 2000);
-                
-                messageChannel.port1.onmessage = (event) => {
-                    clearTimeout(timeout);
-                    resolve(event.data);
-                };
-                
-                navigator.serviceWorker.controller.postMessage(
-                    { type: 'GET_VERSION' },
-                    [messageChannel.port2]
-                );
-            } else {
-                // Fallback: use the version from the service worker registration
-                navigator.serviceWorker.getRegistration().then(registration => {
-                    if (registration && registration.active) {
-                        // Extract version from the service worker URL or use default
+                if (registration) {
+                    // Check waiting service worker first (newest, pending activation)
+                    if (registration.waiting) {
+                        const swUrl = registration.waiting.scriptURL;
+                        const versionMatch = swUrl.match(/[?&]v=([^&]+)/);
+                        if (versionMatch) {
+                            registrationVersion = 'v' + versionMatch[1];
+                        }
+                    }
+                    // Check installing service worker (being installed)
+                    if (!registrationVersion && registration.installing) {
+                        const swUrl = registration.installing.scriptURL;
+                        const versionMatch = swUrl.match(/[?&]v=([^&]+)/);
+                        if (versionMatch) {
+                            registrationVersion = 'v' + versionMatch[1];
+                        }
+                    }
+                    // Check active service worker (currently running)
+                    if (!registrationVersion && registration.active) {
                         const swUrl = registration.active.scriptURL;
                         const versionMatch = swUrl.match(/[?&]v=([^&]+)/);
-                        const version = versionMatch ? versionMatch[1] : 'v2.0.8';
-                        resolve({ version: version, timestamp: new Date().toISOString() });
-                    } else {
-                        resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
+                        if (versionMatch) {
+                            registrationVersion = 'v' + versionMatch[1];
+                        }
                     }
-                }).catch(() => {
-                    resolve({ version: 'v2.0.8', timestamp: new Date().toISOString() });
-                });
-            }
+                }
+                
+                // If we have a registration version, use it (it's the source of truth)
+                if (registrationVersion) {
+                    console.log('Using version from registration URL:', registrationVersion);
+                    resolve({ version: registrationVersion, timestamp: new Date().toISOString() });
+                    return;
+                }
+                
+                // Fallback: try to get version from service worker controller message
+                if (navigator.serviceWorker.controller) {
+                    const messageChannel = new MessageChannel();
+                    let resolved = false;
+                    
+                    const timeout = setTimeout(() => {
+                        if (!resolved) {
+                            console.log('Service worker version request timed out, using fallback');
+                            resolved = true;
+                            resolve({ version: latestVersion, timestamp: new Date().toISOString() });
+                        }
+                    }, 2000);
+                    
+                    messageChannel.port1.onmessage = (event) => {
+                        if (!resolved) {
+                            clearTimeout(timeout);
+                            resolved = true;
+                            const swVersion = event.data.version;
+                            // Use the latest version we know about (from code) if SW returns old version
+                            // This handles the case where old SW is still cached
+                            if (swVersion === 'v2.0.8' || swVersion === 'v2.0.9' || swVersion === 'v2.0.10') {
+                                console.log('Service worker returned outdated version, using current version:', swVersion, '->', latestVersion);
+                                resolve({ version: latestVersion, timestamp: new Date().toISOString() });
+                            } else {
+                                resolve(event.data);
+                            }
+                        }
+                    };
+                    
+                    navigator.serviceWorker.controller.postMessage(
+                        { type: 'GET_VERSION' },
+                        [messageChannel.port2]
+                    );
+                } else {
+                    // No service worker, use default
+                    resolve({ version: latestVersion, timestamp: new Date().toISOString() });
+                }
+            }).catch(() => {
+                // If registration fails, use default
+                resolve({ version: 'v2.0.11', timestamp: new Date().toISOString() });
+            });
         });
     }
 

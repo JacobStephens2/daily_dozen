@@ -1,6 +1,6 @@
 {
   "name": "daily-dozen-tracker",
-  "version": "2.0.1",
+  "version": "2.0.11",
   "description": "A Catholic Daily Dozen Tracker - Stewarding God's Gift of Health",
   "main": "server.js",
   "scripts": {
