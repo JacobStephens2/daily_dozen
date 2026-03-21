@@ -6,6 +6,7 @@ import * as storage from './js/storage.js';
 import { handleServingChange } from './js/checkbox.js';
 import { PwaManager } from './js/pwa.js';
 import { HistoryView } from './js/history.js';
+import { AuthManager } from './js/auth.js';
 
 console.log('Daily Dozen Tracker loaded - Version 2.0.12');
 console.log('Timestamp:', new Date().toISOString());
@@ -30,6 +31,7 @@ class DailyDozenTracker {
         this.categories = getCategoriesForDietType(this.dietType);
         this.pwa = new PwaManager();
         this.history = new HistoryView(this);
+        this.auth = new AuthManager(this);
         this.init();
     }
 
@@ -45,6 +47,25 @@ class DailyDozenTracker {
         this.updateDietTypeLabel();
         this.setupEventListeners();
         this.pwa.init();
+        this.auth.updateUI();
+        // Sync from server on load if logged in
+        if (this.auth.isLoggedIn) {
+            this.auth.sync().catch(() => {});
+        }
+    }
+
+    refreshAfterSync() {
+        this.profiles = storage.loadProfiles();
+        this.dietType = storage.loadDietType(this.currentProfile);
+        this.categories = getCategoriesForDietType(this.dietType);
+        this.setProfileSelector();
+        this.setDietTypeSelector();
+        this.renderCategories();
+        const data = storage.loadData(this.currentProfile);
+        this.restoreCheckboxes(data);
+        this.updateProgress();
+        this.updateHeaderColor();
+        this.updateDietTypeLabel();
     }
 
     // --- Date navigation ---
@@ -196,6 +217,7 @@ class DailyDozenTracker {
             this.setProfileSelector();
             this.updateDietTypeLabel();
             this.showProfileNameUpdated(newName.trim());
+            this.auth.schedulePush();
         }
     }
 
@@ -390,6 +412,13 @@ class DailyDozenTracker {
                 this.exportData();
             });
         }
+
+        const accountBtn = document.getElementById('account-btn');
+        if (accountBtn) {
+            accountBtn.addEventListener('click', () => {
+                this.auth.showAccountModal();
+            });
+        }
     }
 
     // --- Checkbox / serving logic ---
@@ -429,6 +458,7 @@ class DailyDozenTracker {
         }
 
         storage.saveData(this.currentProfile, data);
+        this.auth.schedulePush();
     }
 
     // --- Data restore ---
@@ -571,6 +601,7 @@ class DailyDozenTracker {
         const celebrationKey = storage.getCelebrationKey(this.currentProfile, this.currentDate.toDateString());
         localStorage.removeItem(celebrationKey);
 
+        this.auth.schedulePush();
         this.updateProgress();
         this.categories.forEach(category => {
             this.updateCategoryStatus(category.id);
@@ -616,6 +647,7 @@ class DailyDozenTracker {
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
+        this.auth.schedulePush();
     }
 
     // --- Data export ---

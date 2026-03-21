@@ -12,6 +12,7 @@ const urlsToCache = [
     '/js/checkbox.js',
     '/js/pwa.js',
     '/js/history.js',
+    '/js/auth.js',
     '/manifest.json',
     '/favicon.ico',
     '/assets/icons/icon-48x48.png',
@@ -43,6 +44,12 @@ self.addEventListener('install', event => {
 
 // Fetch event - implement cache-first strategy with network fallback
 self.addEventListener('fetch', event => {
+    // Never cache API requests — let them pass through to the network
+    if (event.request.url.includes('/api/')) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => {
