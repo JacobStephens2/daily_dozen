@@ -690,6 +690,22 @@ class DailyDozenTracker {
         if (dietTypeSelect) {
             dietTypeSelect.value = this.dietType;
         }
+        this.updateDietDescription();
+    }
+
+    updateDietDescription() {
+        const el = document.getElementById('diet-description');
+        if (!el) return;
+
+        const descriptions = {
+            'standard': 'Dr. Greger\'s original Daily Dozen: 3 servings of beans, flaxseed, and 24 total servings across 12 categories.',
+            'modified': 'Replaces beans with 2 servings of protein (meat, eggs, tofu). Removes flaxseed. 21 total servings.',
+            'one-bean': 'Reduces beans from 3 to 1 serving and adds 1 serving of protein. Removes flaxseed. 22 total servings.',
+            'one-bean-two-protein': 'One serving of beans plus 2 servings of protein. Removes flaxseed. 23 total servings.',
+            'one-bean-two-protein-one-flax': 'One serving of beans, 2 servings of protein, and keeps flaxseed. 24 total servings.',
+        };
+
+        el.textContent = descriptions[this.dietType] || '';
     }
 
     handleDietTypeChange(newDietType) {
@@ -702,6 +718,7 @@ class DailyDozenTracker {
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
+        this.updateDietDescription();
         this.auth.schedulePush();
     }
 
