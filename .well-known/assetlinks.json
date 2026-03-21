@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "net.jacobstephens.dailydozen",
+    "sha256_cert_fingerprints": [
+      "4A:4E:8B:0B:E6:30:67:62:0F:74:D1:4C:58:0F:F9:CB:DE:B1:F6:E3:FE:85:08:CE:8E:C9:B8:A1:CA:26:B5:04"
+    ]
+  }
+}]

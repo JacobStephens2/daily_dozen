@@ -1,3 +1,10 @@
 .cursor/mcp.json
 node_modules/
 data/
+android-twa/keystore.properties
+android-twa/*.jks
+android-twa/*.apk
+android-twa/*.aab
+android-twa/build/
+android-twa/app/build/
+android-twa/.gradle/
