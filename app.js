@@ -579,6 +579,19 @@ class DailyDozenTracker {
 
     // --- Celebration ---
 
+    getCelebrationVerse() {
+        const verses = [
+            { text: 'Do you not know that your body is a temple of the Holy Spirit within you, whom you have from\u00a0God?', ref: '1 Corinthians 6:19' },
+            { text: 'So, whether you eat or drink, or whatever you do, do all to the glory of\u00a0God.', ref: '1 Corinthians 10:31' },
+            { text: 'Beloved, I pray that all may go well with you and that you may be in good health, as it goes well with your\u00a0soul.', ref: '3 John 1:2' },
+            { text: 'For everything created by God is good, and nothing is to be rejected if it is received with\u00a0thanksgiving.', ref: '1 Timothy 4:4' },
+            { text: 'The Lord sustains him on his sickbed; in his illness you restore him to full\u00a0health.', ref: 'Psalm 41:3' },
+            { text: 'A joyful heart is good medicine, but a crushed spirit dries up the\u00a0bones.', ref: 'Proverbs 17:22' },
+            { text: 'He gives food to every creature. His love endures\u00a0forever.', ref: 'Psalm 136:25' },
+        ];
+        return verses[Math.floor(Math.random() * verses.length)];
+    }
+
     showCompletionCelebration() {
         // Only celebrate for today, not when editing past dates
         if (!this.isViewingToday()) return;
@@ -588,6 +601,7 @@ class DailyDozenTracker {
             return;
         }
 
+        const verse = this.getCelebrationVerse();
         const celebrationModal = document.createElement('div');
         celebrationModal.className = 'celebration-modal';
         celebrationModal.innerHTML = `
@@ -597,8 +611,8 @@ class DailyDozenTracker {
                 <p>${this.profiles[this.currentProfile].name} has completed the Daily Dozen for today!</p>
                 <p class="celebration-message">Thank you for honoring this temple of the Holy Spirit. Your care for your body glorifies God and respects the sacred gift of life He has entrusted to you.</p>
                 <div class="celebration-verses">
-                    <p>"Do you not know that your body is a temple of the Holy Spirit within you, whom you have from&nbsp;God?"</p>
-                    <p class="verse-reference">— 1 Corinthians 6:19</p>
+                    <p>"${verse.text}"</p>
+                    <p class="verse-reference">— ${verse.ref}</p>
                 </div>
                 <button class="celebration-close" onclick="this.parentElement.parentElement.remove()">Amen! 🙏</button>
             </div>
