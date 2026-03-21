@@ -5,6 +5,7 @@ import { getCategoriesForDietType, getCategoryNameHtml } from './js/categories.j
 import * as storage from './js/storage.js';
 import { handleServingChange } from './js/checkbox.js';
 import { PwaManager } from './js/pwa.js';
+import { HistoryView } from './js/history.js';
 
 console.log('Daily Dozen Tracker loaded - Version 2.0.12');
 console.log('Timestamp:', new Date().toISOString());
@@ -28,6 +29,7 @@ class DailyDozenTracker {
         this.dietType = storage.loadDietType(this.currentProfile);
         this.categories = getCategoriesForDietType(this.dietType);
         this.pwa = new PwaManager();
+        this.history = new HistoryView(this);
         this.init();
     }
 
@@ -234,6 +236,13 @@ class DailyDozenTracker {
                 this.onServingChange(e.target);
             }
         });
+
+        const historyBtn = document.getElementById('history-btn');
+        if (historyBtn) {
+            historyBtn.addEventListener('click', () => {
+                this.history.open();
+            });
+        }
 
         const resetDayBtn = document.getElementById('reset-day-btn');
         if (resetDayBtn) {

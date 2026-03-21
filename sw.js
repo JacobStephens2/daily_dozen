@@ -11,6 +11,7 @@ const urlsToCache = [
     '/js/storage.js',
     '/js/checkbox.js',
     '/js/pwa.js',
+    '/js/history.js',
     '/manifest.json',
     '/favicon.ico',
     '/assets/icons/icon-48x48.png',
