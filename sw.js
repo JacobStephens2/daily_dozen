@@ -13,6 +13,7 @@ const urlsToCache = [
     '/js/pwa.js',
     '/js/history.js',
     '/js/auth.js',
+    '/js/focus-trap.js',
     '/manifest.json',
     '/favicon.ico',
     '/assets/icons/icon-48x48.png',

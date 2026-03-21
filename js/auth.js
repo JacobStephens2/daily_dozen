@@ -1,6 +1,7 @@
 // Account management: login, register, sync
 
 import * as storage from './storage.js';
+import { trapFocus } from './focus-trap.js';
 
 const TOKEN_KEY = 'dailyDozenAuthToken';
 const EMAIL_KEY = 'dailyDozenAuthEmail';
@@ -219,6 +220,9 @@ export class AuthManager {
 
             document.body.appendChild(modal);
             requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        trapFocus(modal);
 
             modal.querySelector('#auth-sync-btn').addEventListener('click', async () => {
                 const status = document.getElementById('auth-status');
@@ -274,6 +278,9 @@ export class AuthManager {
 
             document.body.appendChild(modal);
             requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        trapFocus(modal);
 
             let isRegister = false;
             const toggleBtn = modal.querySelector('#auth-toggle-btn');
@@ -362,6 +369,9 @@ export class AuthManager {
 
         document.body.appendChild(modal);
         requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        trapFocus(modal);
 
         modal.querySelector('#auth-back-to-login').addEventListener('click', () => {
             modal.remove();
@@ -421,6 +431,9 @@ export class AuthManager {
 
         document.body.appendChild(modal);
         requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        trapFocus(modal);
 
         modal.querySelector('#auth-reset-form').addEventListener('submit', async (e) => {
             e.preventDefault();

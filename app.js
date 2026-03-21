@@ -7,6 +7,7 @@ import { handleServingChange } from './js/checkbox.js';
 import { PwaManager } from './js/pwa.js';
 import { HistoryView } from './js/history.js';
 import { AuthManager } from './js/auth.js';
+import { trapFocus } from './js/focus-trap.js';
 
 // Check for updates on page load (but don't clear cache aggressively)
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
@@ -209,6 +210,8 @@ class DailyDozenTracker {
         // Show inline edit modal instead of browser prompt()
         const modal = document.createElement('div');
         modal.className = 'profile-edit-modal';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="profile-edit-content">
                 <h3>Edit Profile Name</h3>
@@ -222,10 +225,12 @@ class DailyDozenTracker {
         `;
 
         document.body.appendChild(modal);
+        const releaseFocus = trapFocus(modal);
         const input = document.getElementById('profile-edit-input');
         input.focus();
         input.select();
 
+        const close = () => { releaseFocus(); modal.remove(); };
         const save = () => {
             const newName = input.value.trim();
             if (newName && newName !== currentName) {
@@ -236,15 +241,15 @@ class DailyDozenTracker {
                 this.showProfileNameUpdated(newName);
                 this.auth.schedulePush();
             }
-            modal.remove();
+            close();
         };
 
         modal.querySelector('#profile-edit-save').addEventListener('click', save);
-        modal.querySelector('#profile-edit-cancel').addEventListener('click', () => modal.remove());
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        modal.querySelector('#profile-edit-cancel').addEventListener('click', close);
+        modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') save();
-            if (e.key === 'Escape') modal.remove();
+            if (e.key === 'Escape') close();
         });
     }
 
@@ -310,7 +315,8 @@ class DailyDozenTracker {
                        id="${category.id}-${i}"
                        class="serving-checkbox"
                        data-category="${category.id}"
-                       data-serving="${i}">
+                       data-serving="${i}"
+                       aria-label="${category.name} serving ${i + 1} of ${category.servings}">
                 <label for="${category.id}-${i}" class="serving-label">${i + 1}</label>
             `;
         }

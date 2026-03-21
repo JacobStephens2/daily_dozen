@@ -2,12 +2,14 @@
 
 import * as storage from './storage.js';
 import { getCategoriesForDietType } from './categories.js';
+import { trapFocus } from './focus-trap.js';
 
 export class HistoryView {
     constructor(app) {
         this.app = app;
         this.viewDate = new Date();
         this._escHandler = null;
+        this._releaseFocus = null;
     }
 
     open() {
@@ -18,6 +20,7 @@ export class HistoryView {
     close() {
         const modal = document.querySelector('.history-modal');
         if (modal) modal.remove();
+        if (this._releaseFocus) { this._releaseFocus(); this._releaseFocus = null; }
         if (this._escHandler) {
             document.removeEventListener('keydown', this._escHandler);
             this._escHandler = null;
@@ -204,6 +207,9 @@ export class HistoryView {
 
         // Animate in
         requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        this._releaseFocus = trapFocus(modal);
 
         // Event listeners
         modal.querySelector('.history-close-btn').addEventListener('click', () => this.close());
