@@ -8,9 +8,6 @@ import { PwaManager } from './js/pwa.js';
 import { HistoryView } from './js/history.js';
 import { AuthManager } from './js/auth.js';
 
-console.log('Daily Dozen Tracker loaded - Version 2.0.12');
-console.log('Timestamp:', new Date().toISOString());
-
 // Check for updates on page load (but don't clear cache aggressively)
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
     if ('serviceWorker' in navigator) {

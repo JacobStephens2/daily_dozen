@@ -23,7 +23,6 @@ export class PwaManager {
 
         navigator.serviceWorker.register('sw.js?v=2.0.12')
             .then(registration => {
-                console.log('Service Worker registered successfully');
 
                 // Periodically check for SW updates
                 const updateInterval = this.isIOS ? 60000 : 300000;
@@ -37,7 +36,6 @@ export class PwaManager {
                 }
             })
             .catch(error => {
-                console.log('Service Worker registration failed:', error);
             });
 
         // Auto-reload when a new service worker takes over
@@ -93,12 +91,10 @@ export class PwaManager {
 
         window.addEventListener('appinstalled', () => {
             this.hideInstallButton();
-            console.log('Daily Dozen Tracker was installed successfully');
             this.showInstallationSuccess();
         });
 
         if (this.isStandalone || this.isIOSStandalone) {
-            console.log('App is already installed');
         } else {
             this.checkAndShowManualInstall();
         }

@@ -28,11 +28,9 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', event => {
-    console.log(`Service Worker installing version ${CACHE_VERSION}`);
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             })
             .then(() => {
@@ -91,13 +89,11 @@ self.addEventListener('fetch', event => {
 
 // Activate event - clean up old caches and notify clients of update
 self.addEventListener('activate', event => {
-    console.log(`Service Worker activating version ${CACHE_VERSION}`);
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -139,6 +135,5 @@ self.addEventListener('message', event => {
 
 function doBackgroundSync() {
     // Handle any background sync tasks
-    console.log('Background sync completed');
 }
 
