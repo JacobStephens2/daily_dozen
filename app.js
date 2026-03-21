@@ -325,6 +325,13 @@ class DailyDozenTracker {
                 this.pwa.showVersionInfo();
             });
         }
+
+        const exportBtn = document.getElementById('export-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                this.exportData();
+            });
+        }
     }
 
     // --- Checkbox / serving logic ---
@@ -551,6 +558,38 @@ class DailyDozenTracker {
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
+    }
+
+    // --- Data export ---
+
+    exportData() {
+        const profiles = storage.loadProfiles();
+        const exportPayload = {
+            exportDate: new Date().toISOString(),
+            profiles: {}
+        };
+
+        Object.keys(profiles).forEach(profileId => {
+            exportPayload.profiles[profileId] = {
+                name: profiles[profileId].name,
+                color: profiles[profileId].color,
+                dietType: storage.loadDietType(profileId),
+                data: storage.loadData(profileId)
+            };
+        });
+
+        const json = JSON.stringify(exportPayload, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const date = new Date().toISOString().slice(0, 10);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `daily-dozen-${date}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     // --- PWA delegations (for inline onclick handlers) ---

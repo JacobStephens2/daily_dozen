@@ -717,7 +717,8 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.version-info-btn {
+.version-info-btn,
+.export-btn {
     background: rgba(255, 255, 255, 0.15);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -732,7 +733,8 @@ body {
     width: 100%;
 }
 
-.version-info-btn:hover {
+.version-info-btn:hover,
+.export-btn:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -808,7 +810,8 @@ body {
         font-size: 0.8rem;
     }
     
-    .version-info-btn {
+    .version-info-btn,
+    .export-btn {
         padding: 0.6rem 1rem;
         font-size: 0.8rem;
     }
