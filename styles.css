@@ -2662,11 +2662,19 @@ body {
     cursor: not-allowed;
 }
 
-.auth-toggle {
+.auth-toggle,
+.auth-forgot {
     text-align: center;
     font-size: 0.85rem;
     color: var(--text-secondary);
     margin-top: 1rem;
+}
+
+.auth-forgot-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
 }
 
 .auth-toggle-btn {

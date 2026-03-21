@@ -20,6 +20,15 @@ db.exec(`
         created_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS password_resets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        token TEXT UNIQUE NOT NULL,
+        expires_at TEXT NOT NULL,
+        used INTEGER DEFAULT 0,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
     CREATE TABLE IF NOT EXISTS user_data (
         user_id INTEGER PRIMARY KEY,
         data TEXT NOT NULL,
@@ -33,6 +42,10 @@ const stmts = {
     getUserByEmail: db.prepare('SELECT * FROM users WHERE email = ?'),
     getUserById: db.prepare('SELECT id, email, created_at FROM users WHERE id = ?'),
     getData: db.prepare('SELECT data, updated_at FROM user_data WHERE user_id = ?'),
+    createReset: db.prepare('INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, datetime(\'now\', \'+1 hour\'))'),
+    getValidReset: db.prepare('SELECT * FROM password_resets WHERE token = ? AND used = 0 AND expires_at > datetime(\'now\')'),
+    markResetUsed: db.prepare('UPDATE password_resets SET used = 1 WHERE id = ?'),
+    updatePassword: db.prepare('UPDATE users SET password_hash = ? WHERE id = ?'),
     upsertData: db.prepare(`
         INSERT INTO user_data (user_id, data, updated_at)
         VALUES (?, ?, datetime('now'))

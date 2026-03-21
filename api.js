@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 const { stmts } = require('./db');
 
 const router = express.Router();
@@ -137,6 +138,82 @@ router.put('/data', authenticate, (req, res) => {
     stmts.upsertData.run(req.user.userId, JSON.stringify(data));
     const row = stmts.getData.get(req.user.userId);
     res.json({ success: true, updatedAt: row.updated_at });
+});
+
+// --- Password reset ---
+
+function getMailTransport() {
+    if (!process.env.SMTP_HOST) return null;
+    return nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
+    });
+}
+
+router.post('/forgot-password', authLimiter, (req, res) => {
+    const { email } = req.body || {};
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+    const user = stmts.getUserByEmail.get(normalizedEmail);
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+        return res.json({ message: 'If an account exists with that email, a reset link has been sent.' });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    stmts.createReset.run(user.id, token);
+
+    const appUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+    const resetLink = `${appUrl}?reset=${token}`;
+
+    const transport = getMailTransport();
+    if (transport) {
+        const fromAddr = process.env.SMTP_FROM || process.env.SMTP_USER;
+        transport.sendMail({
+            from: fromAddr,
+            to: normalizedEmail,
+            subject: 'Daily Dozen Tracker - Password Reset',
+            text: `Reset your password by visiting this link (expires in 1 hour):\n\n${resetLink}\n\nIf you did not request this, you can ignore this email.`,
+            html: `<p>Reset your password by clicking the link below (expires in 1 hour):</p><p><a href="${resetLink}">${resetLink}</a></p><p>If you did not request this, you can ignore this email.</p>`,
+        }).catch(err => {
+            console.log('Failed to send reset email:', err.message);
+        });
+    } else {
+        console.log(`Password reset link for ${normalizedEmail}: ${resetLink}`);
+    }
+
+    res.json({ message: 'If an account exists with that email, a reset link has been sent.' });
+});
+
+router.post('/reset-password', authLimiter, (req, res) => {
+    const { token, password } = req.body || {};
+
+    if (!token) {
+        return res.status(400).json({ error: 'Reset token is required' });
+    }
+    if (!password || typeof password !== 'string' || password.length < 8) {
+        return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    const resetRow = stmts.getValidReset.get(token);
+    if (!resetRow) {
+        return res.status(400).json({ error: 'Invalid or expired reset link. Please request a new one.' });
+    }
+
+    const hash = bcrypt.hashSync(password, 10);
+    stmts.updatePassword.run(hash, resetRow.user_id);
+    stmts.markResetUsed.run(resetRow.id);
+
+    res.json({ message: 'Password has been reset. You can now sign in.' });
 });
 
 module.exports = router;

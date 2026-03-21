@@ -12,6 +12,17 @@ export class AuthManager {
         this.token = localStorage.getItem(TOKEN_KEY);
         this.email = localStorage.getItem(EMAIL_KEY);
         this._syncTimer = null;
+        this.checkForResetToken();
+    }
+
+    checkForResetToken() {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('reset');
+        if (token) {
+            // Clean the URL
+            window.history.replaceState({}, '', window.location.pathname);
+            this.showResetPasswordModal(token);
+        }
     }
 
     get isLoggedIn() {
@@ -254,6 +265,9 @@ export class AuthManager {
                         Don't have an account?
                         <button class="auth-toggle-btn" id="auth-toggle-btn">Create one</button>
                     </p>
+                    <p class="auth-forgot">
+                        <button class="auth-toggle-btn" id="auth-forgot-btn">Forgot password?</button>
+                    </p>
                     <p class="auth-status" id="auth-status"></p>
                 </div>
             `;
@@ -275,6 +289,11 @@ export class AuthManager {
                     ? 'Already have an account? '
                     : "Don't have an account? ";
                 toggleBtn.textContent = isRegister ? 'Sign in' : 'Create one';
+            });
+
+            modal.querySelector('#auth-forgot-btn').addEventListener('click', () => {
+                modal.remove();
+                this.showForgotPasswordModal();
             });
 
             modal.querySelector('#auth-form').addEventListener('submit', async (e) => {
@@ -315,5 +334,132 @@ export class AuthManager {
             }
         };
         document.addEventListener('keydown', escHandler);
+    }
+
+    showForgotPasswordModal() {
+        const existing = document.querySelector('.auth-modal');
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.className = 'auth-modal';
+        modal.innerHTML = `
+            <div class="auth-content">
+                <div class="auth-header">
+                    <h3>Reset Password</h3>
+                    <button class="auth-close-btn">&times;</button>
+                </div>
+                <p class="auth-forgot-desc">Enter your email and we'll send you a link to reset your password.</p>
+                <form class="auth-form" id="auth-forgot-form">
+                    <input type="email" id="auth-forgot-email" placeholder="Email" required autocomplete="email">
+                    <button type="submit" class="auth-submit-btn" id="auth-forgot-submit">Send Reset Link</button>
+                </form>
+                <p class="auth-toggle">
+                    <button class="auth-toggle-btn" id="auth-back-to-login">Back to Sign In</button>
+                </p>
+                <p class="auth-status" id="auth-status"></p>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('show'));
+
+        modal.querySelector('#auth-back-to-login').addEventListener('click', () => {
+            modal.remove();
+            this.showAccountModal();
+        });
+
+        modal.querySelector('#auth-forgot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-forgot-email').value;
+            const status = document.getElementById('auth-status');
+            const btn = document.getElementById('auth-forgot-submit');
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            status.textContent = '';
+
+            try {
+                const result = await this.apiFetch('/forgot-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ email }),
+                });
+                status.textContent = result.message;
+                status.className = 'auth-status success';
+                btn.textContent = 'Sent';
+            } catch (err) {
+                status.textContent = err.message;
+                status.className = 'auth-status error';
+                btn.disabled = false;
+                btn.textContent = 'Send Reset Link';
+            }
+        });
+
+        modal.querySelector('.auth-close-btn').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    }
+
+    showResetPasswordModal(token) {
+        const existing = document.querySelector('.auth-modal');
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.className = 'auth-modal';
+        modal.innerHTML = `
+            <div class="auth-content">
+                <div class="auth-header">
+                    <h3>Set New Password</h3>
+                    <button class="auth-close-btn">&times;</button>
+                </div>
+                <form class="auth-form" id="auth-reset-form">
+                    <input type="password" id="auth-new-password" placeholder="New password (8+ characters)" required minlength="8" autocomplete="new-password">
+                    <input type="password" id="auth-confirm-password" placeholder="Confirm new password" required minlength="8" autocomplete="new-password">
+                    <button type="submit" class="auth-submit-btn" id="auth-reset-submit">Reset Password</button>
+                </form>
+                <p class="auth-status" id="auth-status"></p>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('show'));
+
+        modal.querySelector('#auth-reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('auth-new-password').value;
+            const confirm = document.getElementById('auth-confirm-password').value;
+            const status = document.getElementById('auth-status');
+            const btn = document.getElementById('auth-reset-submit');
+
+            if (password !== confirm) {
+                status.textContent = 'Passwords do not match';
+                status.className = 'auth-status error';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Resetting...';
+            status.textContent = '';
+
+            try {
+                const result = await this.apiFetch('/reset-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ token, password }),
+                });
+                status.textContent = result.message;
+                status.className = 'auth-status success';
+                btn.textContent = 'Done';
+                setTimeout(() => {
+                    modal.remove();
+                    this.showAccountModal();
+                }, 2000);
+            } catch (err) {
+                status.textContent = err.message;
+                status.className = 'auth-status error';
+                btn.disabled = false;
+                btn.textContent = 'Reset Password';
+            }
+        });
+
+        modal.querySelector('.auth-close-btn').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
 }
