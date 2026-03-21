@@ -135,11 +135,12 @@ export class HistoryView {
             const futureClass = isFuture ? 'future' : '';
             const todayClass = isToday ? 'today' : '';
             const hasData = dayData && !isFuture ? 'has-data' : '';
+            const clickable = !isFuture ? 'clickable' : '';
 
             calendarHtml += `
-                <div class="history-day ${colorClass} ${futureClass} ${todayClass} ${hasData}"
+                <div class="history-day ${colorClass} ${futureClass} ${todayClass} ${hasData} ${clickable}"
                      data-date="${dateKey}"
-                     ${hasData ? `title="${percentage}% complete"` : ''}>
+                     ${hasData ? `title="${percentage}% complete — click to edit"` : !isFuture ? 'title="Click to edit"' : ''}>
                     <span class="history-day-number">${day}</span>
                     ${!isFuture && dayData ? `<span class="history-day-pct">${percentage}%</span>` : ''}
                 </div>
@@ -195,7 +196,7 @@ export class HistoryView {
                     <span class="history-legend-item"><span class="history-legend-color history-day-full"></span> 100%</span>
                 </div>
 
-                <div class="history-day-detail" id="history-day-detail"></div>
+                <p class="history-hint">Tap a day to edit its entries</p>
             </div>
         `;
 
@@ -222,12 +223,11 @@ export class HistoryView {
             });
         }
 
-        modal.querySelectorAll('.history-day.has-data').forEach(cell => {
+        modal.querySelectorAll('.history-day.clickable').forEach(cell => {
             cell.addEventListener('click', () => {
-                this.showDayDetail(cell.dataset.date, data, categories, totalServings);
-                // Highlight selected day
-                modal.querySelectorAll('.history-day.selected').forEach(el => el.classList.remove('selected'));
-                cell.classList.add('selected');
+                const date = new Date(cell.dataset.date);
+                this.close();
+                this.app.navigateToDate(date);
             });
         });
 
@@ -235,38 +235,5 @@ export class HistoryView {
             if (e.key === 'Escape') this.close();
         };
         document.addEventListener('keydown', this._escHandler);
-    }
-
-    showDayDetail(dateKey, data, categories, totalServings) {
-        const detail = document.getElementById('history-day-detail');
-        if (!detail) return;
-
-        const dayData = data[dateKey] || {};
-        const date = new Date(dateKey);
-        const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-
-        let completed = 0;
-        let detailHtml = `<h4>${dateStr}</h4><div class="history-detail-categories">`;
-
-        categories.forEach(cat => {
-            const catData = dayData[cat.id] || [];
-            const catCompleted = catData.length;
-            completed += catCompleted;
-            const isComplete = catCompleted >= cat.servings;
-
-            detailHtml += `
-                <div class="history-detail-cat ${isComplete ? 'complete' : ''}">
-                    <span class="history-detail-icon">${cat.icon}</span>
-                    <span class="history-detail-name">${cat.name}</span>
-                    <span class="history-detail-count">${catCompleted}/${cat.servings}</span>
-                </div>
-            `;
-        });
-
-        const pct = Math.round((completed / totalServings) * 100);
-        detailHtml += `</div><div class="history-detail-total">${completed}/${totalServings} servings (${pct}%)</div>`;
-
-        detail.innerHTML = detailHtml;
-        detail.style.display = 'block';
     }
 }

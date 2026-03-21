@@ -47,7 +47,24 @@ class DailyDozenTracker {
         this.pwa.init();
     }
 
-    // --- Date display ---
+    // --- Date navigation ---
+
+    navigateToDate(date) {
+        this.currentDate = date;
+        this.updateDateDisplay();
+        this.renderCategories();
+        const data = storage.loadData(this.currentProfile);
+        this.restoreCheckboxes(data);
+        this.updateProgress();
+    }
+
+    isViewingToday() {
+        return this.currentDate.toDateString() === new Date().toDateString();
+    }
+
+    returnToToday() {
+        this.navigateToDate(new Date());
+    }
 
     updateDateDisplay() {
         const dateElement = document.getElementById('current-date');
@@ -58,6 +75,17 @@ class DailyDozenTracker {
             day: 'numeric'
         };
         dateElement.textContent = this.currentDate.toLocaleDateString('en-US', options);
+
+        const backBtn = document.getElementById('back-to-today-btn');
+        if (backBtn) {
+            backBtn.style.display = this.isViewingToday() ? 'none' : 'inline-block';
+        }
+
+        // Visual indicator when viewing a past date
+        const dateDisplay = document.querySelector('.date-display');
+        if (dateDisplay) {
+            dateDisplay.classList.toggle('viewing-past', !this.isViewingToday());
+        }
     }
 
     // --- Profile management ---
@@ -244,6 +272,13 @@ class DailyDozenTracker {
             });
         }
 
+        const backToTodayBtn = document.getElementById('back-to-today-btn');
+        if (backToTodayBtn) {
+            backToTodayBtn.addEventListener('click', () => {
+                this.returnToToday();
+            });
+        }
+
         const resetDayBtn = document.getElementById('reset-day-btn');
         if (resetDayBtn) {
             resetDayBtn.addEventListener('click', () => {
@@ -416,6 +451,9 @@ class DailyDozenTracker {
     // --- Celebration ---
 
     showCompletionCelebration() {
+        // Only celebrate for today, not when editing past dates
+        if (!this.isViewingToday()) return;
+
         const celebrationKey = storage.getCelebrationKey(this.currentProfile, this.currentDate.toDateString());
         if (localStorage.getItem(celebrationKey)) {
             return;
@@ -448,7 +486,8 @@ class DailyDozenTracker {
     // --- Reset ---
 
     resetDay() {
-        if (!confirm('Are you sure you want to reset all your progress for today? This action cannot be undone.')) {
+        const dayLabel = this.isViewingToday() ? 'today' : this.currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        if (!confirm(`Are you sure you want to reset all your progress for ${dayLabel}? This action cannot be undone.`)) {
             return;
         }
 
