@@ -121,6 +121,15 @@ router.post('/login', authLimiter, (req, res) => {
     res.json({ token, email: user.email });
 });
 
+router.post('/refresh-token', authenticate, (req, res) => {
+    const user = stmts.getUserById.get(req.user.userId);
+    if (!user) {
+        return res.status(401).json({ error: 'Account not found' });
+    }
+    const token = signToken(user);
+    res.json({ token, email: user.email });
+});
+
 router.get('/data', authenticate, (req, res) => {
     const row = stmts.getData.get(req.user.userId);
     if (!row) {

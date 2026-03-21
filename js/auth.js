@@ -47,6 +47,24 @@ export class AuthManager {
         localStorage.removeItem(SYNC_TS_KEY);
     }
 
+    // --- Token refresh ---
+
+    async refreshTokenIfNeeded() {
+        if (!this.token) return;
+        try {
+            // Decode JWT payload (base64) to check expiry
+            const payload = JSON.parse(atob(this.token.split('.')[1]));
+            const expiresIn = payload.exp * 1000 - Date.now();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+            if (expiresIn < sevenDays) {
+                const result = await this.apiFetch('/refresh-token', { method: 'POST' });
+                this.saveAuth(result.token, result.email);
+            }
+        } catch {
+            // Token decode failed or refresh failed — will be caught on next API call
+        }
+    }
+
     // --- API helpers ---
 
     async apiFetch(path, options = {}) {

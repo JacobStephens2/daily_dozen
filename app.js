@@ -47,9 +47,9 @@ class DailyDozenTracker {
         this.pwa.init();
         this.auth.updateUI();
         this.setupOfflineIndicator();
-        // Sync from server on load if logged in
+        // Refresh token and sync from server on load if logged in
         if (this.auth.isLoggedIn) {
-            this.auth.sync().catch(() => {});
+            this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
         }
     }
 
