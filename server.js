@@ -5,6 +5,9 @@ const apiRouter = require('./api');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust the Apache reverse proxy for correct client IP in rate limiting
+app.set('trust proxy', 1);
+
 // Parse JSON bodies (before API routes)
 app.use(express.json({ limit: '2mb' }));
 
