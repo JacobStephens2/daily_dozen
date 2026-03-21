@@ -2550,6 +2550,16 @@ body {
     }
 }
 
+/* Offline banner */
+.offline-banner {
+    background: var(--copper);
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
 /* ========================================
    Profile Edit Modal
    ======================================== */

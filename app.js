@@ -46,6 +46,7 @@ class DailyDozenTracker {
         this.setupEventListeners();
         this.pwa.init();
         this.auth.updateUI();
+        this.setupOfflineIndicator();
         // Sync from server on load if logged in
         if (this.auth.isLoggedIn) {
             this.auth.sync().catch(() => {});
@@ -768,6 +769,20 @@ class DailyDozenTracker {
             reader.readAsText(file);
         });
         input.click();
+    }
+
+    // --- Offline indicator ---
+
+    setupOfflineIndicator() {
+        const banner = document.getElementById('offline-banner');
+        if (!banner) return;
+
+        const update = () => {
+            banner.style.display = navigator.onLine ? 'none' : 'block';
+        };
+        update();
+        window.addEventListener('online', update);
+        window.addEventListener('offline', update);
     }
 
     // --- PWA delegations (for inline onclick handlers) ---
