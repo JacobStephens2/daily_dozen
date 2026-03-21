@@ -413,6 +413,13 @@ class DailyDozenTracker {
             });
         }
 
+        const importBtn = document.getElementById('import-btn');
+        if (importBtn) {
+            importBtn.addEventListener('click', () => {
+                this.importData();
+            });
+        }
+
         const accountBtn = document.getElementById('account-btn');
         if (accountBtn) {
             accountBtn.addEventListener('click', () => {
@@ -680,6 +687,40 @@ class DailyDozenTracker {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    // --- Data import ---
+
+    importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const payload = JSON.parse(event.target.result);
+                    if (!payload.profiles || typeof payload.profiles !== 'object') {
+                        alert('Invalid file: no profile data found.');
+                        return;
+                    }
+                    if (!confirm('This will replace all your current data. Continue?')) {
+                        return;
+                    }
+                    this.auth.restoreFromPayload(payload);
+                    this.refreshAfterSync();
+                    this.auth.schedulePush();
+                    alert('Data imported successfully.');
+                } catch {
+                    alert('Could not read file. Make sure it is a valid Daily Dozen export.');
+                }
+            };
+            reader.readAsText(file);
+        });
+        input.click();
     }
 
     // --- PWA delegations (for inline onclick handlers) ---
