@@ -2551,6 +2551,86 @@ body {
 }
 
 /* ========================================
+   Profile Edit Modal
+   ======================================== */
+
+.profile-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+}
+
+.profile-edit-content {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 320px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.profile-edit-content h3 {
+    color: var(--fern-green);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.profile-edit-input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--background);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.profile-edit-input:focus {
+    outline: none;
+    border-color: var(--fern-green);
+}
+
+.profile-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.profile-edit-save {
+    flex: 1;
+    background: var(--fern-green);
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.profile-edit-cancel {
+    flex: 1;
+    background: var(--background);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* ========================================
    Auth Modal
    ======================================== */
 

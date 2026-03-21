@@ -209,16 +209,46 @@ class DailyDozenTracker {
         const profile = this.profiles[profileId];
         const currentName = profile.name;
 
-        const newName = prompt(`Enter a new name for ${currentName}:`, currentName);
+        // Show inline edit modal instead of browser prompt()
+        const modal = document.createElement('div');
+        modal.className = 'profile-edit-modal';
+        modal.innerHTML = `
+            <div class="profile-edit-content">
+                <h3>Edit Profile Name</h3>
+                <input type="text" class="profile-edit-input" id="profile-edit-input"
+                       value="${currentName}" maxlength="30" autocomplete="off">
+                <div class="profile-edit-actions">
+                    <button class="profile-edit-save" id="profile-edit-save">Save</button>
+                    <button class="profile-edit-cancel" id="profile-edit-cancel">Cancel</button>
+                </div>
+            </div>
+        `;
 
-        if (newName && newName.trim() && newName.trim() !== currentName) {
-            this.profiles[profileId].name = newName.trim();
-            storage.saveProfiles(this.profiles);
-            this.setProfileSelector();
-            this.updateDietTypeLabel();
-            this.showProfileNameUpdated(newName.trim());
-            this.auth.schedulePush();
-        }
+        document.body.appendChild(modal);
+        const input = document.getElementById('profile-edit-input');
+        input.focus();
+        input.select();
+
+        const save = () => {
+            const newName = input.value.trim();
+            if (newName && newName !== currentName) {
+                this.profiles[profileId].name = newName;
+                storage.saveProfiles(this.profiles);
+                this.setProfileSelector();
+                this.updateDietTypeLabel();
+                this.showProfileNameUpdated(newName);
+                this.auth.schedulePush();
+            }
+            modal.remove();
+        };
+
+        modal.querySelector('#profile-edit-save').addEventListener('click', save);
+        modal.querySelector('#profile-edit-cancel').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') save();
+            if (e.key === 'Escape') modal.remove();
+        });
     }
 
     showProfileNameUpdated(newName) {
