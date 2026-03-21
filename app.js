@@ -77,14 +77,31 @@ class DailyDozenTracker {
         dateElement.textContent = this.currentDate.toLocaleDateString('en-US', options);
 
         const backBtn = document.getElementById('back-to-today-btn');
+        const isToday = this.isViewingToday();
         if (backBtn) {
-            backBtn.style.display = this.isViewingToday() ? 'none' : 'inline-block';
+            backBtn.style.display = isToday ? 'none' : 'inline-block';
         }
 
         // Visual indicator when viewing a past date
-        const dateDisplay = document.querySelector('.date-display');
-        if (dateDisplay) {
-            dateDisplay.classList.toggle('viewing-past', !this.isViewingToday());
+        const datePill = document.getElementById('date-pill');
+        if (datePill) {
+            datePill.classList.toggle('viewing-past', !isToday);
+        }
+
+        // Sync the hidden date picker value
+        const picker = document.getElementById('date-picker');
+        if (picker) {
+            const y = this.currentDate.getFullYear();
+            const m = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+            const d = String(this.currentDate.getDate()).padStart(2, '0');
+            picker.value = `${y}-${m}-${d}`;
+        }
+
+        // Disable next arrow if viewing today
+        const nextBtn = document.getElementById('date-next-btn');
+        if (nextBtn) {
+            nextBtn.classList.toggle('disabled', isToday);
+            nextBtn.disabled = isToday;
         }
     }
 
@@ -276,6 +293,47 @@ class DailyDozenTracker {
         if (backToTodayBtn) {
             backToTodayBtn.addEventListener('click', () => {
                 this.returnToToday();
+            });
+        }
+
+        // Date navigation: prev/next arrows
+        const datePrevBtn = document.getElementById('date-prev-btn');
+        if (datePrevBtn) {
+            datePrevBtn.addEventListener('click', () => {
+                const prev = new Date(this.currentDate);
+                prev.setDate(prev.getDate() - 1);
+                this.navigateToDate(prev);
+            });
+        }
+
+        const dateNextBtn = document.getElementById('date-next-btn');
+        if (dateNextBtn) {
+            dateNextBtn.addEventListener('click', () => {
+                if (this.isViewingToday()) return;
+                const next = new Date(this.currentDate);
+                next.setDate(next.getDate() + 1);
+                this.navigateToDate(next);
+            });
+        }
+
+        // Date picker: click the pill to open the native date picker
+        const datePill = document.getElementById('date-pill');
+        const datePicker = document.getElementById('date-picker');
+        if (datePill && datePicker) {
+            datePill.addEventListener('click', () => {
+                datePicker.showPicker();
+            });
+
+            datePicker.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    const parts = e.target.value.split('-');
+                    const picked = new Date(parts[0], parts[1] - 1, parts[2]);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (picked <= today) {
+                        this.navigateToDate(picked);
+                    }
+                }
             });
         }
 

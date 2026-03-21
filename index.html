@@ -48,10 +48,20 @@
                 <img src="assets/icons/icon-48x48.png" alt="Daily Dozen Icon" class="header-icon">
                 <h1>Daily Dozen Tracker</h1>
             </div>
+            <div class="header-date-nav" id="header-date-nav">
+                <button class="date-prev-btn" id="date-prev-btn" aria-label="Previous day">&larr;</button>
+                <button class="date-pill" id="date-pill">
+                    <span id="current-date"></span>
+                    <input type="date" id="date-picker" class="date-picker-input">
+                </button>
+                <button class="date-next-btn" id="date-next-btn" aria-label="Next day">&rarr;</button>
+            </div>
+            <button class="back-to-today-btn" id="back-to-today-btn" style="display:none">
+                Return to Today
+            </button>
             <div class="profile-selector" id="profile-selector">
                 <!-- Profile buttons will be populated by JavaScript -->
             </div>
-
         </header>
 
         <main class="main-content">
@@ -95,12 +105,6 @@
             </div>
 
             <div class="diet-selector-section">
-                <div class="date-display">
-                    <span id="current-date"></span>
-                    <button class="back-to-today-btn" id="back-to-today-btn" style="display:none">
-                        Return to Today
-                    </button>
-                </div>
                 <div class="diet-selector">
                     <label for="diet-type" id="diet-type-label">Diet Type for Profile:</label>
                     <select id="diet-type">
