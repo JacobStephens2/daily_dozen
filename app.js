@@ -1,5 +1,5 @@
 // Catholic Daily Dozen Tracker - Main Application Logic
-// Version: 2.0.12 - Enhanced PWA update mechanism
+// Version: 2.0.13 - Fix stale checkboxes on day change
 
 import { getCategoriesForDietType, getCategoryNameHtml } from './js/categories.js';
 import * as storage from './js/storage.js';
