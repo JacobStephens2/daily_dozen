@@ -44,6 +44,7 @@ class DailyDozenTracker {
         this.updateHeaderColor();
         this.updateDietTypeLabel();
         this.setupEventListeners();
+        this.setupDayChangeDetection();
         this.pwa.init();
         this.auth.updateUI();
         this.setupOfflineIndicator();
@@ -54,6 +55,10 @@ class DailyDozenTracker {
     }
 
     refreshAfterSync() {
+        // Re-anchor to the real "today" in case the sync arrived after a day change
+        if (this.isViewingToday()) {
+            this.currentDate = new Date();
+        }
         this.profiles = storage.loadProfiles();
         this.dietType = storage.loadDietType(this.currentProfile);
         this.categories = getCategoriesForDietType(this.dietType);
@@ -65,6 +70,7 @@ class DailyDozenTracker {
         this.updateProgress();
         this.updateHeaderColor();
         this.updateDietTypeLabel();
+        this.updateDateDisplay();
     }
 
     // --- Date navigation ---
@@ -800,6 +806,31 @@ class DailyDozenTracker {
         update();
         window.addEventListener('online', update);
         window.addEventListener('offline', update);
+    }
+
+    // --- Day change detection ---
+    // When the app resumes from background (e.g. PWA/TWA reopened the next day),
+    // the browser may restore the page from bfcache with stale DOM state.
+    // Detect this and navigate to the real "today" so checkboxes match the date.
+
+    setupDayChangeDetection() {
+        const refreshIfDayChanged = () => {
+            const now = new Date();
+            if (this.isViewingToday() && this.currentDate.toDateString() !== now.toDateString()) {
+                this.navigateToDate(now);
+                if (this.auth.isLoggedIn) {
+                    this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
+                }
+            }
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) refreshIfDayChanged();
+        });
+
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) refreshIfDayChanged();
+        });
     }
 
     // --- PWA delegations (for inline onclick handlers) ---
