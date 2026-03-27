@@ -35,8 +35,8 @@ export function loadProfiles() {
     const saved = localStorage.getItem(STORAGE_KEYS.PROFILES);
     if (saved) return JSON.parse(saved);
     return {
-        'user': { name: 'You', color: '#548444' },
-        'other': { name: 'Other', color: '#b9803c' }
+        'user': { name: 'You', color: '#38672a' },
+        'other': { name: 'Other', color: '#7c5724' }
     };
 }
 

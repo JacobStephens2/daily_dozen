@@ -555,14 +555,14 @@ class DailyDozenTracker {
         totalServingsElement.textContent = totalServings;
 
         if (percentage >= 100) {
-            progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #548444)';
+            progressFill.style.background = 'linear-gradient(90deg, #508041, #38672a)';
             this.showCompletionCelebration();
         } else if (percentage >= 75) {
-            progressFill.style.background = 'linear-gradient(90deg, #8BC34A, #4CAF50)';
+            progressFill.style.background = 'linear-gradient(90deg, #508041, #38672a)';
         } else if (percentage >= 50) {
-            progressFill.style.background = 'linear-gradient(90deg, #FFC107, #8BC34A)';
+            progressFill.style.background = 'linear-gradient(90deg, #BB8F56, #508041)';
         } else {
-            progressFill.style.background = 'linear-gradient(90deg, #FF9800, #FFC107)';
+            progressFill.style.background = 'linear-gradient(90deg, #E1C07B, #BB8F56)';
         }
     }
 
