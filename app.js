@@ -435,7 +435,7 @@ class DailyDozenTracker {
         const footerInstallBtn = document.getElementById('footer-install-btn');
         if (footerInstallBtn) {
             footerInstallBtn.addEventListener('click', () => {
-                this.pwa.showManualInstallInstructions();
+                this.pwa.installApp();
             });
         }
 

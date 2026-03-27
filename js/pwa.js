@@ -86,17 +86,31 @@ export class PwaManager {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             this.deferredPrompt = e;
-            this.showInstallButton();
+            this.syncFooterInstallButton();
         });
 
         window.addEventListener('appinstalled', () => {
             this.hideInstallButton();
             this.showInstallationSuccess();
+            this.syncFooterInstallButton();
         });
 
+        this.syncFooterInstallButton();
+    }
+
+    syncFooterInstallButton() {
+        const footerInstallBtn = document.getElementById('footer-install-btn');
+        if (!footerInstallBtn) return;
+
         if (this.isStandalone || this.isIOSStandalone) {
-            // Already installed, nothing to do
+            footerInstallBtn.hidden = true;
+            return;
         }
+
+        footerInstallBtn.hidden = false;
+        footerInstallBtn.textContent = this.deferredPrompt
+            ? '📱 Install App'
+            : '📱 Show Installation Instructions';
     }
 
     showInstallButton() {
@@ -165,6 +179,7 @@ export class PwaManager {
             this.deferredPrompt.prompt();
             this.deferredPrompt.userChoice.then(() => {
                 this.deferredPrompt = null;
+                this.syncFooterInstallButton();
             });
         } else {
             this.showManualInstallInstructions();
