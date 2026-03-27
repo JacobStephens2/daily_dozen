@@ -466,6 +466,22 @@ class DailyDozenTracker {
                 this.auth.showAccountModal();
             });
         }
+
+        const signInBannerBtn = document.getElementById('sign-in-banner-btn');
+        if (signInBannerBtn) {
+            signInBannerBtn.addEventListener('click', () => {
+                this.auth.showAccountModal();
+            });
+        }
+
+        const signInBannerDismiss = document.getElementById('sign-in-banner-dismiss');
+        if (signInBannerDismiss) {
+            signInBannerDismiss.addEventListener('click', () => {
+                const banner = document.getElementById('sign-in-banner');
+                if (banner) banner.classList.add('hidden');
+                sessionStorage.setItem('sign-in-banner-dismissed', '1');
+            });
+        }
     }
 
     // --- Checkbox / serving logic ---

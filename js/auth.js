@@ -203,6 +203,17 @@ export class AuthManager {
         if (accountBtn) {
             accountBtn.textContent = this.isLoggedIn ? `👤 ${this.email}` : '👤 Sign In';
         }
+        const signInBanner = document.getElementById('sign-in-banner');
+        if (signInBanner) {
+            if (this.isLoggedIn) {
+                signInBanner.classList.add('hidden');
+            } else {
+                const dismissed = sessionStorage.getItem('sign-in-banner-dismissed');
+                if (!dismissed) {
+                    signInBanner.classList.remove('hidden');
+                }
+            }
+        }
     }
 
     showAccountModal() {

@@ -2564,6 +2564,69 @@ body {
     font-weight: 600;
 }
 
+/* Sign-in banner */
+.sign-in-banner {
+    background: var(--surface-container-low);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.sign-in-banner.hidden {
+    display: none;
+}
+
+.sign-in-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.sign-in-banner-text {
+    font-size: 0.9rem;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+}
+
+.sign-in-banner-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-container));
+    color: var(--on-primary);
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.sign-in-banner-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-ambient);
+}
+
+.sign-in-banner-dismiss {
+    background: none;
+    border: none;
+    color: var(--on-surface-variant);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.sign-in-banner-dismiss:hover {
+    opacity: 1;
+}
+
 /* ========================================
    Profile Edit Modal
    ======================================== */
