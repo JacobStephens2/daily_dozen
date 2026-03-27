@@ -95,8 +95,7 @@ export class PwaManager {
         });
 
         if (this.isStandalone || this.isIOSStandalone) {
-        } else {
-            this.checkAndShowManualInstall();
+            // Already installed, nothing to do
         }
     }
 
