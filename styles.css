@@ -998,39 +998,38 @@ body {
     }
 
     .app-header {
-        padding: 3rem 2rem;
+        padding: 1.5rem 2rem;
     }
 
     .header-content {
-        gap: 1.5rem;
-        margin-bottom: 1rem;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .header-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: var(--radius-lg);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         content: url('assets/icons/icon-192x192.png');
     }
 
     .app-header h1 {
-        font-size: 3.5rem;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
     }
 
     .profile-selector {
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .profile-btn {
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+        padding: 0.5rem 1.25rem;
+        font-size: 0.95rem;
         border-radius: var(--radius-full);
-        min-width: 160px;
+        min-width: 120px;
     }
 
     .main-content {
@@ -1409,13 +1408,13 @@ body {
     }
 
     .app-header h1 {
-        font-size: 4rem;
+        font-size: 2.25rem;
     }
 
     .header-icon {
-        width: 80px;
-        height: 80px;
-        content: url('assets/icons/icon-256x256.png');
+        width: 48px;
+        height: 48px;
+        content: url('assets/icons/icon-192x192.png');
     }
 }
 
