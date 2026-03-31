@@ -1,434 +1,59 @@
-// Category definitions for all diet types
+// Category definitions and preset configurations
 
-export function getStandardCategories() {
+// Master list of all possible categories
+export function getAllCategories() {
     return [
-        {
-            id: 'beans',
-            name: 'Beans',
-            icon: '🫘',
-            servings: 3,
-            description: '½ c. cooked beans, ¼&nbsp;c.&nbsp;hummus',
-            examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
-        },
-        {
-            id: 'berries',
-            name: 'Berries',
-            icon: '🫐',
-            servings: 1,
-            description: '½ c. fresh or frozen, ¼ c. dried',
-            examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
-        },
-        {
-            id: 'other-fruits',
-            name: 'Other Fruits',
-            icon: '🍎',
-            servings: 3,
-            description: '1 medium fruit, ¼&nbsp;c.&nbsp;dried&nbsp;fruit',
-            examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
-        },
-        {
-            id: 'greens',
-            name: 'Greens',
-            icon: '🥬',
-            servings: 2,
-            description: '1 c. raw, ½ c. cooked',
-            examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
-        },
-        {
-            id: 'cruciferous',
-            name: 'Cruciferous Vegetables',
-            icon: '🥦',
-            servings: 1,
-            description: '½ c. chopped, 1&nbsp;tbsp&nbsp;horseradish',
-            examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
-        },
-        {
-            id: 'other-vegetables',
-            name: 'Other Vegetables',
-            icon: '🥕',
-            servings: 2,
-            description: '½ c. nonleafy vegetables',
-            examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
-        },
-        {
-            id: 'flaxseed',
-            name: 'Flaxseed',
-            icon: '🌾',
-            servings: 1,
-            description: '1 tbsp ground',
-            examples: ['Ground flaxseed', 'Flaxseed oil']
-        },
-        {
-            id: 'nuts-seeds',
-            name: 'Nuts and Seeds',
-            icon: '🥜',
-            servings: 1,
-            description: '¼ c. nuts, 2 tbsp nut butter',
-            examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
-        },
-        {
-            id: 'herbs-spices',
-            name: 'Herbs and Spices',
-            icon: '🌿',
-            servings: 1,
-            description: '¼ tsp turmeric',
-            examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
-        },
-        {
-            id: 'whole-grains',
-            name: 'Whole Grains',
-            icon: '🌾',
-            servings: 3,
-            description: '½ c. hot cereal, 1 slice of bread',
-            examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
-        },
-        {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '💧',
-            servings: 5,
-            description: "60&nbsp;oz&nbsp;per&nbsp;day",
-            examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
-        },
-        {
-            id: 'exercise',
-            name: 'Exercise',
-            icon: '🏃',
-            servings: 1,
-            description: '90 min. moderate or 40 min. vigorous',
-            examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
-        }
+        { id: 'beans', name: 'Beans', icon: '🫘', description: '½ c. cooked beans, ¼\u00a0c.\u00a0hummus', examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame'] },
+        { id: 'protein', name: 'Protein', icon: '🥩', description: '3 oz lean meat, 1 egg, ½\u00a0c.\u00a0beans', examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu'] },
+        { id: 'berries', name: 'Berries', icon: '🫐', description: '½ c. fresh or frozen, ¼ c. dried', examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries'] },
+        { id: 'other-fruits', name: 'Other Fruits', icon: '🍎', description: '1 medium fruit, ¼\u00a0c.\u00a0dried\u00a0fruit', examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple'] },
+        { id: 'greens', name: 'Greens', icon: '🥬', description: '1 c. raw, ½ c. cooked', examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens'] },
+        { id: 'cruciferous', name: 'Cruciferous Vegetables', icon: '🥦', description: '½ c. chopped, 1\u00a0tbsp\u00a0horseradish', examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale'] },
+        { id: 'other-vegetables', name: 'Other Vegetables', icon: '🥕', description: '½ c. nonleafy vegetables', examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini'] },
+        { id: 'flaxseed', name: 'Flaxseed', icon: '🌾', description: '1 tbsp ground', examples: ['Ground flaxseed', 'Flaxseed oil'] },
+        { id: 'nuts-seeds', name: 'Nuts and Seeds', icon: '🥜', description: '¼ c. nuts, 2 tbsp nut butter', examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter'] },
+        { id: 'herbs-spices', name: 'Herbs and Spices', icon: '🌿', description: '¼ tsp turmeric', examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil'] },
+        { id: 'whole-grains', name: 'Whole Grains', icon: '🌾', description: '½ c. hot cereal, 1 slice of bread', examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley'] },
+        { id: 'beverages', name: 'Beverages', icon: '💧', description: '60\u00a0oz\u00a0per\u00a0day', examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea'] },
+        { id: 'exercise', name: 'Exercise', icon: '🏃', description: '90 min. moderate or 40 min. vigorous', examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga'] },
     ];
 }
 
-export function getModifiedCategories() {
-    return [
-        {
-            id: 'protein',
-            name: 'Protein',
-            icon: '🥩',
-            servings: 2,
-            description: '3 oz lean meat, 1 egg, ½ c. beans',
-            examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
-        },
-        {
-            id: 'berries',
-            name: 'Berries',
-            icon: '🫐',
-            servings: 1,
-            description: '½ c. fresh or frozen, ¼ c. dried',
-            examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
-        },
-        {
-            id: 'other-fruits',
-            name: 'Other Fruits',
-            icon: '🍎',
-            servings: 3,
-            description: '1 medium fruit, ¼ c. dried fruit',
-            examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
-        },
-        {
-            id: 'greens',
-            name: 'Greens',
-            icon: '🥬',
-            servings: 2,
-            description: '1 c. raw, ½ c. cooked',
-            examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
-        },
-        {
-            id: 'cruciferous',
-            name: 'Cruciferous Vegetables',
-            icon: '🥦',
-            servings: 1,
-            description: '½ c. chopped, 1 tbsp horseradish',
-            examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
-        },
-        {
-            id: 'other-vegetables',
-            name: 'Other Vegetables',
-            icon: '🥕',
-            servings: 2,
-            description: '½ c. nonleafy vegetables',
-            examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
-        },
-        {
-            id: 'nuts-seeds',
-            name: 'Nuts and Seeds',
-            icon: '🥜',
-            servings: 1,
-            description: '¼ c. nuts, 2 tbsp nut butter',
-            examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
-        },
-        {
-            id: 'herbs-spices',
-            name: 'Herbs and Spices',
-            icon: '🌿',
-            servings: 1,
-            description: '¼ tsp turmeric',
-            examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
-        },
-        {
-            id: 'whole-grains',
-            name: 'Whole Grains',
-            icon: '🌾',
-            servings: 3,
-            description: '½ c. hot cereal, 1 slice of bread',
-            examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
-        },
-        {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '💧',
-            servings: 5,
-            description: '60 oz per day',
-            examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
-        },
-        {
-            id: 'exercise',
-            name: 'Exercise',
-            icon: '🏃',
-            servings: 1,
-            description: '90 min. moderate or 40 min. vigorous',
-            examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
-        }
-    ];
+// Preset serving configurations (0 = category excluded)
+export const PRESETS = {
+    standard: {
+        name: 'Standard Daily Dozen',
+        servings: { beans: 3, protein: 0, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 1, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
+    },
+    modified: {
+        name: 'Modified',
+        servings: { beans: 0, protein: 2, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 0, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
+    },
+    'one-bean': {
+        name: 'One Bean',
+        servings: { beans: 1, protein: 1, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 0, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
+    },
+    'one-bean-two-protein': {
+        name: 'One Bean + Two Protein',
+        servings: { beans: 1, protein: 2, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 0, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
+    },
+    'one-bean-two-protein-one-flax': {
+        name: 'One Bean + Two Protein + Flax',
+        servings: { beans: 1, protein: 2, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 1, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
+    },
+};
+
+// Build active categories array from a servings map
+export function getActiveCategories(customServings) {
+    return getAllCategories()
+        .filter(cat => (customServings[cat.id] || 0) > 0)
+        .map(cat => ({ ...cat, servings: customServings[cat.id] }));
 }
 
-export function getOneBeanCategories() {
-    return [
-        {
-            id: 'beans',
-            name: 'Beans',
-            icon: '🫘',
-            servings: 1,
-            description: '½ c. cooked beans, ¼ c. hummus',
-            examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
-        },
-        {
-            id: 'protein',
-            name: 'Protein',
-            icon: '🥩',
-            servings: 1,
-            description: '3 oz lean meat, 1 egg, ½ c. beans',
-            examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
-        },
-        {
-            id: 'berries',
-            name: 'Berries',
-            icon: '🫐',
-            servings: 1,
-            description: '½ c. fresh or frozen, ¼ c. dried',
-            examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
-        },
-        {
-            id: 'other-fruits',
-            name: 'Other Fruits',
-            icon: '🍎',
-            servings: 3,
-            description: '1 medium fruit, ¼ c. dried fruit',
-            examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
-        },
-        {
-            id: 'greens',
-            name: 'Greens',
-            icon: '🥬',
-            servings: 2,
-            description: '1 c. raw, ½ c. cooked',
-            examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
-        },
-        {
-            id: 'cruciferous',
-            name: 'Cruciferous Vegetables',
-            icon: '🥦',
-            servings: 1,
-            description: '½ c. chopped, 1 tbsp horseradish',
-            examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
-        },
-        {
-            id: 'other-vegetables',
-            name: 'Other Vegetables',
-            icon: '🥕',
-            servings: 2,
-            description: '½ c. nonleafy vegetables',
-            examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
-        },
-        {
-            id: 'nuts-seeds',
-            name: 'Nuts and Seeds',
-            icon: '🥜',
-            servings: 1,
-            description: '¼ c. nuts, 2 tbsp nut butter',
-            examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
-        },
-        {
-            id: 'herbs-spices',
-            name: 'Herbs and Spices',
-            icon: '🌿',
-            servings: 1,
-            description: '¼ tsp turmeric',
-            examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
-        },
-        {
-            id: 'whole-grains',
-            name: 'Whole Grains',
-            icon: '🌾',
-            servings: 3,
-            description: '½ c. hot cereal, 1 slice of bread',
-            examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
-        },
-        {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '💧',
-            servings: 5,
-            description: '60 oz per day',
-            examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
-        },
-        {
-            id: 'exercise',
-            name: 'Exercise',
-            icon: '🏃',
-            servings: 1,
-            description: '90 min. moderate or 40 min. vigorous',
-            examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
-        }
-    ];
-}
-
-export function getOneBeanTwoProteinCategories() {
-    return [
-        {
-            id: 'beans',
-            name: 'Beans',
-            icon: '🫘',
-            servings: 1,
-            description: '½ c. cooked beans, ¼ c. hummus',
-            examples: ['Black beans', 'Chickpeas', 'Lentils', 'Hummus', 'Edamame']
-        },
-        {
-            id: 'protein',
-            name: 'Protein',
-            icon: '🥩',
-            servings: 2,
-            description: '3 oz lean meat, 1 egg, ½ c. beans',
-            examples: ['Chicken breast', 'Fish', 'Eggs', 'Lean beef', 'Tofu']
-        },
-        {
-            id: 'berries',
-            name: 'Berries',
-            icon: '🫐',
-            servings: 1,
-            description: '½ c. fresh or frozen, ¼ c. dried',
-            examples: ['Blueberries', 'Strawberries', 'Raspberries', 'Blackberries', 'Cranberries']
-        },
-        {
-            id: 'other-fruits',
-            name: 'Other Fruits',
-            icon: '🍎',
-            servings: 3,
-            description: '1 medium fruit, ¼ c. dried fruit',
-            examples: ['Apples', 'Bananas', 'Oranges', 'Grapes', 'Pineapple']
-        },
-        {
-            id: 'greens',
-            name: 'Greens',
-            icon: '🥬',
-            servings: 2,
-            description: '1 c. raw, ½ c. cooked',
-            examples: ['Spinach', 'Kale', 'Arugula', 'Swiss chard', 'Collard greens']
-        },
-        {
-            id: 'cruciferous',
-            name: 'Cruciferous Vegetables',
-            icon: '🥦',
-            servings: 1,
-            description: '½ c. chopped, 1 tbsp horseradish',
-            examples: ['Broccoli', 'Cauliflower', 'Brussels sprouts', 'Cabbage', 'Kale']
-        },
-        {
-            id: 'other-vegetables',
-            name: 'Other Vegetables',
-            icon: '🥕',
-            servings: 2,
-            description: '½ c. nonleafy vegetables',
-            examples: ['Carrots', 'Bell peppers', 'Tomatoes', 'Cucumber', 'Zucchini']
-        },
-        {
-            id: 'nuts-seeds',
-            name: 'Nuts and Seeds',
-            icon: '🥜',
-            servings: 1,
-            description: '¼ c. nuts, 2 tbsp nut butter',
-            examples: ['Almonds', 'Walnuts', 'Chia seeds', 'Pumpkin seeds', 'Peanut butter']
-        },
-        {
-            id: 'herbs-spices',
-            name: 'Herbs and Spices',
-            icon: '🌿',
-            servings: 1,
-            description: '¼ tsp turmeric',
-            examples: ['Turmeric', 'Cinnamon', 'Ginger', 'Garlic', 'Basil']
-        },
-        {
-            id: 'whole-grains',
-            name: 'Whole Grains',
-            icon: '🌾',
-            servings: 3,
-            description: '½ c. hot cereal, 1 slice of bread',
-            examples: ['Oatmeal', 'Brown rice', 'Quinoa', 'Whole wheat bread', 'Barley']
-        },
-        {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '💧',
-            servings: 5,
-            description: '60 oz per day',
-            examples: ['Water', 'Green tea', 'Hibiscus tea', 'Herbal tea']
-        },
-        {
-            id: 'exercise',
-            name: 'Exercise',
-            icon: '🏃',
-            servings: 1,
-            description: '90 min. moderate or 40 min. vigorous',
-            examples: ['Walking', 'Running', 'Cycling', 'Swimming', 'Yoga']
-        }
-    ];
-}
-
-export function getOneBeanTwoProteinOneFlaxCategories() {
-    const categories = getOneBeanTwoProteinCategories();
-    const flaxseedCategory = {
-        id: 'flaxseed',
-        name: 'Flaxseed',
-        icon: '🌾',
-        servings: 1,
-        description: '1 tbsp ground',
-        examples: ['Ground flaxseed', 'Flaxseed oil']
-    };
-
-    const insertAfterIdx = categories.findIndex((c) => c.id === 'other-vegetables');
-    if (insertAfterIdx >= 0) {
-        categories.splice(insertAfterIdx + 1, 0, flaxseedCategory);
-    } else {
-        categories.push(flaxseedCategory);
-    }
-
-    return categories;
-}
-
+// Backward compatibility: derive categories from a diet type string
 export function getCategoriesForDietType(dietType) {
-    if (dietType === 'modified') {
-        return getModifiedCategories();
-    } else if (dietType === 'one-bean') {
-        return getOneBeanCategories();
-    } else if (dietType === 'one-bean-two-protein') {
-        return getOneBeanTwoProteinCategories();
-    } else if (dietType === 'one-bean-two-protein-one-flax') {
-        return getOneBeanTwoProteinOneFlaxCategories();
-    } else {
-        return getStandardCategories();
-    }
+    const preset = PRESETS[dietType] || PRESETS.standard;
+    return getActiveCategories(preset.servings);
 }
 
 // Map category IDs to NutritionFacts.org link URLs

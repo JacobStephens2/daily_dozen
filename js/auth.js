@@ -125,6 +125,7 @@ export class AuthManager {
                 name: profiles[profileId].name,
                 color: profiles[profileId].color,
                 dietType: storage.loadDietType(profileId),
+                customServings: storage.loadCustomServings(profileId),
                 data: storage.loadData(profileId),
             };
         });
@@ -139,6 +140,9 @@ export class AuthManager {
             const p = payload.profiles[profileId];
             profiles[profileId] = { name: p.name, color: p.color };
             storage.saveDietType(profileId, p.dietType);
+            if (p.customServings) {
+                storage.saveCustomServings(profileId, p.customServings);
+            }
             storage.saveData(profileId, p.data || {});
         });
         storage.saveProfiles(profiles);

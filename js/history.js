@@ -1,7 +1,7 @@
 // History view: calendar, streaks, and day-detail drill-down
 
 import * as storage from './storage.js';
-import { getCategoriesForDietType } from './categories.js';
+import { getActiveCategories } from './categories.js';
 import { trapFocus } from './focus-trap.js';
 
 export class HistoryView {
@@ -28,9 +28,7 @@ export class HistoryView {
     }
 
     getCategories() {
-        return getCategoriesForDietType(
-            storage.loadDietType(this.app.currentProfile)
-        );
+        return this.app.categories;
     }
 
     getTotalServings(categories) {

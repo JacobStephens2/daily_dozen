@@ -1,7 +1,7 @@
 // Catholic Daily Dozen Tracker - Main Application Logic
 // Version: 2.0.13 - Fix stale checkboxes on day change
 
-import { getCategoriesForDietType, getCategoryNameHtml } from './js/categories.js';
+import { getCategoriesForDietType, getActiveCategories, getAllCategories, PRESETS, getCategoryNameHtml } from './js/categories.js';
 import * as storage from './js/storage.js';
 import { handleServingChange } from './js/checkbox.js';
 import { PwaManager } from './js/pwa.js';
@@ -25,8 +25,8 @@ class DailyDozenTracker {
         this.currentDate = new Date();
         this.profiles = storage.loadProfiles();
         this.currentProfile = storage.loadCurrentProfile();
-        this.dietType = storage.loadDietType(this.currentProfile);
-        this.categories = getCategoriesForDietType(this.dietType);
+        this.customServings = this.loadServings();
+        this.categories = getActiveCategories(this.customServings);
         this.pwa = new PwaManager();
         this.history = new HistoryView(this);
         this.auth = new AuthManager(this);
@@ -36,13 +36,11 @@ class DailyDozenTracker {
     init() {
         this.updateDateDisplay();
         this.setProfileSelector();
-        this.setDietTypeSelector();
         this.renderCategories();
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
         this.updateHeaderColor();
-        this.updateDietTypeLabel();
         this.setupEventListeners();
         this.setupDayChangeDetection();
         this.pwa.init();
@@ -60,16 +58,14 @@ class DailyDozenTracker {
             this.currentDate = new Date();
         }
         this.profiles = storage.loadProfiles();
-        this.dietType = storage.loadDietType(this.currentProfile);
-        this.categories = getCategoriesForDietType(this.dietType);
+        this.customServings = this.loadServings();
+        this.categories = getActiveCategories(this.customServings);
         this.setProfileSelector();
-        this.setDietTypeSelector();
         this.renderCategories();
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
         this.updateHeaderColor();
-        this.updateDietTypeLabel();
         this.updateDateDisplay();
     }
 
@@ -175,23 +171,19 @@ class DailyDozenTracker {
     switchProfile(profileId) {
         if (profileId === this.currentProfile) return;
 
-        storage.saveDietType(this.currentProfile, this.dietType);
-
         this.currentProfile = profileId;
         storage.saveCurrentProfile(profileId);
 
-        this.dietType = storage.loadDietType(this.currentProfile);
-        this.categories = getCategoriesForDietType(this.dietType);
+        this.customServings = this.loadServings();
+        this.categories = getActiveCategories(this.customServings);
 
         this.setProfileSelector();
-        this.setDietTypeSelector();
         this.renderCategories();
 
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
         this.updateHeaderColor();
-        this.updateDietTypeLabel();
     }
 
     updateHeaderColor() {
@@ -199,14 +191,6 @@ class DailyDozenTracker {
         const profile = this.profiles[this.currentProfile];
         if (header && profile) {
             header.style.backgroundColor = profile.color;
-        }
-    }
-
-    updateDietTypeLabel() {
-        const dietTypeLabel = document.getElementById('diet-type-label');
-        const profile = this.profiles[this.currentProfile];
-        if (dietTypeLabel && profile) {
-            dietTypeLabel.textContent = `Diet Type for ${profile.name}:`;
         }
     }
 
@@ -244,7 +228,6 @@ class DailyDozenTracker {
                 this.profiles[profileId].name = newName;
                 storage.saveProfiles(this.profiles);
                 this.setProfileSelector();
-                this.updateDietTypeLabel();
                 this.showProfileNameUpdated(newName);
                 this.auth.schedulePush();
             }
@@ -333,10 +316,10 @@ class DailyDozenTracker {
     // --- Event handling ---
 
     setupEventListeners() {
-        const dietTypeSelect = document.getElementById('diet-type');
-        dietTypeSelect.addEventListener('change', (e) => {
-            this.handleDietTypeChange(e.target.value);
-        });
+        const customizeBtn = document.getElementById('customize-btn');
+        if (customizeBtn) {
+            customizeBtn.addEventListener('click', () => this.showCustomizeModal());
+        }
 
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('serving-checkbox')) {
@@ -705,43 +688,129 @@ class DailyDozenTracker {
         }, 3000);
     }
 
-    // --- Diet type ---
+    // --- Servings customization ---
 
-    setDietTypeSelector() {
-        const dietTypeSelect = document.getElementById('diet-type');
-        if (dietTypeSelect) {
-            dietTypeSelect.value = this.dietType;
-        }
-        this.updateDietDescription();
+    loadServings() {
+        const custom = storage.loadCustomServings(this.currentProfile);
+        if (custom) return custom;
+        // Migrate from old diet type system
+        const dietType = storage.loadDietType(this.currentProfile);
+        const preset = PRESETS[dietType] || PRESETS.standard;
+        return { ...preset.servings };
     }
 
-    updateDietDescription() {
-        const el = document.getElementById('diet-description');
-        if (!el) return;
-
-        const descriptions = {
-            'standard': 'Dr. Greger\'s original Daily Dozen: 3 servings of beans, flaxseed, and 24 total servings across 12 categories.',
-            'modified': 'Replaces beans with 2 servings of protein (meat, eggs, tofu). Removes flaxseed. 21 total servings.',
-            'one-bean': 'Reduces beans from 3 to 1 serving and adds 1 serving of protein. Removes flaxseed. 22 total servings.',
-            'one-bean-two-protein': 'One serving of beans plus 2 servings of protein. Removes flaxseed. 23 total servings.',
-            'one-bean-two-protein-one-flax': 'One serving of beans, 2 servings of protein, and keeps flaxseed. 24 total servings.',
-        };
-
-        el.textContent = descriptions[this.dietType] || '';
-    }
-
-    handleDietTypeChange(newDietType) {
-        this.dietType = newDietType;
-        storage.saveDietType(this.currentProfile, newDietType);
-
-        this.categories = getCategoriesForDietType(newDietType);
+    applyServings(servings) {
+        this.customServings = servings;
+        storage.saveCustomServings(this.currentProfile, servings);
+        this.categories = getActiveCategories(servings);
         this.renderCategories();
-
         const data = storage.loadData(this.currentProfile);
         this.restoreCheckboxes(data);
         this.updateProgress();
-        this.updateDietDescription();
         this.auth.schedulePush();
+    }
+
+    showCustomizeModal() {
+        const existing = document.querySelector('.customize-modal');
+        if (existing) existing.remove();
+
+        const allCats = getAllCategories();
+        const servings = { ...this.customServings };
+
+        const modal = document.createElement('div');
+        modal.className = 'customize-modal';
+
+        const presetBtns = Object.entries(PRESETS).map(([key, p]) =>
+            `<button class="preset-btn" data-preset="${key}">${p.name}</button>`
+        ).join('');
+
+        const catRows = allCats.map(cat => {
+            const count = servings[cat.id] || 0;
+            return `
+                <div class="customize-row ${count === 0 ? 'disabled' : ''}" data-cat-id="${cat.id}">
+                    <span class="customize-icon">${cat.icon}</span>
+                    <span class="customize-name">${cat.name}</span>
+                    <div class="customize-controls">
+                        <button class="customize-minus" data-cat-id="${cat.id}">-</button>
+                        <span class="customize-count" data-cat-id="${cat.id}">${count}</span>
+                        <button class="customize-plus" data-cat-id="${cat.id}">+</button>
+                    </div>
+                </div>`;
+        }).join('');
+
+        const total = Object.values(servings).reduce((s, v) => s + v, 0);
+
+        modal.innerHTML = `
+            <div class="customize-content">
+                <div class="customize-header">
+                    <h3>Customize Categories</h3>
+                    <button class="customize-close-btn">&times;</button>
+                </div>
+                <div class="customize-presets">
+                    <p class="customize-presets-label">Start from a preset:</p>
+                    ${presetBtns}
+                </div>
+                <div class="customize-list">
+                    ${catRows}
+                </div>
+                <div class="customize-footer">
+                    <span class="customize-total">Total: <strong>${total}</strong> servings</span>
+                    <button class="customize-save-btn">Save</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('show'));
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        const releaseFocus = trapFocus(modal);
+
+        const updateCount = (catId, delta) => {
+            const newVal = Math.max(0, Math.min(9, (servings[catId] || 0) + delta));
+            servings[catId] = newVal;
+            modal.querySelector(`.customize-count[data-cat-id="${catId}"]`).textContent = newVal;
+            const row = modal.querySelector(`.customize-row[data-cat-id="${catId}"]`);
+            row.classList.toggle('disabled', newVal === 0);
+            const total = Object.values(servings).reduce((s, v) => s + v, 0);
+            modal.querySelector('.customize-total strong').textContent = total;
+        };
+
+        modal.querySelectorAll('.customize-minus').forEach(btn => {
+            btn.addEventListener('click', () => updateCount(btn.dataset.catId, -1));
+        });
+
+        modal.querySelectorAll('.customize-plus').forEach(btn => {
+            btn.addEventListener('click', () => updateCount(btn.dataset.catId, 1));
+        });
+
+        modal.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = PRESETS[btn.dataset.preset];
+                Object.assign(servings, preset.servings);
+                allCats.forEach(cat => {
+                    const val = servings[cat.id] || 0;
+                    modal.querySelector(`.customize-count[data-cat-id="${cat.id}"]`).textContent = val;
+                    modal.querySelector(`.customize-row[data-cat-id="${cat.id}"]`).classList.toggle('disabled', val === 0);
+                });
+                const total = Object.values(servings).reduce((s, v) => s + v, 0);
+                modal.querySelector('.customize-total strong').textContent = total;
+            });
+        });
+
+        const close = () => { releaseFocus(); modal.remove(); };
+
+        modal.querySelector('.customize-save-btn').addEventListener('click', () => {
+            this.applyServings(servings);
+            close();
+        });
+
+        modal.querySelector('.customize-close-btn').addEventListener('click', close);
+        modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+        const escHandler = (e) => {
+            if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
+        };
+        document.addEventListener('keydown', escHandler);
     }
 
     // --- Data export ---

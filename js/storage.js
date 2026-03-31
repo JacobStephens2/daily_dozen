@@ -61,3 +61,14 @@ export function saveDietType(profileId, dietType) {
     const key = getDietTypeStorageKey(profileId);
     localStorage.setItem(key, dietType);
 }
+
+export function loadCustomServings(profileId) {
+    const key = `dailyDozenCustomServings_${profileId}`;
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : null;
+}
+
+export function saveCustomServings(profileId, servings) {
+    const key = `dailyDozenCustomServings_${profileId}`;
+    localStorage.setItem(key, JSON.stringify(servings));
+}
