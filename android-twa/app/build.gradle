@@ -6,7 +6,7 @@ plugins {
 
 def twaManifest = [
     applicationId: 'net.jacobstephens.dailydozen',
-    hostName: 'dailydozen.jacobstephens.net',
+    hostName: 'dailydozen.stephens.page',
     launchUrl: '/',
     name: 'Daily Dozen Tracker',
     launcherName: 'Daily Dozen',
@@ -54,8 +54,8 @@ android {
         def launchUrl = "https://" + twaManifest.hostName + twaManifest.launchUrl
         resValue "string", "launchUrl", launchUrl
 
-        resValue "string", "webManifestUrl", 'https://dailydozen.jacobstephens.net/manifest.json'
-        resValue "string", "fullScopeUrl", 'https://dailydozen.jacobstephens.net/'
+        resValue "string", "webManifestUrl", 'https://dailydozen.stephens.page/manifest.json'
+        resValue "string", "fullScopeUrl", 'https://dailydozen.stephens.page/'
 
         resValue "string", "hostName", twaManifest.hostName
         resValue "color", "colorPrimary", twaManifest.themeColor

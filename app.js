@@ -830,13 +830,22 @@ class DailyDozenTracker {
     // Detect this and navigate to the real "today" so checkboxes match the date.
 
     setupDayChangeDetection() {
+        // Remember what "today" was when the page was last active, so we can
+        // detect a day rollover even after the old today has become yesterday.
+        let lastActiveDate = new Date().toDateString();
+
         const refreshIfDayChanged = () => {
             const now = new Date();
-            if (this.isViewingToday() && this.currentDate.toDateString() !== now.toDateString()) {
-                this.navigateToDate(now);
-                if (this.auth.isLoggedIn) {
-                    this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
+            const nowStr = now.toDateString();
+            if (nowStr !== lastActiveDate) {
+                // Day changed — if user was viewing the old "today", advance to the new today
+                if (this.currentDate.toDateString() === lastActiveDate) {
+                    this.navigateToDate(now);
+                    if (this.auth.isLoggedIn) {
+                        this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
+                    }
                 }
+                lastActiveDate = nowStr;
             }
         };
 

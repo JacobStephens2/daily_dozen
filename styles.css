@@ -460,9 +460,9 @@ body {
 }
 
 .reset-section {
-    margin-top: 2rem;
+    margin-top: 0;
     text-align: center;
-    padding: 1rem 0;
+    padding: 0;
 }
 
 .reset-btn {
@@ -589,10 +589,35 @@ body {
     color: var(--on-surface);
 }
 
+/* Account Section (main content) */
+.account-section {
+    text-align: center;
+    margin-top: 0;
+}
+
+.account-section .account-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-ambient);
+}
+
+.account-section .account-btn:hover {
+    box-shadow: var(--shadow-elevated);
+}
+
 /* Gratitude Section */
 .gratitude-section {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 0;
+}
+
+.gratitude-btn-small {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
 }
 
 .gratitude-btn {
@@ -1181,7 +1206,7 @@ body {
     }
 
     .gratitude-section {
-        margin-top: 2rem;
+        margin-top: 0;
         text-align: center;
     }
 
@@ -1200,8 +1225,8 @@ body {
     }
 
     .reset-section {
-        margin-top: 2rem;
-        padding: 1rem 0;
+        margin-top: 0;
+        padding: 0;
     }
 
     .reset-btn {
@@ -2183,10 +2208,18 @@ body {
    History View
    ======================================== */
 
+.actions-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
 .history-section {
     text-align: center;
-    margin-top: 2rem;
-    padding: 1rem 0;
+    margin-top: 0;
+    padding: 0;
 }
 
 .history-btn {
