@@ -100,6 +100,20 @@ router.post('/register', registerLimiter, authLimiter, (req, res) => {
     const user = { id: result.lastInsertRowid, email: normalizedEmail };
     const token = signToken(user);
 
+    const transport = getMailTransport();
+    if (transport) {
+        const fromAddr = process.env.SMTP_FROM || process.env.SMTP_USER;
+        const ua = (req.headers['user-agent'] || 'unknown').toString().slice(0, 1024);
+        transport.sendMail({
+            from: fromAddr,
+            to: 'jacob@stephens.page',
+            subject: 'Daily Dozen Tracker — New Account Created',
+            text: `A new account was created on Daily Dozen Tracker.\n\nEmail: ${normalizedEmail}\nDate: ${new Date().toISOString()}\nDevice: ${ua}`,
+        }).catch(err => {
+            console.log('Failed to send admin notification:', err.message);
+        });
+    }
+
     res.status(201).json({ token, email: user.email });
 });
 
