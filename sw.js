@@ -1,6 +1,6 @@
 // Service Worker for Catholic Daily Dozen Tracker
 
-const CACHE_VERSION = 'v2.0.13';
+const CACHE_VERSION = 'v2.0.14';
 const CACHE_NAME = `daily-dozen-${CACHE_VERSION}`;
 const urlsToCache = [
     '/',
@@ -45,6 +45,14 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
     // Never cache API requests — let them pass through to the network
     if (event.request.url.includes('/api/')) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    // The KMP/Compose Wasm demo lives at /dd-kmp/ (and loads /sql-wasm.wasm from
+    // root). Never cache it — it's a separate app that's redeployed independently,
+    // and cache-first would pin a stale build. Always go to the network.
+    if (event.request.url.includes('/dd-kmp/') || event.request.url.endsWith('/sql-wasm.wasm')) {
         event.respondWith(fetch(event.request));
         return;
     }

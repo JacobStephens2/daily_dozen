@@ -8,3 +8,8 @@ android-twa/*.aab
 android-twa/build/
 android-twa/app/build/
 android-twa/.gradle/
+
+# Deployed KMP/Compose Wasm demo build output (built & deployed from the
+# daily-dozen-kmp repo, not part of this PWA's source).
+dd-kmp/
+sql-wasm.wasm
