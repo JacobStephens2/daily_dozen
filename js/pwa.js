@@ -21,7 +21,7 @@ export class PwaManager {
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) return;
 
-        navigator.serviceWorker.register('sw.js?v=2.0.13')
+        navigator.serviceWorker.register('sw.js?v=2.0.15')
             .then(registration => {
 
                 // Periodically check for SW updates

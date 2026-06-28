@@ -124,6 +124,7 @@ export class AuthManager {
             payload.profiles[profileId] = {
                 name: profiles[profileId].name,
                 color: profiles[profileId].color,
+                emoji: profiles[profileId].emoji || '👤',
                 dietType: storage.loadDietType(profileId),
                 customServings: storage.loadCustomServings(profileId),
                 data: storage.loadData(profileId),
@@ -138,7 +139,7 @@ export class AuthManager {
         const profiles = {};
         Object.keys(payload.profiles).forEach(profileId => {
             const p = payload.profiles[profileId];
-            profiles[profileId] = { name: p.name, color: p.color };
+            profiles[profileId] = { name: p.name, color: p.color, emoji: p.emoji || '👤' };
             storage.saveDietType(profileId, p.dietType);
             if (p.customServings) {
                 storage.saveCustomServings(profileId, p.customServings);

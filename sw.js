@@ -1,6 +1,6 @@
 // Service Worker for Catholic Daily Dozen Tracker
 
-const CACHE_VERSION = 'v2.0.14';
+const CACHE_VERSION = 'v2.0.15';
 const CACHE_NAME = `daily-dozen-${CACHE_VERSION}`;
 const urlsToCache = [
     '/',

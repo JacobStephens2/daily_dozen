@@ -147,7 +147,7 @@ class DailyDozenTracker {
 
             profileBtn.style.setProperty('--profile-color', profile.color);
             profileBtn.innerHTML = `
-                <span class="profile-icon">👤</span>
+                <span class="profile-icon">${profile.emoji || '👤'}</span>
                 <span class="profile-name">${profile.name}</span>
                 <button class="edit-profile-btn" data-profile-id="${profileId}">✏️</button>
             `;
@@ -197,6 +197,9 @@ class DailyDozenTracker {
     editProfileName(profileId) {
         const profile = this.profiles[profileId];
         const currentName = profile.name;
+        const currentEmoji = profile.emoji || '👤';
+        let selectedEmoji = currentEmoji;
+        const EMOJI_CHOICES = ['🧑', '👩', '👨', '🧓', '👵', '👴', '🧒', '👶', '👤', '👥', '🙂', '😀', '😎', '🤓', '🐱', '🐶', '🦊', '🐻', '🌟', '🌸', '🍎', '🥑', '💪', '❤️'];
 
         // Show inline edit modal instead of browser prompt()
         const modal = document.createElement('div');
@@ -205,9 +208,13 @@ class DailyDozenTracker {
         modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="profile-edit-content">
-                <h3>Edit Profile Name</h3>
+                <h3>Edit Profile</h3>
                 <input type="text" class="profile-edit-input" id="profile-edit-input"
-                       value="${currentName}" maxlength="30" autocomplete="off">
+                       value="${currentName}" maxlength="30" autocomplete="off" aria-label="Profile name">
+                <div class="profile-emoji-label">Icon</div>
+                <div class="profile-emoji-grid" id="profile-emoji-grid" role="group" aria-label="Choose an icon">
+                    ${EMOJI_CHOICES.map(e => `<button type="button" class="profile-emoji-option${e === currentEmoji ? ' selected' : ''}" data-emoji="${e}" aria-label="${e}">${e}</button>`).join('')}
+                </div>
                 <div class="profile-edit-actions">
                     <button class="profile-edit-save" id="profile-edit-save">Save</button>
                     <button class="profile-edit-cancel" id="profile-edit-cancel">Cancel</button>
@@ -223,9 +230,11 @@ class DailyDozenTracker {
 
         const close = () => { releaseFocus(); modal.remove(); };
         const save = () => {
-            const newName = input.value.trim();
-            if (newName && newName !== currentName) {
+            const newName = input.value.trim() || currentName;
+            const changed = newName !== currentName || selectedEmoji !== currentEmoji;
+            if (changed) {
                 this.profiles[profileId].name = newName;
+                this.profiles[profileId].emoji = selectedEmoji;
                 storage.saveProfiles(this.profiles);
                 this.setProfileSelector();
                 this.showProfileNameUpdated(newName);
@@ -236,6 +245,13 @@ class DailyDozenTracker {
 
         modal.querySelector('#profile-edit-save').addEventListener('click', save);
         modal.querySelector('#profile-edit-cancel').addEventListener('click', close);
+        const emojiGrid = modal.querySelector('#profile-emoji-grid');
+        emojiGrid.addEventListener('click', (e) => {
+            const opt = e.target.closest('.profile-emoji-option');
+            if (!opt) return;
+            selectedEmoji = opt.dataset.emoji;
+            emojiGrid.querySelectorAll('.profile-emoji-option').forEach(b => b.classList.toggle('selected', b === opt));
+        });
         modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') save();

@@ -35,8 +35,8 @@ export function loadProfiles() {
     const saved = localStorage.getItem(STORAGE_KEYS.PROFILES);
     if (saved) return JSON.parse(saved);
     return {
-        'user': { name: 'You', color: '#38672a' },
-        'other': { name: 'Other', color: '#7c5724' }
+        'user': { name: 'You', color: '#38672a', emoji: '🧑' },
+        'other': { name: 'Other', color: '#7c5724', emoji: '👥' }
     };
 }
 

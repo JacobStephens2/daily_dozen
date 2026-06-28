@@ -2814,6 +2814,43 @@ body {
     box-shadow: 0 0 0 3px rgba(56, 103, 42, 0.15);
 }
 
+.profile-emoji-label {
+    font-size: 0.8rem;
+    color: var(--on-surface-variant);
+    text-align: left;
+    margin-bottom: 0.4rem;
+}
+
+.profile-emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.profile-emoji-option {
+    aspect-ratio: 1 / 1;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--surface-container-highest);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-emoji-option:hover {
+    background: var(--surface-container-high);
+}
+
+.profile-emoji-option.selected {
+    background: var(--primary-container);
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
 .profile-edit-actions {
     display: flex;
     gap: 0.75rem;
