@@ -1,11 +1,11 @@
 # BOUNTYWELL — Name Change Decision Record
 
 **Project:** Daily Dozen Tracker → Bountywell
-**Repo:** `JacobStephens2/daily-dozen` → `JacobStephens2/bountywell` (pending)
-**Live origin:** `dailydozen.stephens.page` → `bountywell.com` / `bountywell.app` (pending)
+**Repo:** `JacobStephens2/bountywell` (migrated 2026-08-05)
+**Live origins:** `bountywell.com` / `bountywell.app` (live); `dailydozen.stephens.page` retained temporarily for installed-app compatibility
 **Author:** Jacob Stephens
 **Date:** 2026-08-05
-**Status:** Name selected. Domains cleared to purchase. **Repo/package rename BLOCKED pending manual USPTO search.**
+**Status:** Rename deployed at the owner's direction on 2026-08-05. **Manual USPTO and PA entity searches remain outstanding; deployment does not imply legal clearance.**
 
 ---
 
@@ -130,8 +130,8 @@ Descriptive names ("Catholic Nutrition," "Catholic Fitness") are unavailable and
 
 | Domain | 1st year | Renewal | Decision |
 |---|---|---|---|
-| `bountywell.com` | $11.08 | $11.08 | **BUY** |
-| `bountywell.app` | $8.75 (sale) | $14.93 | **BUY** |
+| `bountywell.com` | $11.08 | $11.08 | **REGISTERED / LIVE** |
+| `bountywell.app` | $8.75 (sale) | $14.93 | **REGISTERED / LIVE** |
 | `twelvebaskets.app` | $8.75 (sale) | $14.93 | Pass |
 | `twelvebaskets.com` | **$16,295 aftermarket + transfer fee** | — | **Pass — decisive** |
 
@@ -217,6 +217,8 @@ Sign into USPTO.gov first — the search system is unreliable when logged out.
 
 3. **Complete §7 manual clearance.** Nothing below this line happens until USPTO comes back clean.
 
+**Execution note (2026-08-05):** the owner explicitly directed the migration before the manual clearance record was completed. The implementation is live, but the unchecked items in §7 remain open and this exception does not represent legal clearance.
+
 ### Phase 2 — Prepare (do not break existing installs)
 
 4. **Set an explicit stable `id` in `manifest.json` BEFORE touching `name` or `start_url`.** Changing `id` — or `start_url` when `id` is absent — makes browsers treat this as a *different* PWA and orphans every existing install.
@@ -293,9 +295,13 @@ Home-screen copy:
 | 2026-08-05 | Hearth & Harvest eliminated — exact-phrase collisions incl. an App Store app of that name. |
 | 2026-08-05 | **Bountywell selected** over Twelve Baskets on domain economics ($19.83 vs. $16,295+ for the matched `.com`). |
 | 2026-08-05 | Clearance run: GitHub confirmed clear via API; stores, variants, and general web clear. **USPTO register not machine-accessible — manual pass required and outstanding.** |
-| _pending_ | USPTO + PA DOS manual clearance complete → unblock rename. |
-| _pending_ | Domains + GitHub org registered. |
-| _pending_ | Migration executed. |
+| 2026-08-05 | Owner directed execution of the rename while the manual USPTO and PA DOS checks remain documented as outstanding. |
+| 2026-08-05 | `bountywell.com` and `bountywell.app` pointed to production, secured with one automatically renewed TLS certificate, and verified live. |
+| 2026-08-05 | Stable PWA `id` published before the rename; cache version rolled; new and legacy Android asset links retained. |
+| 2026-08-05 | Android wrapper renamed to unpublished package `page.stephens.bountywell` and signed release bundle verified. |
+| 2026-08-05 | GitHub repository renamed to `JacobStephens2/bountywell`; description, homepage, topics, and deployment remotes updated. |
+| _pending_ | USPTO + PA DOS manual clearance complete. |
+| _pending_ | `bountywell` GitHub organization claimed, if still desired. |
 
 ---
 
@@ -304,7 +310,7 @@ Home-screen copy:
 1. Does a live federal DAILY DOZEN registration owned by NutritionFacts exist? Unresolved. Does not change the decision, but closes the record.
 2. What classes does the Bountiful/Nestlé portfolio cover? Determines §2(d) risk.
 3. Will NutritionFacts grant written permission for the compatibility line? Ask.
-4. Is the Android package already published? Determines whether step 9 is a rename or a new listing.
+4. The old Android package returned no public Google Play listing on 2026-08-05. The wrapper now uses `page.stephens.bountywell`; confirm Play Console state before creating any listing.
 5. Secular fork later? If broad-market distribution is ever wanted without the Catholic framing, revisit *Twelve a Day* / *Verdant*. Not now.
 
 ---
