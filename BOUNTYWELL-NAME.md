@@ -5,7 +5,7 @@
 **Live origins:** `bountywell.com` / `bountywell.app` (live); `dailydozen.stephens.page` retained temporarily for installed-app compatibility
 **Author:** Jacob Stephens
 **Date:** 2026-08-05
-**Status:** Rename deployed at the owner's direction on 2026-08-05. **Manual USPTO and PA entity searches remain outstanding; deployment does not imply legal clearance.**
+**Status:** Rename deployed at the owner's direction on 2026-08-05. The manual USPTO and Pennsylvania entity searches were completed the same day. **BOUNTYWELL has no exact or close federal match and no Pennsylvania entity match, but DR. GREGER'S DAILY DOZEN is a live federal registration in the app's exact software class. Deployment does not imply legal clearance.**
 
 ---
 
@@ -55,15 +55,11 @@ This is the argument that stands even if every legal concern above evaporated.
 
 The GitHub description already reads "or a custom version." The actual differentiator — the thing no competing tracker has — is the Catholic framing: the blessing before meals, stewardship, temperance, the 1 Cor 6:19 anchor. What was built is a **Catholic virtue-and-habit tracker that ships with Greger's checklist as its default preset**. It was named after the preset.
 
-### 2.6 What was NOT a reason
+### 2.6 Federal registration confirms the primary risk
 
-For the record, so this isn't reopened on bad premises:
+The 2026-08-05 manual USPTO search found **DR. GREGER'S DAILY DOZEN**, U.S. Registration **6,662,527**, serial **90/273,898**, on the Principal Register. It is live and active, owned by Michael Greger, and covers Class 009 downloadable mobile software for managing healthy eating, dietary and nutritional guidance, and healthy weight. First use and use in commerce are claimed from 2015-12-10.
 
-- **No confirmed federal registration** for DAILY DOZEN owned by NutritionFacts surfaced in searching. Treat as *unverified*, not *absent*.
-- The phrase is **over a century old and generic in health contexts**. Walter Camp coined "the Daily Dozen" in 1917–18 for a twelve-exercise calisthenics routine for the US Navy; by the 1920s newspapers used it to mean exercise generally. Dictionaries still define it as "a set of routine tasks" / daily calisthenics.
-- The phrase is **descriptive** of this app (twelve things, daily), which weakens anyone's exclusivity claim.
-
-**The rename is defensive and strategic, not a concession of infringement.**
+That is the app's exact channel and subject matter. The age and descriptive character of the words “daily dozen” remain relevant context, but they do not erase a live composite registration covering directly overlapping software. The rename is therefore both strategic and a concrete reduction in trademark and platform-enforcement risk; it is not a concession that every factual reference to the checklist infringes.
 
 ---
 
@@ -145,12 +141,14 @@ Registrar: Porkbun (house standard).
 
 ## 6. Clearance Status
 
-### 6.1 Completed — CLEAR
+### 6.1 Completed — BOUNTYWELL exact/near-match clear
 
 | Layer | Method | Result |
 |---|---|---|
-| **GitHub username/org** | GitHub API, direct query | **0 results.** `bountywell` available. |
+| **GitHub organization** | GitHub API + authenticated setup | Parent organization **[`stephens-page`](https://github.com/stephens-page)** created for Stephens Page LLC on 2026-08-05. A separate `bountywell` organization was intentionally not created. |
 | **GitHub repos** | GitHub API, name + description + README + topics | **0 results.** Nothing on the platform. |
+| **USPTO federal register** | Official Trademark Search, all live and dead records | **0 results** for BOUNTYWELL, BOUNT\*WELL variants, BOUNTY WELL, or BOUNTY-WELL; **0 results** in coordinated Class 009 and International Classes 042/044. |
+| **Pennsylvania entities** | Official PA DOS Business Search, “Contains,” all filing types and all statuses | **0 results** for BOUNTYWELL. Database reported filings processed through 2026-08-04. |
 | **App Store / Google Play** | Web search | No BOUNTYWELL app. Nearest: *BondWell* (mental-health scheduling), *Be Well* (rewards). Different marks, different services. |
 | **BOUNTIWELL / BOUNT\*WELL** | Web search | Zero hits across all sources. |
 | **"BOUNTY WELL" (spaced)** | Web search | Only incidental prose (Aesop essay, 1977 boat classified). No trademark use. |
@@ -164,43 +162,57 @@ Registrar: Porkbun (house standard).
 
 ### 6.3 Adjacent mark to watch
 
-**The Bountiful Company** — supplements manufacturer, acquired by Nestlé for $5.75B, FTC-fined $600K in 2023 over health claims. Large portfolio in the wellness space. Different mark, but `BOUNTIFUL` is the most plausible §2(d) citation against `BOUNTYWELL`. **Check what classes their portfolio actually covers during the manual pass.**
+**The Bountiful Company** — supplements manufacturer, acquired by Nestlé for $5.75B, FTC-fined $600K in 2023 over health claims. Different mark, but `BOUNTIFUL` remains the most plausible field of §2(d) citations against `BOUNTYWELL`. The completed Classes 009/042/044 search returned 33 BOUNTIFUL-form records; none was BOUNTYWELL, but several live registrations cover software or health-adjacent services.
 
-### 6.4 OUTSTANDING — BLOCKING
+### 6.4 Completed — material findings
 
-**❌ USPTO federal register — NOT SEARCHED.**
+The official manual searches materially changed the record:
 
-`tmsearch.uspto.gov` is a login-gated, JS-rendered cloud application (replaced TESS in Nov 2023) and cannot be queried programmatically. TSDR likewise. Justia, uspto.report, and TrademarkElite all blocked.
+- **BOUNTYWELL itself is clear at the exact and close-variant level.** The official federal register returned no live or dead result for the exact mark, regex close variants, spaced/hyphenated versions, or BOUNT\*WELL in Classes 009, 042, or 044.
+- **BOUNTIFUL is crowded but distinguishable.** `CM:bountiful* AND IC:(009 042 044)` returned 33 live and dead records. The live set includes unrelated uses such as BOUNTIFUL for agriculture-technology consulting/software, BOUNTIFUL LABS for online software, BOUNTIFUL ORTHODONTICS, and assorted media/gaming marks. This is not an exact blocker, but it remains the nearest field of marks for any attorney-level likelihood-of-confusion review.
+- **DR. GREGER'S DAILY DOZEN is registered in the exact product class.** Registration 6,662,527 is live on the Principal Register in Class 009 for mobile software covering healthy eating, nutrition guidance, and weight management. This resolves the earlier open question against the project and raises the severity of using that wording in the app, README, store listing, or promotion.
+- **Pennsylvania is clear.** The official entity database returned no BOUNTYWELL result across active and inactive statuses.
 
-**Five of six clearance layers are clean. The sixth is the one that matters legally.**
-
-Also outstanding: PA Department of State entity search (no indexed conflict found, but the official database was not queried directly).
+**Clearance conclusion:** the BOUNTYWELL house mark remains a reasonable candidate, but the embedded Daily Dozen content and Dr. Greger attribution are a separate, material licensing and trademark issue. Written permission is the correct gate before monetization or expanded distribution. This record is not a legal opinion.
 
 ---
 
 ## 7. Manual Clearance Checklist
 
-Sign into USPTO.gov first — the search system is unreliable when logged out.
+The official Trademark Search and TSDR records were queried directly; no third-party trademark index was used for the conclusions below.
 
-**USPTO Advanced Search** (`tmsearch.uspto.gov`) — wildcards go before *and* after the term:
+**USPTO Advanced Search** (`tmsearch.uspto.gov`) — completed 2026-08-05:
 
-- [ ] `bountywell` — all statuses, live and dead
-- [ ] `.*bount.*well.*` — catches Bountiwell, Bountywel, Bounteewell
-- [ ] `"bounty well"` and `bounty-well`
-- [ ] `bount*well* AND CC:009` — coordinated class search (downloadable software)
-- [ ] `IC:042` — SaaS
-- [ ] `IC:044` — nutrition / health advisory
-- [ ] `bountiful*` filtered to Classes 9 / 42 / 44 — map the Nestlé/Bountiful portfolio
-- [ ] Confirm no live DAILY DOZEN registration owned by NutritionFacts (close the open question from §2.6)
+- [x] `bountywell` — all statuses, live and dead: 0 results
+- [x] `CM:.*bount.*well.*` — catches Bountiwell, Bountywel, Bounteewell: 0 results
+- [x] `CM:"bounty well"` and `CM:"bounty-well"`: 0 results each
+- [x] `CM:bount*well* AND CC:009` — coordinated class search: 0 results
+- [x] `CM:bount*well* AND IC:042` — SaaS: 0 results
+- [x] `CM:bount*well* AND IC:044` — nutrition / health advisory: 0 results
+- [x] `CM:bountiful* AND IC:(009 042 044)` — 33 live/dead adjacent records; no BOUNTYWELL match
+- [x] `CM:"daily dozen"` — 5 results; one live Class 009 registration owned by Michael Greger
 
 **State + platform:**
 
-- [ ] `file.dos.pa.gov/search/business` — search "Contains," check **both active and inactive** (inactive names can still be reserved). Phone fallback: BCCO (717) 787-1057.
+- [x] `file.dos.pa.gov/search/business` — “Contains,” all filing types, all statuses: 0 BOUNTYWELL results
 - [ ] Apple App Store, exact and near-match
 - [ ] Google Play, exact and near-match
 - [ ] Social handles: `@bountywell` across platforms
 
-**Screenshot every result set.** These become the evidence appendix to this document.
+### 7.1 Evidence appendix
+
+| Source | Query / record | Result captured 2026-08-05 |
+|---|---|---|
+| USPTO Trademark Search | `bountywell` | No results, live and dead |
+| USPTO Trademark Search | `CM:.*bount.*well.*` | No results |
+| USPTO Trademark Search | `CM:"bounty well"`; `CM:"bounty-well"` | No results for either exact phrase |
+| USPTO Trademark Search | `CM:bount*well* AND CC:009`; `... AND IC:042`; `... AND IC:044` | No results for each class query |
+| USPTO Trademark Search | `CM:bountiful* AND IC:(009 042 044)` | 33 live/dead adjacent records |
+| USPTO Trademark Search | `CM:"daily dozen"` | 5 records; DR. GREGER'S DAILY DOZEN live in Class 009 |
+| USPTO TSDR | Serial 90/273,898; Registration 6,662,527 | Principal Register; issued 2022-03-08; active; owner Michael Greger |
+| PA DOS Business Search | BOUNTYWELL, Contains, All filing types, All statuses | No results; filings processed through 2026-08-04 |
+
+The official USPTO application did not complete image capture in this session, so the exact query strings, counts, registration identifiers, goods description, owner, and database dates are preserved here instead. Export a fresh USPTO search history and obtain counsel review before filing a federal application.
 
 ---
 
@@ -211,13 +223,13 @@ Sign into USPTO.gov first — the search system is unreliable when logged out.
 ### Phase 0 — Now (reversible, low risk)
 
 1. Register `bountywell.com` + `bountywell.app` on Porkbun — $19.83.
-2. Claim the `bountywell` GitHub org — free, closes a squatting vector on a name now discussed across multiple sessions.
+2. Create the parent `stephens-page` GitHub organization for Stephens Page LLC rather than one organization per product — completed 2026-08-05. Product repository transfers remain separate decisions.
 
 ### Phase 1 — Gate
 
-3. **Complete §7 manual clearance.** Nothing below this line happens until USPTO comes back clean.
+3. **Complete §7 manual BOUNTYWELL clearance and resolve the separate Daily Dozen permission issue before monetization or store expansion.**
 
-**Execution note (2026-08-05):** the owner explicitly directed the migration before the manual clearance record was completed. The implementation is live, but the unchecked items in §7 remain open and this exception does not represent legal clearance.
+**Execution note (2026-08-05):** the owner explicitly directed the migration before the manual clearance record was completed. The two outstanding official searches are now complete. They support BOUNTYWELL as the house mark but uncovered a live, directly overlapping DR. GREGER'S DAILY DOZEN registration; written permission remains the content/attribution gate. The remaining store and social-handle checklist items do not convert this record into a legal opinion.
 
 ### Phase 2 — Prepare (do not break existing installs)
 
@@ -240,23 +252,24 @@ Sign into USPTO.gov first — the search system is unreliable when logged out.
 
 ---
 
-## 9. Attribution Policy (post-rename)
+## 9. Permission and Attribution Policy (post-rename)
 
-Rename the brand; keep the Greger association through **nominative fair use**. Use only as much of the mark as necessary, no logo or styling, no suggestion of sponsorship.
+Rename the brand and treat the Greger association as **permission-gated**, not as a settled nominative-fair-use conclusion. NutritionFacts.org's Terms place original materials under CC BY-NC 4.0, define noncommercial use broadly, reserve takedown rights where commercial intent is unclear, forbid using their content to promote a product without approval, and separately require written staff approval for Dr. Greger's name. The live Class 009 registration for DR. GREGER'S DAILY DOZEN makes the overlap more direct.
 
 **Do:**
 
 - Title is **Bountywell** — never "Bountywell: Daily Dozen"
-- Plain-text description line, below the fold:
+- If written permission is granted, use a narrow plain-text compatibility line below the fold:
   > *Ships with a checklist based on the twelve food groups popularized by Dr. Michael Greger's Daily Dozen (NutritionFacts.org). Not affiliated with or endorsed by Dr. Greger or NutritionFacts.org.*
-- **Move the disclaimer from the bottom of the README to the top of the Play listing and into the app's first-run screen.** Reviewers read listings, not repos.
+- **Keep the non-affiliation disclaimer at the top of any store listing and in the app's first-run screen.** It improves clarity but does not substitute for permission.
 - Make the twelve categories **user-editable at first launch**; label the default "Daily Dozen–inspired preset." This reframes the product as a checklist engine with a preset — a stronger product *and* a cleaner legal posture. The GitHub description already says "or a custom version," so most of the way there.
-- **Email NutritionFacts and request written permission for the compatibility line.** Their Terms require written approval for Greger's name specifically. They're a nonprofit that takes no corporate money; the ask is cheap and a written "yes" eliminates the entire question.
+- **Request written permission for both the Greger attribution and the shipped checklist.** The request should disclose the current free status and promise to seek fresh approval before monetization or commercial promotion.
 
 **Don't:**
 
 - Use Greger's photo, the NutritionFacts logo, or their color palette (written approval required).
 - Center the README on Dr. Greger. Lead with: *"Bountywell is an offline-first food and wellness checklist with customizable plans and optional cloud synchronization."*
+- Treat the CC BY-NC license as permission for a future paid tier. If permission is denied or materially limited, replace the default plan with independently authored categories and remove Dr. Greger/Daily Dozen wording from product and promotional surfaces.
 
 ---
 
@@ -294,22 +307,25 @@ Home-screen copy:
 | 2026-08-05 | Full evaluation run. Rename confirmed as necessary. Shortlist narrowed to Bountywell / Twelve Baskets / Hearth & Harvest. |
 | 2026-08-05 | Hearth & Harvest eliminated — exact-phrase collisions incl. an App Store app of that name. |
 | 2026-08-05 | **Bountywell selected** over Twelve Baskets on domain economics ($19.83 vs. $16,295+ for the matched `.com`). |
-| 2026-08-05 | Clearance run: GitHub confirmed clear via API; stores, variants, and general web clear. **USPTO register not machine-accessible — manual pass required and outstanding.** |
-| 2026-08-05 | Owner directed execution of the rename while the manual USPTO and PA DOS checks remain documented as outstanding. |
+| 2026-08-05 | Initial clearance run: GitHub confirmed clear via API; stores, variants, and general web clear. USPTO and PA manual passes were still outstanding at the moment of deployment. |
+| 2026-08-05 | Owner directed execution of the rename before the manual USPTO and PA DOS checks were complete. |
 | 2026-08-05 | `bountywell.com` and `bountywell.app` pointed to production, secured with one automatically renewed TLS certificate, and verified live. |
 | 2026-08-05 | Stable PWA `id` published before the rename; cache version rolled; new and legacy Android asset links retained. |
 | 2026-08-05 | Android wrapper renamed to unpublished package `page.stephens.bountywell` and signed release bundle verified. |
 | 2026-08-05 | GitHub repository renamed to `JacobStephens2/bountywell`; description, homepage, topics, and deployment remotes updated. |
-| _pending_ | USPTO + PA DOS manual clearance complete. |
-| _pending_ | `bountywell` GitHub organization claimed, if still desired. |
+| 2026-08-05 | Official PA DOS “Contains” search across all filing types/statuses returned 0 BOUNTYWELL entities. |
+| 2026-08-05 | Official USPTO searches returned 0 BOUNTYWELL exact/near/class matches and 33 adjacent BOUNTIFUL records in Classes 009/042/044. |
+| 2026-08-05 | USPTO search found live Principal Register registration 6,662,527, DR. GREGER'S DAILY DOZEN, owned by Michael Greger in Class 009 for directly overlapping nutrition-app software. Earlier “unverified” language withdrawn. |
+| 2026-08-05 | NutritionFacts permission request submitted through its official support channel from `jacob@stephens.page`. Zendesk receipt confirmed; email-address verification remains outstanding before staff processing. |
+| 2026-08-05 | Parent GitHub organization [`stephens-page`](https://github.com/stephens-page) created for Stephens Page LLC, given the existing Steward Goods bee from `stephens.page/bee-favicon.png` as its avatar, and published with the Stephens Page name, description, and `https://stephens.page/` website. A separate Bountywell organization was not created; no repositories were transferred. |
 
 ---
 
 ## 12. Open Questions
 
-1. Does a live federal DAILY DOZEN registration owned by NutritionFacts exist? Unresolved. Does not change the decision, but closes the record.
-2. What classes does the Bountiful/Nestlé portfolio cover? Determines §2(d) risk.
-3. Will NutritionFacts grant written permission for the compatibility line? Ask.
+1. Will NutritionFacts grant written permission for the Greger attribution and shipped checklist? Request submitted; Zendesk email verification and staff response pending.
+2. Do the 33 BOUNTIFUL records in Classes 009/042/044 create a material §2(d) issue for BOUNTYWELL? No exact match surfaced, but counsel should assess the adjacent field before a federal filing.
+3. Should the app remove or independently rewrite the current preset if permission is denied or if monetization begins before a response? Default answer: yes.
 4. The old Android package returned no public Google Play listing on 2026-08-05. The wrapper now uses `page.stephens.bountywell`; confirm Play Console state before creating any listing.
 5. Secular fork later? If broad-market distribution is ever wanted without the Catholic framing, revisit *Twelve a Day* / *Verdant*. Not now.
 
