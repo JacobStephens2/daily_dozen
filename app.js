@@ -1,5 +1,5 @@
-// Catholic Daily Dozen Tracker - Main Application Logic
-// Version: 2.0.13 - Fix stale checkboxes on day change
+// Bountywell - Main Application Logic
+// Version: 2.1.0 - Bountywell rename and domain migration
 
 import { getCategoriesForDietType, getActiveCategories, getAllCategories, PRESETS, getCategoryNameHtml } from './js/categories.js';
 import * as storage from './js/storage.js';
@@ -20,7 +20,7 @@ if (window.performance && window.performance.navigation.type === window.performa
     }
 }
 
-class DailyDozenTracker {
+class BountywellTracker {
     constructor() {
         this.currentDate = new Date();
         this.profiles = storage.loadProfiles();
@@ -46,6 +46,7 @@ class DailyDozenTracker {
         this.pwa.init();
         this.auth.updateUI();
         this.setupOfflineIndicator();
+        this.setupAttributionNotice();
         // Refresh token and sync from server on load if logged in
         if (this.auth.isLoggedIn) {
             this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
@@ -636,7 +637,7 @@ class DailyDozenTracker {
             <div class="celebration-content">
                 <div class="celebration-icon">🎉</div>
                 <h2>Congratulations!</h2>
-                <p>${this.profiles[this.currentProfile].name} has completed the Daily Dozen for today!</p>
+                <p>${this.profiles[this.currentProfile].name} has completed today's nourishment plan!</p>
                 <p class="celebration-message">Thank you for honoring this temple of the Holy Spirit. Your care for your body glorifies God and respects the sacred gift of life He has entrusted to you.</p>
                 <div class="celebration-verses">
                     <p>"${verse.text}"</p>
@@ -854,7 +855,7 @@ class DailyDozenTracker {
         const date = new Date().toISOString().slice(0, 10);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `daily-dozen-${date}.json`;
+        a.download = `bountywell-${date}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -887,7 +888,7 @@ class DailyDozenTracker {
                     this.auth.schedulePush();
                     alert('Data imported successfully.');
                 } catch {
-                    alert('Could not read file. Make sure it is a valid Daily Dozen export.');
+                    alert('Could not read file. Make sure it is a valid Bountywell export.');
                 }
             };
             reader.readAsText(file);
@@ -907,6 +908,25 @@ class DailyDozenTracker {
         update();
         window.addEventListener('online', update);
         window.addEventListener('offline', update);
+    }
+
+    setupAttributionNotice() {
+        const notice = document.getElementById('attribution-banner');
+        const dismiss = document.getElementById('attribution-dismiss');
+        if (!notice || !dismiss) return;
+
+        try {
+            notice.hidden = localStorage.getItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN) === 'true';
+        } catch {
+            notice.hidden = false;
+        }
+
+        dismiss.addEventListener('click', () => {
+            notice.hidden = true;
+            try {
+                localStorage.setItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN, 'true');
+            } catch { /* ignore */ }
+        });
     }
 
     // --- Day change detection ---
@@ -954,5 +974,5 @@ class DailyDozenTracker {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.dailyDozenTracker = new DailyDozenTracker();
+    window.bountywellTracker = new BountywellTracker();
 });

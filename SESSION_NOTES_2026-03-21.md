@@ -1,4 +1,6 @@
-# Daily Dozen Tracker - Session Notes (2026-03-21)
+# Bountywell - Session Notes (2026-03-21)
+
+> Historical implementation notes. The product was renamed from Daily Dozen Tracker to Bountywell on 2026-08-05. Some internal server and storage identifiers retain their legacy names to preserve existing data and installed-app compatibility.
 
 ## What we accomplished
 
@@ -43,11 +45,12 @@
 - Removed redundant `<script src="sw.js">` tag
 
 ## Key files and locations
-- **App:** `/var/www/daily_dozen/`
-- **Live URL:** `https://dailydozen.jacobstephens.net`
+- **App:** `/var/www/dailydozen.stephens.page/` (legacy internal path)
+- **Live URLs:** `https://bountywell.com` and `https://bountywell.app`
+- **Migration origin:** `https://dailydozen.stephens.page`
 - **API service:** `sudo systemctl restart dailydozen-api`
-- **Apache config:** `/etc/apache2/sites-enabled/dailydozen.jacobstephens.net-le-ssl.conf`
-- **Database:** `/var/www/daily_dozen/data/daily_dozen.db`
+- **Apache configs:** `/etc/apache2/sites-enabled/bountywell.com.conf` and the legacy Daily Dozen origin configs
+- **Database:** `/var/www/dailydozen.stephens.page/data/daily_dozen.db` (legacy filename retained)
 - **SMTP creds source:** `/var/www/wadadliflarecatering.com/private/.env`
 - **SMTP configured in:** `/etc/systemd/system/dailydozen-api.service`
 

@@ -2,7 +2,7 @@
 
 import { STORAGE_KEYS } from './storage.js';
 
-const APP_VERSION = 'v2.0.13';
+const APP_VERSION = 'v2.1.0';
 
 export class PwaManager {
     constructor() {
@@ -21,7 +21,7 @@ export class PwaManager {
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) return;
 
-        navigator.serviceWorker.register('sw.js?v=2.0.15')
+        navigator.serviceWorker.register('sw.js?v=2.1.0')
             .then(registration => {
 
                 // Periodically check for SW updates
@@ -123,13 +123,13 @@ export class PwaManager {
             <div class="install-content">
                 <div class="install-icon">📱</div>
                 <div class="install-text">
-                    <h4>Install Daily Dozen Tracker</h4>
+                    <h4>Install Bountywell</h4>
                     <p>Add to your home screen for quick access and offline use</p>
                 </div>
-                <button class="install-btn" onclick="window.dailyDozenTracker.installApp()">
+                <button class="install-btn" onclick="window.bountywellTracker.installApp()">
                     Install App
                 </button>
-                <button class="dismiss-install-btn" onclick="window.dailyDozenTracker.dismissInstallPrompt()">
+                <button class="dismiss-install-btn" onclick="window.bountywellTracker.dismissInstallPrompt()">
                     ✕
                 </button>
             </div>
@@ -193,7 +193,7 @@ export class PwaManager {
             <div class="success-content">
                 <div class="success-icon">✅</div>
                 <h4>Successfully Installed!</h4>
-                <p>Daily Dozen Tracker is now available on your home screen</p>
+                <p>Bountywell is now available on your home screen</p>
                 <button onclick="this.parentElement.parentElement.remove()" class="close-success-btn">
                     Great!
                 </button>
@@ -231,13 +231,13 @@ export class PwaManager {
             <div class="manual-install-content">
                 <div class="manual-install-icon">📱</div>
                 <div class="manual-install-text">
-                    <h4>Install Daily Dozen Tracker</h4>
+                    <h4>Install Bountywell</h4>
                     <p>Get quick access and offline functionality</p>
                 </div>
-                <button class="manual-install-btn" onclick="window.dailyDozenTracker.showManualInstallInstructions()">
+                <button class="manual-install-btn" onclick="window.bountywellTracker.showManualInstallInstructions()">
                     How to Install
                 </button>
-                <button class="dismiss-manual-btn" onclick="window.dailyDozenTracker.dismissManualInstallPrompt()">
+                <button class="dismiss-manual-btn" onclick="window.bountywellTracker.dismissManualInstallPrompt()">
                     Maybe Later
                 </button>
             </div>
@@ -252,7 +252,7 @@ export class PwaManager {
         instructionsDiv.innerHTML = `
             <div class="instructions-content">
                 <div class="instructions-header">
-                    <h3>📱 Install Daily Dozen Tracker</h3>
+                    <h3>📱 Install Bountywell</h3>
                     <button class="close-instructions" onclick="this.parentElement.parentElement.parentElement.remove()">✕</button>
                 </div>
                 <div class="instructions-body">
@@ -260,7 +260,7 @@ export class PwaManager {
                         <h4>Chrome / Edge / Brave:</h4>
                         <ol>
                             <li>Click the <strong>⋮</strong> menu in the top-right corner</li>
-                            <li>Select <strong>"Install Daily Dozen Tracker"</strong> or <strong>"Add to Home screen"</strong></li>
+                            <li>Select <strong>"Install Bountywell"</strong> or <strong>"Add to Home screen"</strong></li>
                             <li>Click <strong>"Install"</strong> when prompted</li>
                         </ol>
 
@@ -298,7 +298,7 @@ export class PwaManager {
                     </div>
 
                     <div class="install-actions">
-                        <button class="reset-install-dismissed-btn" onclick="window.dailyDozenTracker.resetInstallDismissed(); this.parentElement.parentElement.parentElement.remove();">
+                        <button class="reset-install-dismissed-btn" onclick="window.bountywellTracker.resetInstallDismissed(); this.parentElement.parentElement.parentElement.remove();">
                             Reset Install Prompts
                         </button>
                         <p class="reset-install-note">Click this if you want to see the automatic install prompts again</p>

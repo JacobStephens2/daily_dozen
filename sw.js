@@ -1,7 +1,7 @@
-// Service Worker for Catholic Daily Dozen Tracker
+// Service Worker for Bountywell
 
-const CACHE_VERSION = 'v2.0.15';
-const CACHE_NAME = `daily-dozen-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v2.1.0';
+const CACHE_NAME = `bountywell-${CACHE_VERSION}`;
 const urlsToCache = [
     '/',
     '/index.html',
@@ -145,4 +145,3 @@ self.addEventListener('message', event => {
 function doBackgroundSync() {
     // Handle any background sync tasks
 }
-

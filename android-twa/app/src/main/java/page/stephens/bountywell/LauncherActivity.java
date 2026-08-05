@@ -1,4 +1,4 @@
-package net.jacobstephens.dailydozen;
+package page.stephens.bountywell;
 
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -20,7 +20,6 @@ public class LauncherActivity
 
     @Override
     protected Uri getLaunchingUrl() {
-        Uri uri = super.getLaunchingUrl();
-        return uri;
+        return super.getLaunchingUrl();
     }
 }

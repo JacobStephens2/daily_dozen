@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Dozen Tracker - Stewarding God's Gift of Health</title>
-    <meta name="description" content="Track your daily servings of the healthiest foods while honoring your body as a temple of the Holy Spirit">
+    <title>Bountywell — Daily nourishment, gratefully tracked.</title>
+    <meta name="description" content="An offline-first Catholic food and wellness checklist with customizable plans and optional cloud sync.">
+    <link rel="canonical" href="https://bountywell.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Bountywell">
+    <meta property="og:title" content="Bountywell">
+    <meta property="og:description" content="Daily nourishment, gratefully tracked.">
+    <meta property="og:url" content="https://bountywell.com/">
+    <meta property="og:image" content="https://bountywell.com/assets/icons/icon-512x512.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Bountywell">
+    <meta name="twitter:description" content="Daily nourishment, gratefully tracked.">
+    <meta name="twitter:image" content="https://bountywell.com/assets/icons/icon-512x512.png">
     
     <!-- Balanced caching approach - allow caching but with version control -->
     <meta http-equiv="Cache-Control" content="public, max-age=3600">
     
-    <link rel="manifest" href="manifest.json?v=2.0.15">
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2.0.15">
+    <link rel="manifest" href="manifest.json?v=2.1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2.1.0">
     <link rel="apple-touch-icon" href="assets/icons/icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png">
@@ -19,14 +30,14 @@
     <link rel="apple-touch-icon" sizes="60x60" href="assets/icons/icon-72x72.png">
     <meta name="theme-color" content="#38672a">
     <meta name="apple-mobile-web-app-capable" content="standalone">
-    <meta name="apple-mobile-web-app-title" content="Daily Dozen">
+    <meta name="apple-mobile-web-app-title" content="Bountywell">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-itunes-app" content="app-argument=">
     <meta name="msapplication-TileColor" content="#38672a">
     <meta name="msapplication-TileImage" content="assets/icons/icon-144x144.png">
-    <meta name="application-name" content="Daily Dozen">
+    <meta name="application-name" content="Bountywell">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q6JFQS0HG0"></script>
     <script>
@@ -39,14 +50,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2.0.15">
+    <link rel="stylesheet" href="styles.css?v=2.1.0">
 </head>
 <body>
     <div class="app-container">
         <header class="app-header">
             <div class="header-content">
-                <img src="assets/icons/icon-48x48.png" alt="Daily Dozen Icon" class="header-icon">
-                <h1>Daily Dozen Tracker</h1>
+                <img src="assets/icons/icon-48x48.png" alt="Bountywell icon" class="header-icon">
+                <div class="brand-lockup">
+                    <h1>Bountywell</h1>
+                    <p>Today's nourishment</p>
+                </div>
             </div>
             <div class="header-date-nav" id="header-date-nav">
                 <button class="date-prev-btn" id="date-prev-btn" aria-label="Previous day">&larr;</button>
@@ -67,6 +81,11 @@
         <div class="offline-banner" id="offline-banner" style="display:none">
             You are offline — changes are saved locally
         </div>
+
+        <aside class="attribution-banner" id="attribution-banner" hidden aria-label="About the default plan">
+            <p><strong>Welcome to Bountywell.</strong> The default plan is based on the twelve food groups popularized by Dr. Michael Greger's Daily Dozen. Bountywell is independent and is not affiliated with or endorsed by Dr. Greger or NutritionFacts.org.</p>
+            <button type="button" id="attribution-dismiss" aria-label="Dismiss attribution notice">Got it</button>
+        </aside>
 
         <div class="sign-in-banner" id="sign-in-banner">
             <div class="sign-in-banner-content">
@@ -137,11 +156,11 @@
                 <p class="learn-more"><a href="https://nutritionfacts.org/topics/daily-dozen/" target="_blank" rel="noopener noreferrer">Browse All Daily Dozen Videos →</a></p>
                 <p class="learn-more"><a href="https://usccb.cld.bz/Catechism-of-the-Catholic-Church/570/" target="_blank" rel="noopener noreferrer">Catholic Teaching on Respect for Health →</a></p>
 
-                <img src="assets/icons/icon-48x48.png" alt="Daily Dozen Icon" class="footer-icon">
+                <img src="assets/icons/icon-48x48.png" alt="Bountywell icon" class="footer-icon">
                 <div class="footer-content">
                     <div class="footer-text">         
                         <p>Created with respect for the dignity of the human person and the body as a temple of the Holy Spirit</p>
-                        <p class="disclaimer">This app is inspired by Dr. Greger's Daily Dozen from <a href="https://nutritionfacts.org/video/dr-gregers-daily-dozen-checklist/" target="_blank" rel="noopener noreferrer">NutritionFacts.org</a></p>
+                        <p class="disclaimer">Ships with a checklist based on the twelve food groups popularized by Dr. Michael Greger's Daily Dozen (<a href="https://nutritionfacts.org/video/dr-gregers-daily-dozen-checklist/" target="_blank" rel="noopener noreferrer">NutritionFacts.org</a>). Not affiliated with or endorsed by Dr. Greger or NutritionFacts.org.</p>
                         <p class="patron-saint-info" style="text-align: left;">Saint Martha is considered the patron saint of cooks (and sometimes of dietitians) due to her role in the Gospels, where she is portrayed as a gracious hostess and provider of&nbsp;meals.
                         </p>
         
@@ -168,7 +187,6 @@
         </footer>
     </div>
 
-    <script type="module" src="app.js?v=2.0.15"></script>
+    <script type="module" src="app.js?v=2.1.0"></script>
 </body>
 </html>
-

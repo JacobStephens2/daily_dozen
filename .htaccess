@@ -1,4 +1,4 @@
-# Cache Control Headers for Daily Dozen Tracker
+# Cache Control Headers for Bountywell
 # Balanced caching approach - allow caching for performance but with reasonable expiration
 
 # Cache HTML files for 1 hour

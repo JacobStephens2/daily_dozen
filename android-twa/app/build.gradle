@@ -5,11 +5,11 @@ plugins {
 }
 
 def twaManifest = [
-    applicationId: 'net.jacobstephens.dailydozen',
-    hostName: 'dailydozen.stephens.page',
+    applicationId: 'page.stephens.bountywell',
+    hostName: 'bountywell.com',
     launchUrl: '/',
-    name: 'Daily Dozen Tracker',
-    launcherName: 'Daily Dozen',
+    name: 'Bountywell',
+    launcherName: 'Bountywell',
     themeColor: '#548444',
     themeColorDark: '#3d6332',
     navigationColor: '#000000',
@@ -40,9 +40,9 @@ android {
         }
     }
     compileSdkVersion 36
-    namespace "net.jacobstephens.dailydozen"
+    namespace "page.stephens.bountywell"
     defaultConfig {
-        applicationId "net.jacobstephens.dailydozen"
+        applicationId "page.stephens.bountywell"
         minSdkVersion 21
         targetSdkVersion 35
         versionCode 1
@@ -54,8 +54,8 @@ android {
         def launchUrl = "https://" + twaManifest.hostName + twaManifest.launchUrl
         resValue "string", "launchUrl", launchUrl
 
-        resValue "string", "webManifestUrl", 'https://dailydozen.stephens.page/manifest.json'
-        resValue "string", "fullScopeUrl", 'https://dailydozen.stephens.page/'
+        resValue "string", "webManifestUrl", 'https://bountywell.com/manifest.json'
+        resValue "string", "fullScopeUrl", 'https://bountywell.com/'
 
         resValue "string", "hostName", twaManifest.hostName
         resValue "color", "colorPrimary", twaManifest.themeColor

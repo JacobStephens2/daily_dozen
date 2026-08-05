@@ -22,7 +22,7 @@ export function getAllCategories() {
 // Preset serving configurations (0 = category excluded)
 export const PRESETS = {
     standard: {
-        name: 'Standard Daily Dozen',
+        name: 'Daily Dozen–inspired',
         servings: { beans: 3, protein: 0, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 1, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
     },
     modified: {

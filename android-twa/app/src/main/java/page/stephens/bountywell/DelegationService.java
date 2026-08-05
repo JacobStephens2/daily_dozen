@@ -1,4 +1,4 @@
-package net.jacobstephens.dailydozen;
+package page.stephens.bountywell;
 
 public class DelegationService extends
         com.google.androidbrowserhelper.trusted.DelegationService {

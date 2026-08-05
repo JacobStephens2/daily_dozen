@@ -1,4 +1,4 @@
-/* Catholic Daily Dozen Tracker - Modern Apothecary Design System */
+/* Bountywell - Modern Apothecary Design System */
 
 :root {
     /* Material 3 Tonal Palette - "Deep Forest & Sun-Drenched Earth" */
@@ -122,6 +122,18 @@ body {
     margin-bottom: 0.5rem;
     position: relative;
     z-index: 1;
+}
+
+.brand-lockup {
+    text-align: left;
+}
+
+.brand-lockup p {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    opacity: 0.9;
 }
 
 .header-icon {
@@ -2696,6 +2708,45 @@ body {
     padding: 0.5rem;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.attribution-banner {
+    background: var(--tertiary-container);
+    color: var(--on-surface);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.attribution-banner[hidden] {
+    display: none;
+}
+
+.attribution-banner p {
+    margin: 0;
+    max-width: 680px;
+}
+
+.attribution-banner button {
+    flex: 0 0 auto;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: inherit;
+    padding: 0.4rem 0.8rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .attribution-banner {
+        align-items: flex-start;
+    }
 }
 
 /* Sign-in banner */

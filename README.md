@@ -1,168 +1,83 @@
-# Daily Dozen Tracker - Catholic Progressive Web App
+# Bountywell
 
-A progressive web application for tracking Dr. Greger's Daily Dozen food recommendations (or a modified version of the recommendations), designed with Catholic principles of stewardship, temperance, and respect for the body as a temple of the Holy Spirit.
+**Daily nourishment, gratefully tracked.**
 
-## 🎯 Purpose
+Bountywell is an offline-first food and wellness checklist with customizable plans, optional cloud synchronization, and a Catholic approach to gratitude, stewardship, and temperance.
 
-This app helps users track their daily consumption of the healthiest foods while fostering gratitude for God's gifts and promoting responsible stewardship of one's health. It's inspired by Dr. Michael Greger's Daily Dozen checklist from [NutritionFacts.org](https://nutritionfacts.org/daily-dozen/).
+Use it at [bountywell.com](https://bountywell.com) or [bountywell.app](https://bountywell.app).
 
-## ✨ Features
+> Bountywell ships with a checklist based on the twelve food groups popularized by Dr. Michael Greger's Daily Dozen ([NutritionFacts.org](https://nutritionfacts.org/daily-dozen/)). It is not affiliated with or endorsed by Dr. Greger or NutritionFacts.org.
 
-### Core Functionality
-- **Daily Tracking**: Check off servings for each of the 12 food categories
-- **Progress Visualization**: Real-time progress bar showing daily completion
-- **Local Storage**: Data persists locally on your device
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+## Features
 
-### Catholic Integration
-- **Gratitude Feature**: Built-in meal blessing and gratitude prompts
-- **Stewardship Focus**: Encourages responsible care of the body
-- **Temperance Promotion**: Balanced approach to health tracking
-- **Respectful Design**: Honors the dignity of the human person
+- Track daily servings across food, water, exercise, and custom categories.
+- Start with the Daily Dozen–inspired plan or customize every target.
+- Keep working offline with local-first storage and an installable PWA.
+- Create multiple profiles with individual names, icons, plans, and histories.
+- Optionally create an account to synchronize data across devices.
+- Review progress by day and export or import a portable JSON backup.
+- Pause for an optional meal blessing and gratitude prompt.
 
-### Progressive Web App Features
-- **Offline Functionality**: Works without internet connection
-- **Installable**: Can be added to home screen on mobile devices
-- **Smart Installation Prompts**: Automatic and manual installation options
-- **Fast Loading**: Optimized for quick access
-- **Cross-Platform**: Works on all modern browsers
+## Default plan
 
-## 🥗 The Daily Dozen Categories
+The Daily Dozen–inspired plan includes:
 
-1. **Beans** (3 servings) - e.g., ½ c. cooked beans, ¼ c. hummus
-2. **Berries** (1 serving) - e.g., ½ c. fresh or frozen, ¼ c. dried
-3. **Other Fruits** (3 servings) - e.g., 1 medium fruit, ¼ c. dried fruit
-4. **Greens** (2 servings) - e.g., 1 c. raw, ½ c. cooked
-5. **Cruciferous Vegetables** (1 serving) - e.g., ½ c. chopped, 1 tbsp horseradish
-6. **Other Vegetables** (2 servings) - e.g., ½ c. nonleafy vegetables
-7. **Flaxseed** (1 serving) - e.g., 1 tbsp ground
-8. **Nuts and Seeds** (1 serving) - e.g., ¼ c. nuts, 2 tbsp nut butter
-9. **Herbs and Spices** (1 serving) - e.g., ¼ tsp turmeric
-10. **Whole Grains** (3 servings) - e.g., ½ c. hot cereal, 1 slice of bread
-11. **Beverages** (5 servings) - 60 oz per day
-12. **Exercise** (1 serving) - 90 min. moderate or 40 min. vigorous
+1. Beans — 3 servings
+2. Berries — 1 serving
+3. Other fruits — 3 servings
+4. Greens — 2 servings
+5. Cruciferous vegetables — 1 serving
+6. Other vegetables — 2 servings
+7. Flaxseed — 1 serving
+8. Nuts and seeds — 1 serving
+9. Herbs and spices — 1 serving
+10. Whole grains — 3 servings
+11. Beverages — 5 servings
+12. Exercise — 1 serving
 
-## 🚀 Installation & Usage
+These targets are editable from **Customize Categories**. Additional presets include protein and other adjustments.
 
-### Web Browser
-1. Open the app in any modern web browser
-2. The app will work immediately - no installation required
-3. Your data is stored locally on your device
+## Install
 
-### Mobile Installation
-1. Open the app in your mobile browser
-2. The app will automatically show an install prompt if it meets PWA criteria
-3. Alternatively, tap the "📱 Install App" button in the header
-4. Follow the prompts to install the app
-5. The app will now work like a native app on your device
+Open either live address in a modern browser. Bountywell works immediately without installation.
 
-### Desktop Installation
-1. Open the app in Chrome, Edge, or other modern browsers
-2. The app will automatically show an install prompt if it meets PWA criteria
-3. Alternatively, click the "📱 Install App" button in the header
-4. Follow the prompts to install the app
-5. The app will be available in your applications menu
+- On Chrome, Edge, or Brave, choose **Install Bountywell** from the browser menu.
+- On iPhone or iPad, use **Share → Add to Home Screen**.
+- On Android, use **Install app** or **Add to Home screen**.
 
-### Manual Installation Instructions
-If automatic installation doesn't work, the app provides detailed step-by-step instructions for:
-- **Chrome / Edge / Brave**: Menu → Install Daily Dozen Tracker
-- **Safari (iPhone/iPad)**: Share button → Add to Home Screen
-- **Firefox**: Menu → Install App
-- **Android Chrome**: Menu → Add to Home screen
+Once installed, Bountywell launches like a native app and keeps its core tracking features available offline.
 
-## 🛠️ Technical Details
+## Run locally
 
-### Built With
-- **HTML5**: Semantic markup and accessibility
-- **CSS3**: Modern styling with CSS Grid and Flexbox
-- **JavaScript (ES6+)**: Vanilla JavaScript with modern features
-- **Progressive Web App**: Service Worker for offline functionality
-- **Local Storage**: Client-side data persistence
+Requirements: a supported Node.js LTS release (20, 22, or 24).
 
-### File Structure
-```
-daily_dozen/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styles
-├── app.js             # Main JavaScript application
-├── sw.js              # Service Worker
-├── manifest.json      # PWA manifest
-├── icons/             # App icons
-│   └── icon.jpg       # JPG icon
-└── README.md          # This file
+```bash
+npm install
+npm start
 ```
 
-### Browser Support
-- Chrome 60+
-- Firefox 55+
-- Safari 11.1+
-- Edge 79+
+Then open [http://localhost:3000](http://localhost:3000).
 
-## 🙏 Catholic Principles
+The application uses vanilla JavaScript, HTML, and CSS on the client; Express and SQLite provide optional account and synchronization APIs. The main PWA files are `index.html`, `styles.css`, `app.js`, `manifest.json`, and `sw.js`. The Android Trusted Web Activity wrapper lives in `android-twa/`.
 
-This app is designed with the following Catholic principles in mind:
+## Privacy
 
-### Stewardship
-- Encourages responsible care of the body as a gift from God
-- Promotes balanced, sustainable health practices
-- Avoids obsessive or extreme approaches to nutrition
+- Tracking data is stored locally by default.
+- Cloud synchronization is optional and requires an account.
+- The app contains no advertising.
+- Google Analytics is used for aggregate site traffic measurement.
+- The source is public under the MIT License.
 
-### Temperance
-- Moderation in all things, including health tracking
-- Balanced approach to food and exercise
-- Respect for the body's natural needs
+## Catholic principles
 
-### Gratitude
-- Built-in meal blessings and gratitude prompts
-- Recognition of food as a gift from God
-- Thankfulness for the ability to care for one's health
+Bountywell is designed around gratitude for food as a gift, responsible stewardship of health, moderation rather than obsession, and respect for the dignity of the human person. Its meal blessing and faith framing are optional; its tracking plans are fully customizable.
 
-### Dignity of the Human Person
-- Respect for the body as a temple of the Holy Spirit
-- Holistic approach to health (body, mind, and spirit)
-- Avoidance of practices that objectify or harm the body
+## Disclaimer
 
-## 📱 Progressive Web App Features
+Bountywell is for educational and tracking purposes only. It is not a substitute for professional medical advice. Consult a qualified healthcare professional for personalized nutrition or health guidance.
 
-### Offline Functionality
-- The app works without an internet connection
-- All core features are available offline
-- Data is stored locally on your device
-
-### Installable
-- Can be installed on mobile and desktop devices
-- Appears in the app launcher/home screen
-- Works like a native app
-- Smart installation prompts with detailed instructions
-- Automatic detection of installation eligibility
-
-### Fast and Reliable
-- Optimized for quick loading
-- Minimal data usage
-- Responsive design for all screen sizes
-
-## 🔒 Privacy & Data
-
-- **No Server Required**: All data is stored locally on your device
-- **No Tracking**: No analytics or user tracking
-- **No Ads**: Completely ad-free
-- **Open Source**: Transparent code that you can review
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🙋‍♂️ Support
-
-For questions or support, please refer to the original Daily Dozen information at [NutritionFacts.org](https://nutritionfacts.org/daily-dozen/).
-
-## ⚠️ Disclaimer
-
-This app is for educational and tracking purposes only. It is not a substitute for professional medical advice. Always consult with healthcare professionals for personalized nutrition and health guidance.
-
-The app is inspired by Dr. Michael Greger's Daily Dozen from NutritionFacts.org but is not officially affiliated with or endorsed by Dr. Greger or NutritionFacts.org.
+The compatibility reference to Dr. Greger's Daily Dozen is descriptive only. Bountywell does not use NutritionFacts.org branding and does not claim sponsorship, affiliation, or endorsement.
 
 ---
 
-*"Do you not know that your body is a temple of the Holy Spirit within you, which you have from God, and that you are not your own?" - 1 Corinthians 6:19*
-
+*“Do you not know that your body is a temple of the Holy Spirit within you, which you have from God, and that you are not your own?” — 1 Corinthians 6:19*

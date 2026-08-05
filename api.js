@@ -107,8 +107,8 @@ router.post('/register', registerLimiter, authLimiter, (req, res) => {
         transport.sendMail({
             from: fromAddr,
             to: 'jacob@stephens.page',
-            subject: 'Daily Dozen Tracker — New Account Created',
-            text: `A new account was created on Daily Dozen Tracker.\n\nEmail: ${normalizedEmail}\nDate: ${new Date().toISOString()}\nDevice: ${ua}`,
+            subject: 'Bountywell — New Account Created',
+            text: `A new account was created on Bountywell.\n\nEmail: ${normalizedEmail}\nDate: ${new Date().toISOString()}\nDevice: ${ua}`,
         }).catch(err => {
             console.log('Failed to send admin notification:', err.message);
         });
@@ -204,7 +204,7 @@ router.post('/forgot-password', authLimiter, (req, res) => {
         transport.sendMail({
             from: fromAddr,
             to: normalizedEmail,
-            subject: 'Daily Dozen Tracker - Password Reset',
+            subject: 'Bountywell — Password Reset',
             text: `Reset your password by visiting this link (expires in 1 hour):\n\n${resetLink}\n\nIf you did not request this, you can ignore this email.`,
             html: `<p>Reset your password by clicking the link below (expires in 1 hour):</p><p><a href="${resetLink}">${resetLink}</a></p><p>If you did not request this, you can ignore this email.</p>`,
         }).catch(err => {

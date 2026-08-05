@@ -40,6 +40,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Daily Dozen Tracker server running on port ${PORT}`);
+    console.log(`Bountywell server running on port ${PORT}`);
     console.log(`Visit: http://localhost:${PORT}`);
 });

@@ -1,7 +1,7 @@
 {
-  "name": "daily-dozen-tracker",
-  "version": "2.0.13",
-  "description": "A Catholic Daily Dozen Tracker - Stewarding God's Gift of Health",
+  "name": "bountywell",
+  "version": "2.1.0",
+  "description": "An offline-first Catholic food and wellness checklist with customizable plans and optional cloud sync.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -19,7 +19,9 @@
     "nodemon": "^3.0.1"
   },
   "keywords": [
-    "daily-dozen",
+    "bountywell",
+    "food-tracker",
+    "habit-tracker",
     "nutrition",
     "health",
     "catholic",

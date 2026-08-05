@@ -1,4 +1,4 @@
-# Balanced Caching Implementation for Daily Dozen Tracker
+# Balanced Caching Implementation for Bountywell
 
 This document explains the balanced caching implementation that optimizes performance while ensuring users can get updates when needed.
 

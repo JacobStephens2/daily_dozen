@@ -1,7 +1,8 @@
 {
-    "name": "Daily Dozen Tracker - Stewarding God's Gift of Health",
-    "short_name": "Daily Dozen",
-    "description": "Track your daily servings of the healthiest foods while honoring your body as a temple of the Holy Spirit",
+    "name": "Bountywell",
+    "short_name": "Bountywell",
+    "description": "Daily nourishment, gratefully tracked — a customizable Catholic food and wellness checklist",
+    "id": "/",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#fdf9ed",
@@ -175,7 +176,7 @@
         {
             "name": "Today's Progress",
             "short_name": "Progress",
-            "description": "View today's Daily Dozen progress",
+            "description": "View today's nourishment progress",
             "url": "/",
             "icons": [
                 {
@@ -186,4 +187,3 @@
         }
     ]
 }
-
