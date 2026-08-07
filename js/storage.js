@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
     INSTALL_DISMISSED: 'dailyDozenInstallDismissed',
     PROFILES: 'dailyDozenProfiles',
     CURRENT_PROFILE: 'dailyDozenCurrentProfile',
+    ATTRIBUTION_SEEN: 'bountywellAttributionSeen',
 };
 
 export function getProfileStorageKey(profileId) {

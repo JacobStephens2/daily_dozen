@@ -1,5 +1,5 @@
 // Bountywell - Main Application Logic
-// Version: 2.1.1 - Remove third-party attribution references
+// Version: 2.1.2 - Restore Daily Dozen attribution; action row; permission granted
 
 import { getCategoriesForDietType, getActiveCategories, getAllCategories, PRESETS, getCategoryNameHtml } from './js/categories.js';
 import * as storage from './js/storage.js';
@@ -46,6 +46,7 @@ class BountywellTracker {
         this.pwa.init();
         this.auth.updateUI();
         this.setupOfflineIndicator();
+        this.setupAttributionNotice();
         // Refresh token and sync from server on load if logged in
         if (this.auth.isLoggedIn) {
             this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
@@ -995,6 +996,25 @@ class BountywellTracker {
         update();
         window.addEventListener('online', update);
         window.addEventListener('offline', update);
+    }
+
+    setupAttributionNotice() {
+        const notice = document.getElementById('attribution-banner');
+        const dismiss = document.getElementById('attribution-dismiss');
+        if (!notice || !dismiss) return;
+
+        try {
+            notice.hidden = localStorage.getItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN) === 'true';
+        } catch {
+            notice.hidden = false;
+        }
+
+        dismiss.addEventListener('click', () => {
+            notice.hidden = true;
+            try {
+                localStorage.setItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN, 'true');
+            } catch { /* ignore */ }
+        });
     }
 
     // --- Day change detection ---

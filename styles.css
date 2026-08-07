@@ -2370,6 +2370,42 @@ body {
     margin-top: 1.5rem;
 }
 
+/* Wide enough for the action buttons to sit side by side: flow them into one
+   or two centered rows instead of a five-deep stack, to save vertical space. */
+@media (min-width: 620px) {
+    .actions-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.6rem 0.5rem;
+    }
+
+    /* These wrappers each hold one button; in a row their standalone
+       vertical margins would knock the buttons out of alignment. */
+    .actions-group > .customize-section,
+    .actions-group > .history-section,
+    .actions-group > .reset-section,
+    .actions-group > .account-section,
+    .actions-group > .gratitude-section {
+        margin-top: 0;
+    }
+
+    /* The wide breakpoint sizes these buttons individually, which reads as
+       ragged once they share a row. Match them so the row looks deliberate. */
+    .actions-group .history-btn,
+    .actions-group .reset-btn,
+    .actions-group .account-btn,
+    .actions-group .gratitude-btn,
+    .actions-group .customize-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: var(--radius-full);
+        white-space: nowrap;
+    }
+}
+
 .history-section {
     text-align: center;
     margin-top: 0;
@@ -2748,6 +2784,45 @@ body {
     padding: 0.5rem;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.attribution-banner {
+    background: var(--tertiary-container);
+    color: var(--on-surface);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.attribution-banner[hidden] {
+    display: none;
+}
+
+.attribution-banner p {
+    margin: 0;
+    max-width: 680px;
+}
+
+.attribution-banner button {
+    flex: 0 0 auto;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: inherit;
+    padding: 0.4rem 0.8rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .attribution-banner {
+        align-items: flex-start;
+    }
 }
 
 /* Sign-in banner */

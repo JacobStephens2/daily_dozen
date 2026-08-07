@@ -318,14 +318,17 @@ Home-screen copy:
 | 2026-08-05 | USPTO search found live Principal Register registration 6,662,527, DR. GREGER'S DAILY DOZEN, owned by Michael Greger in Class 009 for directly overlapping nutrition-app software. Earlier “unverified” language withdrawn. |
 | 2026-08-05 | NutritionFacts permission request submitted through its official support channel from `jacob@stephens.page`. Zendesk receipt confirmed; email-address verification remains outstanding before staff processing. |
 | 2026-08-05 | Parent GitHub organization [`stephens-page`](https://github.com/stephens-page) created for Stephens Page LLC, given the existing Steward Goods bee from `stephens.page/bee-favicon.png` as its avatar, and published with the Stephens Page name, description, and `https://stephens.page/` website. A separate Bountywell organization was not created; no repositories were transferred. |
+| 2026-08-07 | Ahead of a reply, all Daily Dozen / Dr. Greger / NutritionFacts.org references were stripped from `bountywell.com` and the `/dd-kmp/` demo, and the site shipped with no such reference. |
+| 2026-08-07 | **Dr. Greger granted written permission by email**, replying directly rather than through the Zendesk queue: *“You’re welcome to put it back to the way it was! happy to help! -Michael”*. He is the named owner of registration 6,662,527, so this is consent from the mark owner himself, not merely from NutritionFacts staff. |
+| 2026-08-07 | References restored across the web app and the KMP demo, each noting use by permission; the non-affiliation disclaimer retained. §12.1 closed. |
 
 ---
 
 ## 12. Open Questions
 
-1. Will NutritionFacts grant written permission for the Greger attribution and shipped checklist? Request submitted; Zendesk email verification and staff response pending.
+1. ~~Will NutritionFacts grant written permission for the Greger attribution and shipped checklist?~~ **Resolved 2026-08-07: granted.** Dr. Greger replied directly by email: *“You’re welcome to put it back to the way it was! happy to help! -Michael”*. **Preserve that email** — it is the written approval §2.3 identifies as required for any use of his name, and it comes from the owner of registration 6,662,527. Scope: it covers the descriptive compatibility line, the shipped preset, and the nutritionfacts.org topic links. It is *not* a grant to use the NutritionFacts logo, Dr. Greger's photo, or their color palette, and it does not create affiliation or endorsement — so the disclaimer stays. It also does not resolve §2.3's CC BY-NC question if the app is ever monetized; re-ask before charging.
 2. Do the 33 BOUNTIFUL records in Classes 009/042/044 create a material §2(d) issue for BOUNTYWELL? No exact match surfaced, but counsel should assess the adjacent field before a federal filing.
-3. Should the app remove or independently rewrite the current preset if permission is denied or if monetization begins before a response? Default answer: yes.
+3. Should the app remove or independently rewrite the current preset if monetization begins? Permission is now granted for the current non-commercial use, so this is no longer urgent — but §2.3's non-commercial licensing wrinkle is untouched by it. Re-confirm with Dr. Greger before any paid tier.
 4. The old Android package returned no public Google Play listing on 2026-08-05. The wrapper now uses `page.stephens.bountywell`; confirm Play Console state before creating any listing.
 5. Secular fork later? If broad-market distribution is ever wanted without the Catholic framing, revisit *Twelve a Day* / *Verdant*. Not now.
 

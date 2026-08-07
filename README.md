@@ -6,10 +6,12 @@ Bountywell is an offline-first food and wellness checklist with customizable pla
 
 Use it at [bountywell.com](https://bountywell.com) or [bountywell.app](https://bountywell.app).
 
+> Bountywell ships with a checklist based on the twelve food groups popularized by Dr. Michael Greger's Daily Dozen ([NutritionFacts.org](https://nutritionfacts.org/daily-dozen/)), used with Dr. Greger's written permission (granted 2026-08-07). It is not affiliated with or endorsed by Dr. Greger or NutritionFacts.org.
+
 ## Features
 
 - Track daily servings across food, water, exercise, and custom categories.
-- Start with the standard plan or customize every target.
+- Start with the Daily Dozen–inspired plan or customize every target.
 - Keep working offline with local-first storage and an installable PWA.
 - Track for one person by default, and add more people as needed - each with their own name, icon, plan, and history.
 - Optionally create an account to synchronize data across devices.
@@ -18,7 +20,7 @@ Use it at [bountywell.com](https://bountywell.com) or [bountywell.app](https://b
 
 ## Default plan
 
-The standard plan includes:
+The Daily Dozen–inspired plan includes:
 
 1. Beans — 3 servings
 2. Berries — 1 serving
@@ -73,6 +75,8 @@ Bountywell is designed around gratitude for food as a gift, responsible stewards
 ## Disclaimer
 
 Bountywell is for educational and tracking purposes only. It is not a substitute for professional medical advice. Consult a qualified healthcare professional for personalized nutrition or health guidance.
+
+The reference to Dr. Greger's Daily Dozen is descriptive and used with his written permission (granted 2026-08-07). Bountywell does not use NutritionFacts.org branding and does not claim sponsorship, affiliation, or endorsement.
 
 ---
 
