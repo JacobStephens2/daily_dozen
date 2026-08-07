@@ -1,5 +1,5 @@
 // Bountywell - Main Application Logic
-// Version: 2.1.0 - Bountywell rename and domain migration
+// Version: 2.1.1 - Remove third-party attribution references
 
 import { getCategoriesForDietType, getActiveCategories, getAllCategories, PRESETS, getCategoryNameHtml } from './js/categories.js';
 import * as storage from './js/storage.js';
@@ -46,7 +46,6 @@ class BountywellTracker {
         this.pwa.init();
         this.auth.updateUI();
         this.setupOfflineIndicator();
-        this.setupAttributionNotice();
         // Refresh token and sync from server on load if logged in
         if (this.auth.isLoggedIn) {
             this.auth.refreshTokenIfNeeded().then(() => this.auth.sync()).catch(() => {});
@@ -167,6 +166,69 @@ class BountywellTracker {
 
             profileContainer.appendChild(profileBtn);
         });
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-profile-btn';
+        addBtn.type = 'button';
+        addBtn.setAttribute('aria-label', 'Add a person to track for');
+        addBtn.innerHTML = '<span aria-hidden="true">＋</span><span class="profile-name">Add person</span>';
+        addBtn.addEventListener('click', () => this.addProfile());
+        profileContainer.appendChild(addBtn);
+    }
+
+    // Pick the first palette color not already taken, so each person
+    // gets a visually distinct header.
+    nextProfileColor() {
+        const used = new Set(Object.values(this.profiles).map(p => p.color));
+        return storage.PROFILE_COLORS.find(c => !used.has(c)) || storage.PROFILE_COLORS[0];
+    }
+
+    addProfile() {
+        this.showProfileDialog({
+            title: 'Add Person',
+            name: '',
+            emoji: '👤',
+            saveLabel: 'Add',
+            onSave: (name, emoji) => {
+                const profileId = storage.createProfileId();
+                this.profiles[profileId] = {
+                    name: name || 'New person',
+                    color: this.nextProfileColor(),
+                    emoji
+                };
+                storage.saveProfiles(this.profiles);
+                this.auth.schedulePush();
+                // switchProfile re-renders the selector, so no extra call here.
+                this.switchProfile(profileId);
+            }
+        });
+    }
+
+    deleteProfile(profileId) {
+        if (Object.keys(this.profiles).length <= 1) return;
+
+        const name = this.profiles[profileId].name;
+        if (!confirm(`Remove ${name} and all of their tracked history? This cannot be undone.`)) return;
+
+        delete this.profiles[profileId];
+        storage.deleteProfileData(profileId);
+        storage.saveProfiles(this.profiles);
+
+        if (this.currentProfile === profileId) {
+            // switchProfile bails if the id is unchanged, so move off the
+            // deleted profile before re-rendering.
+            this.currentProfile = Object.keys(this.profiles)[0];
+            storage.saveCurrentProfile(this.currentProfile);
+            this.customServings = this.loadServings();
+            this.categories = getActiveCategories(this.customServings);
+            this.renderCategories();
+            this.restoreCheckboxes(storage.loadData(this.currentProfile));
+            this.updateProgress();
+            this.updateHeaderColor();
+        }
+
+        this.setProfileSelector();
+        this.auth.schedulePush();
     }
 
     switchProfile(profileId) {
@@ -199,53 +261,78 @@ class BountywellTracker {
         const profile = this.profiles[profileId];
         const currentName = profile.name;
         const currentEmoji = profile.emoji || '👤';
-        let selectedEmoji = currentEmoji;
-        const EMOJI_CHOICES = ['🧑', '👩', '👨', '🧓', '👵', '👴', '🧒', '👶', '👤', '👥', '🙂', '😀', '😎', '🤓', '🐱', '🐶', '🦊', '🐻', '🌟', '🌸', '🍎', '🥑', '💪', '❤️'];
 
-        // Show inline edit modal instead of browser prompt()
+        this.showProfileDialog({
+            title: 'Edit Profile',
+            name: currentName,
+            emoji: currentEmoji,
+            saveLabel: 'Save',
+            // Only offer removal while at least one other person remains.
+            onDelete: Object.keys(this.profiles).length > 1
+                ? () => this.deleteProfile(profileId)
+                : null,
+            onSave: (newName, newEmoji) => {
+                const name = newName || currentName;
+                if (name === currentName && newEmoji === currentEmoji) return;
+                this.profiles[profileId].name = name;
+                this.profiles[profileId].emoji = newEmoji;
+                storage.saveProfiles(this.profiles);
+                this.setProfileSelector();
+                this.showProfileNameUpdated(name);
+                this.auth.schedulePush();
+            }
+        });
+    }
+
+    // Shared add/edit person dialog. Used instead of prompt() so the
+    // icon picker and delete action can live alongside the name field.
+    showProfileDialog({ title, name, emoji, saveLabel, onSave, onDelete }) {
+        const EMOJI_CHOICES = ['🧑', '👩', '👨', '🧓', '👵', '👴', '🧒', '👶', '👤', '👥', '🙂', '😀', '😎', '🤓', '🐱', '🐶', '🦊', '🐻', '🌟', '🌸', '🍎', '🥑', '💪', '❤️'];
+        let selectedEmoji = emoji;
+
         const modal = document.createElement('div');
         modal.className = 'profile-edit-modal';
         modal.setAttribute('role', 'dialog');
         modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="profile-edit-content">
-                <h3>Edit Profile</h3>
+                <h3>${title}</h3>
                 <input type="text" class="profile-edit-input" id="profile-edit-input"
-                       value="${currentName}" maxlength="30" autocomplete="off" aria-label="Profile name">
+                       maxlength="30" autocomplete="off" placeholder="Name" aria-label="Profile name">
                 <div class="profile-emoji-label">Icon</div>
                 <div class="profile-emoji-grid" id="profile-emoji-grid" role="group" aria-label="Choose an icon">
-                    ${EMOJI_CHOICES.map(e => `<button type="button" class="profile-emoji-option${e === currentEmoji ? ' selected' : ''}" data-emoji="${e}" aria-label="${e}">${e}</button>`).join('')}
+                    ${EMOJI_CHOICES.map(e => `<button type="button" class="profile-emoji-option${e === emoji ? ' selected' : ''}" data-emoji="${e}" aria-label="${e}">${e}</button>`).join('')}
                 </div>
                 <div class="profile-edit-actions">
-                    <button class="profile-edit-save" id="profile-edit-save">Save</button>
+                    <button class="profile-edit-save" id="profile-edit-save">${saveLabel}</button>
                     <button class="profile-edit-cancel" id="profile-edit-cancel">Cancel</button>
                 </div>
+                ${onDelete ? '<button class="profile-delete-btn" id="profile-delete">Remove this person</button>' : ''}
             </div>
         `;
 
         document.body.appendChild(modal);
         const releaseFocus = trapFocus(modal);
-        const input = document.getElementById('profile-edit-input');
+        const input = modal.querySelector('#profile-edit-input');
+        // Assigned rather than interpolated so quotes in a name can't break the markup.
+        input.value = name;
         input.focus();
         input.select();
 
         const close = () => { releaseFocus(); modal.remove(); };
         const save = () => {
-            const newName = input.value.trim() || currentName;
-            const changed = newName !== currentName || selectedEmoji !== currentEmoji;
-            if (changed) {
-                this.profiles[profileId].name = newName;
-                this.profiles[profileId].emoji = selectedEmoji;
-                storage.saveProfiles(this.profiles);
-                this.setProfileSelector();
-                this.showProfileNameUpdated(newName);
-                this.auth.schedulePush();
-            }
+            onSave(input.value.trim(), selectedEmoji);
             close();
         };
 
         modal.querySelector('#profile-edit-save').addEventListener('click', save);
         modal.querySelector('#profile-edit-cancel').addEventListener('click', close);
+        if (onDelete) {
+            modal.querySelector('#profile-delete').addEventListener('click', () => {
+                close();
+                onDelete();
+            });
+        }
         const emojiGrid = modal.querySelector('#profile-emoji-grid');
         emojiGrid.addEventListener('click', (e) => {
             const opt = e.target.closest('.profile-emoji-option');
@@ -908,25 +995,6 @@ class BountywellTracker {
         update();
         window.addEventListener('online', update);
         window.addEventListener('offline', update);
-    }
-
-    setupAttributionNotice() {
-        const notice = document.getElementById('attribution-banner');
-        const dismiss = document.getElementById('attribution-dismiss');
-        if (!notice || !dismiss) return;
-
-        try {
-            notice.hidden = localStorage.getItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN) === 'true';
-        } catch {
-            notice.hidden = false;
-        }
-
-        dismiss.addEventListener('click', () => {
-            notice.hidden = true;
-            try {
-                localStorage.setItem(storage.STORAGE_KEYS.ATTRIBUTION_SEEN, 'true');
-            } catch { /* ignore */ }
-        });
     }
 
     // --- Day change detection ---

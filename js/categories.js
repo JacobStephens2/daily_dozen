@@ -22,7 +22,7 @@ export function getAllCategories() {
 // Preset serving configurations (0 = category excluded)
 export const PRESETS = {
     standard: {
-        name: 'Daily Dozen–inspired',
+        name: 'Standard',
         servings: { beans: 3, protein: 0, berries: 1, 'other-fruits': 3, greens: 2, cruciferous: 1, 'other-vegetables': 2, flaxseed: 1, 'nuts-seeds': 1, 'herbs-spices': 1, 'whole-grains': 3, beverages: 5, exercise: 1 },
     },
     modified: {
@@ -56,42 +56,6 @@ export function getCategoriesForDietType(dietType) {
     return getActiveCategories(preset.servings);
 }
 
-// Map category IDs to NutritionFacts.org link URLs
-const CATEGORY_LINKS = {
-    'beans': { url: 'https://nutritionfacts.org/topics/beans/', label: null },
-    'berries': { url: 'https://nutritionfacts.org/topics/berries/', label: null },
-    'other-fruits': { url: 'https://nutritionfacts.org/topics/fruit/', label: null },
-    'greens': { url: 'https://nutritionfacts.org/topics/greens/', label: null },
-    'cruciferous': { url: 'https://nutritionfacts.org/topics/cruciferous-vegetables/', label: null },
-    'other-vegetables': { url: 'https://nutritionfacts.org/topics/vegetables/', label: null },
-    'flaxseed': { url: 'https://nutritionfacts.org/topics/flax-seeds/', label: null },
-    'whole-grains': { url: 'https://nutritionfacts.org/topics/grains/', label: null },
-    'beverages': { url: 'https://nutritionfacts.org/topics/beverages/', label: null },
-    'exercise': { url: 'https://nutritionfacts.org/topics/exercise/', label: null },
-    'protein': { url: 'https://nutritionfacts.org/topics/protein/', label: null },
-    'nuts-seeds': {
-        parts: [
-            { url: 'https://nutritionfacts.org/topics/nuts/', label: 'Nuts' },
-            { url: 'https://nutritionfacts.org/topics/seeds/', label: 'Seeds' }
-        ]
-    },
-    'herbs-spices': {
-        parts: [
-            { url: 'https://nutritionfacts.org/topics/herbs/', label: 'Herbs' },
-            { url: 'https://nutritionfacts.org/topics/spices/', label: 'Spices' }
-        ]
-    }
-};
-
 export function getCategoryNameHtml(category) {
-    const linkInfo = CATEGORY_LINKS[category.id];
-    if (!linkInfo) return category.name;
-
-    if (linkInfo.parts) {
-        return linkInfo.parts
-            .map(p => `<a href="${p.url}" target="_blank" rel="noopener noreferrer">${p.label}</a>`)
-            .join(' and ');
-    }
-
-    return `<a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer">${category.name}</a>`;
+    return category.name;
 }

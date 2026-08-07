@@ -128,14 +128,6 @@ body {
     text-align: left;
 }
 
-.brand-lockup p {
-    margin: 0.15rem 0 0;
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    opacity: 0.9;
-}
-
 .header-icon {
     width: 48px;
     height: 48px;
@@ -300,6 +292,30 @@ body {
 
 .profile-name {
     font-size: 1rem;
+}
+
+/* Sits alongside the people chips; outlined so it reads as an action,
+   not as another person. */
+.add-profile-btn {
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-full);
+    padding: 0.75rem 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.add-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.85);
+    color: white;
+    transform: translateY(-2px);
 }
 
 .edit-profile-btn {
@@ -650,17 +666,23 @@ body {
 /* Categories Container */
 .categories-container {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
     margin-bottom: 2rem;
 }
 
+/* Cards are a single row at every width: icon + name on the left,
+   serving checkboxes right-aligned. Keeps the list short to scroll. */
 .category-card {
     background: var(--surface-container-lowest);
     border: none;
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: 1rem 1.25rem;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-ambient);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .category-card:hover {
@@ -671,7 +693,15 @@ body {
 .category-header {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 0;
+    margin-right: 1rem;
+}
+
+.category-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .category-icon {
@@ -692,19 +722,29 @@ body {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--on-surface);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
     letter-spacing: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .category-info p {
     color: var(--on-surface-variant);
     font-size: 0.9rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .servings-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .serving-checkbox {
@@ -714,14 +754,14 @@ body {
 /* Tonal Chips for servings */
 .serving-label {
     display: inline-block;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.7rem;
     background: var(--surface-container-high);
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 500;
-    min-width: 60px;
+    min-width: 48px;
     text-align: center;
     color: var(--on-surface);
 }
@@ -1232,7 +1272,7 @@ body {
 
     .categories-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
         gap: 1.25rem;
         margin-bottom: 2rem;
     }
@@ -1319,11 +1359,11 @@ body {
     }
 
     .serving-label {
-        padding: 0.5rem 0.7rem;
+        padding: 0.5rem 0.6rem;
         font-size: 0.85rem;
         font-weight: 600;
-        min-width: 55px;
-        max-width: 60px;
+        min-width: 40px;
+        max-width: 48px;
         border-radius: 12px;
         transition: all 0.3s ease;
         position: relative;
@@ -2710,45 +2750,6 @@ body {
     font-weight: 600;
 }
 
-.attribution-banner {
-    background: var(--tertiary-container);
-    color: var(--on-surface);
-    padding: 0.85rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    font-size: 0.85rem;
-    line-height: 1.45;
-}
-
-.attribution-banner[hidden] {
-    display: none;
-}
-
-.attribution-banner p {
-    margin: 0;
-    max-width: 680px;
-}
-
-.attribution-banner button {
-    flex: 0 0 auto;
-    border: 1px solid currentColor;
-    border-radius: var(--radius-full);
-    background: transparent;
-    color: inherit;
-    padding: 0.4rem 0.8rem;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-@media (max-width: 600px) {
-    .attribution-banner {
-        align-items: flex-start;
-    }
-}
-
 /* Sign-in banner */
 .sign-in-banner {
     background: var(--surface-container-low);
@@ -2929,6 +2930,27 @@ body {
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
+}
+
+/* Destructive, so it is set apart from Save/Cancel rather than beside them. */
+.profile-delete-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.55rem;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--surface-container-highest);
+    padding-top: 0.9rem;
+    color: #a33a2a;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-delete-btn:hover {
+    text-decoration: underline;
 }
 
 /* ========================================

@@ -21,6 +21,24 @@
     Header set Cache-Control "public, max-age=31536000"
 </FilesMatch>
 
+# Internal documentation lives in the repo, not on the public site
+<FilesMatch "\.md$">
+    Require all denied
+</FilesMatch>
+
+# Source maps are build artifacts; they leak local build paths
+<FilesMatch "\.map$">
+    Require all denied
+</FilesMatch>
+
+# Server-side sources and build scripts are not part of the served app
+<FilesMatch "^(server|db|api|generate-icons)\.js$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^(package|package-lock)\.json$">
+    Require all denied
+</FilesMatch>
+
 # Force HTTPS (if available)
 RewriteEngine On
 RewriteCond %{HTTPS} off
