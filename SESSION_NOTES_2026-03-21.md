@@ -28,7 +28,7 @@
 
 ### Infrastructure
 - Apache reverse proxy (`ProxyPass /api/`) forwarding to Node on port 3000
-- systemd service `dailydozen-api` for the Node API (auto-restart, enabled on boot)
+- systemd service `bountywell-api` for the Node API (auto-restart, enabled on boot)
 - SMTP via Mandrill (`smtp.mandrillapp.com`) using credentials from the wadadli project
 - SQLite database in `data/` directory (gitignored, owned by www-data)
 - `/data/` directory blocked from static serving in Apache config
@@ -45,14 +45,14 @@
 - Removed redundant `<script src="sw.js">` tag
 
 ## Key files and locations
-- **App:** `/var/www/dailydozen.stephens.page/` (legacy internal path)
+- **App:** `/var/www/bountywell.com/` (renamed from `dailydozen.stephens.page` on 2026-08-07)
 - **Live URLs:** `https://bountywell.com` and `https://bountywell.app`
 - **Migration origin:** `https://dailydozen.stephens.page`
-- **API service:** `sudo systemctl restart dailydozen-api`
+- **API service:** `sudo systemctl restart bountywell-api`
 - **Apache configs:** `/etc/apache2/sites-enabled/bountywell.com.conf` and the legacy Daily Dozen origin configs
-- **Database:** `/var/www/dailydozen.stephens.page/data/daily_dozen.db` (legacy filename retained)
+- **Database:** `/var/www/bountywell.com/data/daily_dozen.db` (legacy filename retained)
 - **SMTP creds source:** `/var/www/wadadliflarecatering.com/private/.env`
-- **SMTP configured in:** `/etc/systemd/system/dailydozen-api.service`
+- **SMTP configured in:** `/etc/systemd/system/bountywell-api.service`
 
 ## Known remaining items
 - Version string `2.0.12` is hardcoded in multiple files (not yet centralized)
